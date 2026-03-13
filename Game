@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diamond Nine · Lesson 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --jade:    #2d6a4f;
+    --jade-lt: #40916c;
+    --gold:    #c9a84c;
+    --gold-lt: #e9c46a;
+    --stone:   #3d2b1f;
+    --stone-lt:#6b4c3b;
+    --cream:   #f5edd6;
+    --sand:    #e8d5b0;
+    --terracotta: #c1440e;
+    --shadow:  rgba(30,15,5,.45);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: var(--stone);
+    color: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* stone-texture bg */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg,  transparent, transparent 2px, rgba(0,0,0,.06) 2px, rgba(0,0,0,.06) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px);
+    pointer-events: none; z-index: 0;
+  }
+
+  header {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 28px 16px 18px;
+    border-bottom: 2px solid var(--gold);
+    background: linear-gradient(180deg, #1e0f07 0%, rgba(30,15,7,.4) 100%);
+  }
+
+  .eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: .7rem;
+    letter-spacing: .22em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    font-weight: 700;
+    color: var(--gold-lt);
+    line-height: 1.15;
+    letter-spacing: .04em;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--sand);
+    margin-top: 6px;
+    font-weight: 300;
+  }
+
+  /* ── INSTRUCTION BAR ── */
+  .instructions {
+    position: relative; z-index: 1;
+    background: rgba(201,168,76,.12);
+    border-bottom: 1px solid rgba(201,168,76,.3);
+    padding: 10px 20px;
+    font-size: .92rem;
+    color: var(--sand);
+    text-align: center;
+    line-height: 1.5;
+  }
+  .instructions strong { color: var(--gold-lt); font-family: 'Cinzel', serif; font-size: .82rem; }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    position: relative; z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 24px 16px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ── CARD BANK ── */
+  .bank-wrap {
+    flex: 0 0 220px;
+  }
+  .bank-label {
+    font-family: 'Cinzel', serif;
+    font-size: .7rem;
+    letter-spacing: .18em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(201,168,76,.4);
+  }
+  #card-bank {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 80px;
+    padding: 10px;
+    border: 1px dashed rgba(201,168,76,.3);
+    border-radius: 6px;
+    background: rgba(0,0,0,.2);
+    transition: background .2s;
+  }
+  #card-bank.drag-over {
+    background: rgba(201,168,76,.12);
+    border-color: var(--gold);
+  }
+
+  /* ── DIAMOND GRID ── */
+  .diamond-wrap {
+    flex: 1 1 500px;
+  }
+  .diamond-label {
+    font-family: 'Cinzel', serif;
+    font-size: .7rem;
+    letter-spacing: .18em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(201,168,76,.4);
+    text-align: center;
+  }
+  .diamond-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(5, auto);
+    gap: 8px;
+    justify-items: center;
+    align-items: center;
+  }
+
+  /* slot positions */
+  .slot { display: flex; justify-content: center; align-items: center; }
+  .slot[data-pos="1"] { grid-column: 3 / 5; grid-row: 1; }
+  .slot[data-pos="2"] { grid-column: 2 / 4; grid-row: 2; }
+  .slot[data-pos="3"] { grid-column: 4 / 6; grid-row: 2; }
+  .slot[data-pos="4"] { grid-column: 1 / 3; grid-row: 3; }
+  .slot[data-pos="5"] { grid-column: 3 / 5; grid-row: 3; }
+  .slot[data-pos="6"] { grid-column: 5 / 7; grid-row: 3; }
+  .slot[data-pos="7"] { grid-column: 2 / 4; grid-row: 4; }
+  .slot[data-pos="8"] { grid-column: 4 / 6; grid-row: 4; }
+  .slot[data-pos="9"] { grid-column: 3 / 5; grid-row: 5; }
+
+  /* rank labels */
+  .slot::before {
+    content: attr(data-rank);
+    position: absolute;
+    top: -18px; left: 50%; transform: translateX(-50%);
+    font-family: 'Cinzel', serif;
+    font-size: .6rem;
+    letter-spacing: .1em;
+    color: var(--gold);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .slot { position: relative; padding-top: 20px; }
+
+  .drop-zone {
+    width: 130px; height: 78px;
+    border: 2px dashed rgba(201,168,76,.4);
+    border-radius: 8px;
+    background: rgba(0,0,0,.25);
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s;
+    position: relative;
+  }
+  .drop-zone.drag-over {
+    border-color: var(--gold);
+    background: rgba(201,168,76,.15);
+    transform: scale(1.04);
+  }
+  .drop-zone.occupied { border-style: solid; border-color: rgba(201,168,76,.5); }
+
+  /* top & bottom highlights */
+  .slot[data-pos="1"] .drop-zone {
+    border-color: var(--gold);
+    background: rgba(201,168,76,.08);
+    box-shadow: 0 0 18px rgba(201,168,76,.2);
+  }
+  .slot[data-pos="9"] .drop-zone {
+    border-color: rgba(193,68,14,.5);
+    background: rgba(193,68,14,.06);
+  }
+
+  /* ── CARDS ── */
+  .card {
+    width: 130px; height: 74px;
+    background: linear-gradient(135deg, #4a2c17 0%, #2a160a 100%);
+    border: 1px solid var(--gold);
+    border-radius: 7px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 6px 8px;
+    cursor: grab;
+    user-select: none;
+    transition: transform .15s, box-shadow .15s, opacity .15s;
+    box-shadow: 0 3px 10px var(--shadow), inset 0 1px 0 rgba(255,255,255,.07);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 20%, rgba(201,168,76,.12), transparent 60%);
+    pointer-events: none;
+  }
+  .card:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 7px 20px var(--shadow); }
+  .card:active { cursor: grabbing; opacity: .85; }
+  .card.dragging { opacity: .5; transform: scale(.97); }
+
+  .card-icon { font-size: 1.3rem; line-height: 1; margin-bottom: 3px; }
+  .card-name {
+    font-family: 'Cinzel', serif;
+    font-size: .65rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    color: var(--gold-lt);
+    line-height: 1.25;
+  }
+
+  /* bank card (narrower layout) */
+  #card-bank .card {
+    width: 100%; height: 58px;
+    flex-direction: row; gap: 8px; padding: 6px 12px;
+  }
+  #card-bank .card-icon { font-size: 1.1rem; margin-bottom: 0; }
+  #card-bank .card-name { font-size: .62rem; text-align: left; }
+
+  /* ── ANNOTATION SECTION ── */
+  .annotations {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 4px;
+  }
+  @media (max-width: 640px) { .annotations { grid-template-columns: 1fr; } }
+
+  .annotation-box {
+    background: rgba(0,0,0,.3);
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid rgba(201,168,76,.25);
+  }
+  .annotation-box.top-box  { border-color: rgba(201,168,76,.5); }
+  .annotation-box.bot-box  { border-color: rgba(193,68,14,.35); }
+
+  .ann-title {
+    font-family: 'Cinzel', serif;
+    font-size: .7rem;
+    letter-spacing: .15em;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ann-title .badge {
+    background: var(--gold);
+    color: var(--stone);
+    border-radius: 3px;
+    padding: 1px 6px;
+    font-size: .6rem;
+  }
+  .ann-title .badge.ext { background: var(--terracotta); color: var(--cream); }
+  .ann-hint { font-size: .82rem; font-style: italic; color: rgba(245,237,214,.55); margin-bottom: 8px; }
+  .ann-name {
+    font-family: 'Cinzel', serif;
+    font-size: .72rem;
+    color: var(--gold-lt);
+    margin-bottom: 6px;
+    min-height: 1em;
+    transition: all .3s;
+  }
+  .ann-name.empty { color: rgba(201,168,76,.3); font-style: italic; }
+
+  textarea {
+    width: 100%; min-height: 72px;
+    background: rgba(0,0,0,.35);
+    border: 1px solid rgba(201,168,76,.3);
+    border-radius: 5px;
+    color: var(--cream);
+    font-family: 'Crimson Pro', serif;
+    font-size: .9rem;
+    padding: 8px 10px;
+    resize: vertical;
+    outline: none;
+    transition: border-color .2s;
+    line-height: 1.5;
+  }
+  textarea:focus { border-color: var(--gold); }
+  textarea::placeholder { color: rgba(245,237,214,.3); font-style: italic; }
+
+  /* ── SUBMIT ── */
+  .actions {
+    width: 100%;
+    display: flex; justify-content: center; gap: 14px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  button {
+    font-family: 'Cinzel', serif;
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 11px 28px;
+    border: none; border-radius: 5px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold) 0%, #a8832a 100%);
+    color: var(--stone);
+    box-shadow: 0 4px 14px rgba(201,168,76,.3);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,168,76,.4); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--sand);
+    border: 1px solid rgba(201,168,76,.4);
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold-lt); }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--jade);
+    color: var(--cream);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-family: 'Cinzel', serif;
+    font-size: .75rem;
+    letter-spacing: .1em;
+    border: 1px solid var(--jade-lt);
+    box-shadow: 0 8px 30px rgba(0,0,0,.5);
+    transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+    z-index: 999;
+    pointer-events: none;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+  #toast.error { background: var(--terracotta); border-color: #e05a22; }
+
+  /* ── PROGRESS ── */
+  .progress-bar {
+    width: 100%; max-width: 480px;
+    height: 4px;
+    background: rgba(201,168,76,.15);
+    border-radius: 2px;
+    margin: 12px auto 0;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--jade-lt), var(--gold));
+    border-radius: 2px;
+    transition: width .4s ease;
+  }
+  .progress-label {
+    text-align: center;
+    font-size: .72rem;
+    color: rgba(245,237,214,.5);
+    margin-top: 5px;
+    font-style: italic;
+  }
+
+  /* rank decorations */
+  .rank-pip {
+    position: absolute; top: 3px; right: 5px;
+    font-size: .55rem;
+    font-family: 'Cinzel', serif;
+    color: rgba(201,168,76,.5);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Lesson 5 · Cat. 5 Metacognition · The Wild Robot Enquiry</p>
+  <h1>Diamond Nine</h1>
+  <p class="subtitle">Who mattered most in the world of Pakal Votan?</p>
+</header>
+
+<div class="instructions">
+  <strong>How to play:</strong>&ensp;Drag each card into the diamond. Most important at the <strong style="color:var(--gold-lt)">top ◆</strong>, least important at the <strong style="color:#e06030">bottom ◇</strong>. Then write your reasons below.
+</div>
+
+<div style="position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:8px 16px 0;">
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <p class="progress-label" id="progress-label">0 of 9 cards placed</p>
+</div>
+
+<main>
+  <!-- BANK -->
+  <div class="bank-wrap">
+    <p class="bank-label">Card bank</p>
+    <div id="card-bank" 
+         ondragover="onDragOver(event,'bank')" 
+         ondragleave="onDragLeave(event,'bank')"
+         ondrop="onDrop(event,'bank')">
+    </div>
+  </div>
+
+  <!-- DIAMOND -->
+  <div class="diamond-wrap">
+    <p class="diamond-label">Your Diamond Nine</p>
+    <div class="diamond-grid" id="diamond-grid">
+      <!-- slots injected by JS -->
+    </div>
+  </div>
+
+  <!-- ANNOTATIONS -->
+  <div class="annotations">
+    <div class="annotation-box top-box">
+      <p class="ann-title">◆ Top card — most significant <span class="badge">Core</span></p>
+      <p class="ann-hint">Why is this the most important? Think about power, survival, or society.</p>
+      <p class="ann-name empty" id="top-name">Place a card in position 1 first</p>
+      <textarea id="top-reason" placeholder="Write your reason here…" rows="3"></textarea>
+    </div>
+    <div class="annotation-box bot-box">
+      <p class="ann-title">◇ Bottom card — least significant <span class="badge ext">Extend</span></p>
+      <p class="ann-hint">Why does this matter least? What would change if it were removed?</p>
+      <p class="ann-name empty" id="bot-name">Place a card in position 9 first</p>
+      <textarea id="bot-reason" placeholder="Write your reason here…" rows="3"></textarea>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <button class="btn-secondary" onclick="resetAll()">↺ Reset</button>
+    <button class="btn-primary" onclick="submit()">Submit Diamond ◆</button>
+  </div>
+</main>
+
+<div id="toast">✓ Diamond submitted!</div>
+
+<script>
+const CARDS = [
+  { id: 'king',    name: 'The King',         icon: '👑' },
+  { id: 'nobles',  name: 'Nobles',           icon: '⚔️' },
+  { id: 'farmers', name: 'Farmers',          icon: '🌽' },
+  { id: 'artisans',name: 'Artisans',         icon: '🏺' },
+  { id: 'slaves',  name: 'Slaves',           icon: '⛓️' },
+  { id: 'animals', name: 'Animal Companions',icon: '🐆' },
+  { id: 'divine',  name: 'Divine Right',     icon: '☀️' },
+  { id: 'labour',  name: 'Unpaid Labour',    icon: '⚒️' },
+  { id: 'pakal',   name: 'Ahau Pacal Votan', icon: '🗿' },
+];
+
+const RANK_LABELS = {
+  1: 'Most significant',
+  2: '', 3: '',
+  4: '', 5: '', 6: '',
+  7: '', 8: '',
+  9: 'Least significant'
+};
+
+// State: which card is in which slot (slot 0 = bank)
+const slots = {}; // pos (1-9) -> card id or null
+
+let dragCard = null;   // id of card being dragged
+let dragFrom = null;   // 'bank' or slot number (1-9)
+
+// ── BUILD DOM ──────────────────────────────────────────
+function buildGrid() {
+  const grid = document.getElementById('diamond-grid');
+  for (let pos = 1; pos <= 9; pos++) {
+    const slot = document.createElement('div');
+    slot.className = 'slot';
+    slot.dataset.pos = pos;
+    slot.dataset.rank = RANK_LABELS[pos] || '';
+
+    const zone = document.createElement('div');
+    zone.className = 'drop-zone';
+    zone.id = `slot-${pos}`;
+    zone.dataset.pos = pos;
+    zone.ondragover  = e => onDragOver(e, pos);
+    zone.ondragleave = e => onDragLeave(e, pos);
+    zone.ondrop      = e => onDrop(e, pos);
+
+    slot.appendChild(zone);
+    grid.appendChild(slot);
+  }
+}
+
+function buildBank() {
+  const bank = document.getElementById('card-bank');
+  bank.innerHTML = '';
+  CARDS.forEach(c => {
+    if (!isPlaced(c.id)) bank.appendChild(makeCard(c, 'bank'));
+  });
+}
+
+function isPlaced(id) {
+  return Object.values(slots).includes(id);
+}
+
+function makeCard(cardDef, location) {
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.draggable = true;
+  el.id = `card-${cardDef.id}`;
+  el.dataset.id = cardDef.id;
+
+  if (location !== 'bank') {
+    const pip = document.createElement('span');
+    pip.className = 'rank-pip';
+    pip.textContent = `#${location}`;
+    el.appendChild(pip);
+  }
+
+  const icon = document.createElement('div');
+  icon.className = 'card-icon';
+  icon.textContent = cardDef.icon;
+
+  const name = document.createElement('div');
+  name.className = 'card-name';
+  name.textContent = cardDef.name;
+
+  el.appendChild(icon);
+  el.appendChild(name);
+
+  el.ondragstart = e => {
+    dragCard = cardDef.id;
+    dragFrom = location;
+    setTimeout(() => el.classList.add('dragging'), 0);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+  el.ondragend = () => el.classList.remove('dragging');
+
+  return el;
+}
+
+function onDragOver(e, target) {
+  e.preventDefault();
+  const el = target === 'bank'
+    ? document.getElementById('card-bank')
+    : document.getElementById(`slot-${target}`);
+  el?.classList.add('drag-over');
+}
+
+function onDragLeave(e, target) {
+  const el = target === 'bank'
+    ? document.getElementById('card-bank')
+    : document.getElementById(`slot-${target}`);
+  el?.classList.remove('drag-over');
+}
+
+function onDrop(e, target) {
+  e.preventDefault();
+  const el = target === 'bank'
+    ? document.getElementById('card-bank')
+    : document.getElementById(`slot-${target}`);
+  el?.classList.remove('drag-over');
+
+  if (!dragCard) return;
+  if (dragFrom === target) return; // same location
+
+  // If dropping onto a slot that already has a card, swap
+  const displaced = target !== 'bank' ? (slots[target] || null) : null;
+
+  // Remove dragCard from its current location
+  if (dragFrom !== 'bank') {
+    delete slots[dragFrom];
+  }
+
+  // Place displaced card where dragCard came from
+  if (displaced) {
+    if (dragFrom !== 'bank') {
+      slots[dragFrom] = displaced;
+    }
+    // else displaced goes back to bank (handled by buildBank)
+  }
+
+  // Place dragCard in new location
+  if (target !== 'bank') {
+    slots[target] = dragCard;
+  }
+
+  dragCard = null;
+  dragFrom = null;
+  render();
+}
+
+function render() {
+  // Render slots
+  for (let pos = 1; pos <= 9; pos++) {
+    const zone = document.getElementById(`slot-${pos}`);
+    zone.innerHTML = '';
+    const cardId = slots[pos];
+    if (cardId) {
+      const def = CARDS.find(c => c.id === cardId);
+      zone.appendChild(makeCard(def, pos));
+      zone.classList.add('occupied');
+    } else {
+      zone.classList.remove('occupied');
+    }
+  }
+
+  // Rebuild bank
+  buildBank();
+
+  // Update annotation names
+  const topId  = slots[1];
+  const botId  = slots[9];
+  const topEl  = document.getElementById('top-name');
+  const botEl  = document.getElementById('bot-name');
+
+  if (topId) {
+    const def = CARDS.find(c => c.id === topId);
+    topEl.textContent = def.icon + '  ' + def.name;
+    topEl.classList.remove('empty');
+  } else {
+    topEl.textContent = 'Place a card in position 1 first';
+    topEl.classList.add('empty');
+  }
+
+  if (botId) {
+    const def = CARDS.find(c => c.id === botId);
+    botEl.textContent = def.icon + '  ' + def.name;
+    botEl.classList.remove('empty');
+  } else {
+    botEl.textContent = 'Place a card in position 9 first';
+    botEl.classList.add('empty');
+  }
+
+  // Progress
+  const placed = Object.keys(slots).length;
+  const pct = Math.round((placed / 9) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `${placed} of 9 cards placed`;
+}
+
+function submit() {
+  const placed = Object.keys(slots).length;
+  if (placed < 9) {
+    showToast(`Place all 9 cards first (${9 - placed} remaining)`, true);
+    return;
+  }
+  const topReason = document.getElementById('top-reason').value.trim();
+  if (!topReason) {
+    showToast('Add your reason for the top card first', true);
+    return;
+  }
+  showToast('✓ Diamond submitted — well done!', false);
+}
+
+function resetAll() {
+  Object.keys(slots).forEach(k => delete slots[k]);
+  document.getElementById('top-reason').value = '';
+  document.getElementById('bot-reason').value = '';
+  render();
+}
+
+function showToast(msg, isError) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = isError ? 'error' : '';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── INIT ───────────────────────────────────────────────
+buildGrid();
+buildBank();
+render();
+</script>
+</body>
+</html>
