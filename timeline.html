@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maya Civilisation · Timeline</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold:    #c9a84c;
+    --gold-lt: #e9c46a;
+    --stone:   #3d2b1f;
+    --stone-dk:#140a04;
+    --cream:   #f5edd6;
+    --sand:    #e8d5b0;
+    --jade:    #2d6a4f;
+    --jade-lt: #40916c;
+    --terra:   #c1440e;
+    --pakal:   #e9c46a;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%; height: 100%; overflow: hidden;
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: var(--stone-dk); color: var(--cream);
+    user-select: none; -webkit-user-select: none;
+  }
+
+  .page { display: grid; grid-template-rows: auto 1fr auto; height: 100vh; }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(180deg, #0d0604 0%, rgba(13,6,4,.8) 100%);
+    border-bottom: 2px solid var(--gold);
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    z-index: 10; flex-wrap: wrap;
+  }
+  .hdr-left .eyebrow {
+    font-family: 'Cinzel', serif; font-size: .62rem;
+    letter-spacing: .22em; color: var(--gold); text-transform: uppercase; margin-bottom: 3px;
+  }
+  .hdr-left h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1rem, 2.5vw, 1.55rem);
+    font-weight: 700; color: var(--gold-lt); letter-spacing: .04em;
+  }
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+  .leg-item { display: flex; align-items: center; gap: 6px; font-size: .72rem; font-style: italic; color: var(--sand); white-space: nowrap; }
+  .leg-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+  .leg-dot.general { background: var(--jade-lt); }
+  .leg-dot.pakal   { background: var(--pakal); box-shadow: 0 0 7px var(--pakal); }
+  .leg-dot.decline { background: var(--terra); }
+
+  /* ── VIEWPORT ── */
+  .timeline-viewport {
+    overflow: hidden; position: relative; cursor: grab;
+  }
+  .timeline-viewport.grabbing { cursor: grabbing; }
+  .timeline-viewport::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse at 15% 60%, rgba(45,106,79,.14) 0%, transparent 45%),
+      radial-gradient(ellipse at 75% 25%, rgba(201,168,76,.09) 0%, transparent 40%),
+      radial-gradient(ellipse at 55% 85%, rgba(193,68,14,.07) 0%, transparent 35%);
+  }
+
+  /* ── CANVAS ── */
+  .timeline-canvas { position: relative; height: 100%; }
+
+  /* ── SPINE ── */
+  .spine {
+    position: absolute; left: 0; height: 3px;
+    background: linear-gradient(90deg,
+      transparent 0%, rgba(201,168,76,.25) 2%,
+      rgba(201,168,76,.65) 8%, rgba(201,168,76,.65) 92%,
+      rgba(201,168,76,.25) 98%, transparent 100%);
+    transform: translateY(-50%); pointer-events: none;
+  }
+
+  /* ── ERA BANDS ── */
+  .era-band {
+    position: absolute; top: 0; bottom: 0;
+    border-left: 1px dashed rgba(201,168,76,.12); pointer-events: none;
+  }
+  .era-label {
+    position: absolute; top: 14px;
+    font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .15em;
+    color: rgba(201,168,76,.3); text-transform: uppercase; white-space: nowrap; padding-left: 8px;
+  }
+
+  /* ── EVENTS ── */
+  .event {
+    position: absolute; display: flex; flex-direction: column; align-items: center;
+    cursor: pointer; transition: filter .18s;
+  }
+  .event:hover { filter: brightness(1.25); z-index: 5; }
+  .event.above { flex-direction: column; }
+  .event.below { flex-direction: column-reverse; }
+
+  .event-line {
+    width: 1px; flex-shrink: 0;
+    background: rgba(201,168,76,.3); transition: background .18s;
+  }
+  .event:hover .event-line { background: var(--gold); }
+
+  .event-dot {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 2px solid var(--stone-dk); flex-shrink: 0;
+    transition: transform .18s; z-index: 2;
+  }
+  .event:hover .event-dot { transform: scale(1.5); }
+  .event.general .event-dot { background: var(--jade-lt); }
+  .event.pakal   .event-dot { background: var(--pakal); box-shadow: 0 0 10px rgba(233,196,106,.7); }
+  .event.decline .event-dot { background: var(--terra); }
+
+  /* ── CARD ── */
+  .event-card {
+    width: 200px;
+    background: rgba(16,8,3,.9);
+    border-radius: 9px;
+    border: 1px solid rgba(201,168,76,.2);
+    overflow: hidden;
+    transition: border-color .18s, box-shadow .18s;
+    backdrop-filter: blur(6px);
+  }
+  .event.pakal   .event-card { border-color: rgba(233,196,106,.45); box-shadow: 0 0 16px rgba(233,196,106,.12); }
+  .event.decline .event-card { border-color: rgba(193,68,14,.35); }
+  .event:hover   .event-card { border-color: var(--gold); box-shadow: 0 6px 24px rgba(201,168,76,.22); }
+  .event.pakal:hover .event-card { box-shadow: 0 6px 28px rgba(233,196,106,.32); }
+
+  .card-img {
+    width: 100%; height: 100px; object-fit: cover;
+    display: block; border-bottom: 1px solid rgba(201,168,76,.15);
+    background: rgba(0,0,0,.4);
+  }
+  .card-img-placeholder {
+    width: 100%; height: 100px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; background: rgba(0,0,0,.35);
+    border-bottom: 1px solid rgba(201,168,76,.15);
+  }
+  .card-body { padding: 9px 11px; }
+  .card-date {
+    font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .1em;
+    margin-bottom: 3px;
+  }
+  .event.general .card-date { color: var(--jade-lt); }
+  .event.pakal   .card-date { color: var(--pakal); }
+  .event.decline .card-date { color: var(--terra); }
+  .card-title {
+    font-family: 'Cinzel', serif; font-size: .7rem; font-weight: 600;
+    color: var(--cream); line-height: 1.25;
+  }
+  .event.pakal .card-title { color: var(--gold-lt); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(6,3,1,.8);
+    z-index: 100; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity .25s;
+    backdrop-filter: blur(4px); padding: 20px;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: auto; }
+
+  .modal {
+    background: linear-gradient(145deg, #2a1508 0%, #180c04 100%);
+    border: 1px solid var(--gold); border-radius: 14px;
+    max-width: 560px; width: 100%; position: relative;
+    box-shadow: 0 24px 70px rgba(0,0,0,.8);
+    transform: translateY(24px) scale(.97);
+    transition: transform .28s cubic-bezier(.34,1.4,.64,1);
+    overflow: hidden;
+  }
+  .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+  .modal.pakal-modal  { border-color: var(--pakal); box-shadow: 0 24px 70px rgba(0,0,0,.8), 0 0 40px rgba(233,196,106,.18); }
+  .modal.decline-modal { border-color: var(--terra); }
+
+  .modal-hero {
+    width: 100%; height: 200px; object-fit: cover; display: block;
+    border-bottom: 1px solid rgba(201,168,76,.2);
+    background: rgba(0,0,0,.5);
+  }
+  .modal-hero-placeholder {
+    width: 100%; height: 200px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem; background: rgba(0,0,0,.4);
+    border-bottom: 1px solid rgba(201,168,76,.2);
+  }
+  .modal-content { padding: 22px 26px 26px; }
+  .modal-eyebrow {
+    font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .18em;
+    text-transform: uppercase; margin-bottom: 5px;
+  }
+  .modal-eyebrow.general { color: var(--jade-lt); }
+  .modal-eyebrow.pakal   { color: var(--pakal); }
+  .modal-eyebrow.decline { color: var(--terra); }
+  .modal-date { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold-lt); margin-bottom: 4px; }
+  .modal-title {
+    font-family: 'Cinzel', serif; font-size: 1.35rem; font-weight: 700;
+    color: var(--cream); line-height: 1.2; margin-bottom: 14px;
+  }
+  .modal.pakal-modal .modal-title { color: var(--gold-lt); }
+  .modal-body { font-size: .98rem; line-height: 1.72; color: var(--sand); }
+  .modal-caption {
+    margin-top: 10px; font-size: .72rem; font-style: italic;
+    color: rgba(232,213,176,.4);
+  }
+  .modal-close {
+    position: absolute; top: 12px; right: 14px;
+    background: rgba(0,0,0,.5); border: 1px solid rgba(201,168,76,.35);
+    color: var(--sand); border-radius: 5px; padding: 4px 12px;
+    cursor: pointer; font-family: 'Cinzel', serif; font-size: .6rem;
+    letter-spacing: .1em; transition: all .2s; z-index: 10;
+    backdrop-filter: blur(4px);
+  }
+  .modal-close:hover { border-color: var(--gold); color: var(--gold-lt); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: rgba(0,0,0,.55); border-top: 1px solid rgba(201,168,76,.18);
+    padding: 8px 20px; display: flex; align-items: center;
+    justify-content: space-between; gap: 12px; z-index: 10; flex-wrap: wrap;
+  }
+  .hint { font-size: .7rem; font-style: italic; color: rgba(232,213,176,.38); }
+  .minimap-row { display: flex; align-items: center; gap: 8px; }
+  .minimap-track {
+    width: 180px; height: 4px; background: rgba(201,168,76,.14);
+    border-radius: 2px; position: relative; cursor: pointer;
+  }
+  .minimap-thumb { position: absolute; top: 0; height: 100%; background: var(--gold); border-radius: 2px; transition: left .08s, width .08s; }
+  .era-now { font-size: .65rem; font-style: italic; color: rgba(232,213,176,.38); white-space: nowrap; }
+  .nav-btns { display: flex; gap: 8px; }
+  .nav-btn {
+    font-family: 'Cinzel', serif; font-size: .65rem; letter-spacing: .08em;
+    text-transform: uppercase; padding: 8px 20px;
+    background: transparent; border: 1px solid rgba(201,168,76,.32);
+    color: var(--sand); border-radius: 5px; cursor: pointer; transition: all .2s;
+  }
+  .nav-btn:hover { border-color: var(--gold); color: var(--gold-lt); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="hdr-left">
+      <div class="eyebrow">Maya Enquiry · Year 4 · Wallscourt Farm Academy</div>
+      <h1>Maya Civilisation Timeline</h1>
+    </div>
+    <div class="legend">
+      <div class="leg-item"><div class="leg-dot general"></div>Maya events</div>
+      <div class="leg-item"><div class="leg-dot pakal"></div>Pakal Votan &amp; Palenque</div>
+      <div class="leg-item"><div class="leg-dot decline"></div>Decline &amp; conquest</div>
+    </div>
+  </header>
+
+  <div class="timeline-viewport" id="viewport">
+    <div class="timeline-canvas" id="canvas"></div>
+  </div>
+
+  <footer>
+    <div class="hint">← Drag or use arrow keys · Tap any event to learn more →</div>
+    <div class="minimap-row">
+      <span class="era-now" id="era-now">—</span>
+      <div class="minimap-track" id="minimap-track">
+        <div class="minimap-thumb" id="minimap-thumb"></div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="nav-btn" onclick="scrollBy(-500)">← Earlier</button>
+      <button class="nav-btn" onclick="scrollBy(500)">Later →</button>
+    </div>
+  </footer>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="overlayClick(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">✕ Close</button>
+    <div id="modal-hero-wrap"></div>
+    <div class="modal-content">
+      <div class="modal-eyebrow" id="modal-eyebrow"></div>
+      <div class="modal-date"    id="modal-date"></div>
+      <div class="modal-title"   id="modal-title"></div>
+      <div class="modal-body"    id="modal-body"></div>
+      <div class="modal-caption" id="modal-caption"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── EVENTS DATA ───────────────────────────────────────────────────────
+const EVENTS = [
+  {
+    date:'2000 BCE', year:-2000, type:'general',
+    title:'First Maya Settlements',
+    short:'Early farming villages appear in Mesoamerica.',
+    detail:'The earliest Maya people settle in small farming villages across present-day Guatemala and southern Mexico. They cultivate maize, beans and squash — crops that will sustain the Maya civilisation for thousands of years to come.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/TeosinteMaizeDiagram.jpg/400px-TeosinteMaizeDiagram.jpg',
+    caption:'Maize — the crop that fed the Maya civilisation for thousands of years.',
+    emoji:'🌽',
+  },
+  {
+    date:'1000 BCE', year:-1000, type:'general',
+    title:'Villages Grow into Towns',
+    short:'Larger, more organised communities form.',
+    detail:'Maya communities grow larger and more organised. Trade networks begin to link villages together, and the first ceremonial platforms and plazas are built as gathering places for worship and community life.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Maya_people_and_culture.jpg/400px-Maya_people_and_culture.jpg',
+    caption:'Early Maya communities developed complex social structures.',
+    emoji:'🏘️',
+  },
+  {
+    date:'400 BCE', year:-400, type:'general',
+    title:'First Maya Writing System',
+    short:'The Maya develop a system of glyphs.',
+    detail:'The Maya begin developing one of the world\'s earliest writing systems, using symbols called glyphs carved into stone monuments. This allows them to record history, royal lineages, astronomical observations and the great deeds of rulers for future generations.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Mayan_glyphs.jpg/400px-Mayan_glyphs.jpg',
+    caption:'Maya glyphs — one of the most sophisticated writing systems of the ancient world.',
+    emoji:'📜',
+  },
+  {
+    date:'100 BCE', year:-100, type:'general',
+    title:'Rise of El Mirador',
+    short:'One of the first truly great Maya cities.',
+    detail:'El Mirador rises to become one of the first great Maya cities, dominated by enormous pyramid temples. The largest — La Danta — is one of the biggest pyramids ever built on Earth. At its peak the city may have housed over 100,000 people.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/El_Mirador_Peten_Guatemala.jpg/400px-El_Mirador_Peten_Guatemala.jpg',
+    caption:'The ruins of El Mirador, still emerging from the Guatemalan jungle.',
+    emoji:'🏛️',
+  },
+  {
+    date:'250 CE', year:250, type:'general',
+    title:'Classic Period Begins',
+    short:'The golden age of Maya civilisation.',
+    detail:'The Classic Period marks the height of Maya civilisation. Dozens of powerful city-states flourish across Mesoamerica. Cities like Tikal, Calakmul and Copán compete for trade, alliances and military supremacy. Art, architecture and learning reach extraordinary heights.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Tikal_Temple1_2006_08_11.JPG/400px-Tikal_Temple1_2006_08_11.JPG',
+    caption:'Temple I at Tikal, Guatemala — one of the greatest cities of the Classic Period.',
+    emoji:'🌆',
+  },
+  {
+    date:'378 CE', year:378, type:'general',
+    title:'Tikal Conquers Uaxactun',
+    short:'Tikal rises as a dominant Maya power.',
+    detail:'The city of Tikal, backed by the distant power of Teotihuacan in central Mexico, defeats the rival city of Uaxactun. A warlord known as Siyaj K\'ahk\' ("Fire is Born") leads the assault. This marks Tikal\'s emergence as one of the most powerful cities in the Maya world.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Tikal_Temple1_2006_08_11.JPG/400px-Tikal_Temple1_2006_08_11.JPG',
+    caption:'The great Temple I of Tikal towers over the jungle canopy.',
+    emoji:'⚔️',
+  },
+  {
+    date:'431 CE', year:431, type:'general',
+    title:'Palenque is Founded',
+    short:'A great city rises in the rainforest.',
+    detail:'The city of Palenque — known to the Maya as Lakamha, meaning "Big Water" — is founded in the dense rainforests of present-day Chiapas, Mexico. Positioned at the foot of wooded hills with a commanding view of the lowland plains, it will grow into one of the most elegant cities of the ancient world.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Palenque_zona_arqueologica_23.jpg/400px-Palenque_zona_arqueologica_23.jpg',
+    caption:'The ruins of Palenque, nestled against forested hills in Chiapas, Mexico.',
+    emoji:'🌿',
+  },
+  {
+    date:'603 CE', year:603, type:'pakal',
+    title:'Pakal Votan is Born',
+    short:'Birth of Palenque\'s greatest king.',
+    detail:'K\'inich Janaab\' Pakal — known to us as Pakal Votan, meaning "Sun Shield" — is born in Palenque. He will go on to become the city\'s greatest ever ruler, reigning for 68 years and transforming Palenque into one of the most magnificent cities of the ancient Maya world.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Jade_Mask_of_Pakal_-_Palenque_-_Mexico.jpg/300px-Jade_Mask_of_Pakal_-_Palenque_-_Mexico.jpg',
+    caption:'The jade funeral mask of Pakal Votan, discovered in his tomb in 1952.',
+    emoji:'👑',
+  },
+  {
+    date:'615 CE', year:615, type:'pakal',
+    title:'Pakal Crowned King',
+    short:'Crowned at just 12 years old.',
+    detail:'At only 12 years old, Pakal is crowned King of Palenque. The city is weak following years of military defeats and political instability. Nobody could have predicted that this young boy would go on to reign for 68 years — longer than almost any other ruler in the ancient world.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Palenque_palace_01.jpg/400px-Palenque_palace_01.jpg',
+    caption:'The Palace of Palenque — rebuilt and expanded under Pakal\'s extraordinary reign.',
+    emoji:'🏛️',
+  },
+  {
+    date:'626 CE', year:626, type:'pakal',
+    title:'Pakal Rebuilds Palenque',
+    short:'An enormous building programme begins.',
+    detail:'Pakal launches a remarkable programme of construction, rebuilding Palenque\'s temples, palaces and plazas on a grand scale. He commissions magnificent stone reliefs, stucco portraits and hieroglyphic inscriptions celebrating his divine right to rule and his royal ancestors.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Palenque_relief_Pakalpanel.jpg/300px-Palenque_relief_Pakalpanel.jpg',
+    caption:'A stone relief panel showing Pakal Votan receiving the crown of Palenque.',
+    emoji:'🗿',
+  },
+  {
+    date:'683 CE', year:683, type:'pakal',
+    title:'Pakal Votan Dies',
+    short:'Buried beneath the Temple of Inscriptions.',
+    detail:'Pakal Votan dies at the extraordinary age of 80 — remarkable for the ancient world. He is buried deep beneath the Temple of Inscriptions in a magnificent stone sarcophagus. The famous carved lid shows him at the moment of death, descending into Xibalba — the Maya underworld — as the maize god, ready to be reborn.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Sarcophagus_lid_of_Pakal.jpg/300px-Sarcophagus_lid_of_Pakal.jpg',
+    caption:'The lid of Pakal\'s sarcophagus — one of the most celebrated carvings in all of Maya art.',
+    emoji:'🌟',
+  },
+  {
+    date:'692 CE', year:692, type:'pakal',
+    title:'Temple of Inscriptions Completed',
+    short:'Pakal\'s monumental tomb sealed forever.',
+    detail:'The Temple of Inscriptions — built directly over Pakal\'s tomb — is finally completed by his son K\'inich Kan B\'alam II. The temple contains one of the longest Maya texts ever found, spread across three enormous stone panels recording Palenque\'s history across 180 years.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Palenque_templo_inscripciones.jpg/400px-Palenque_templo_inscripciones.jpg',
+    caption:'The Temple of Inscriptions at Palenque — Pakal\'s tomb lies deep within its heart.',
+    emoji:'⛩️',
+  },
+  {
+    date:'700 CE', year:700, type:'general',
+    title:'Maya Civilisation at its Peak',
+    short:'Up to 2 million people across the Maya world.',
+    detail:'The Maya world reaches its greatest extent. Hundreds of cities and towns are connected by trade routes carrying jade, obsidian, cacao, cotton and feathers across thousands of miles. The total population may reach two million people. Astronomers accurately predict eclipses; architects build soaring temples without metal tools or the wheel.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Chichen_Itza_3.jpg/400px-Chichen_Itza_3.jpg',
+    caption:'El Castillo at Chichén Itzá — built to align perfectly with the sun at the spring equinox.',
+    emoji:'☀️',
+  },
+  {
+    date:'751 CE', year:751, type:'general',
+    title:'Maya Cities Begin to Weaken',
+    short:'Warfare and drought strain the city-states.',
+    detail:'Conflict between rival city-states intensifies dramatically. At the same time, a series of prolonged droughts devastates agriculture across the Maya lowlands. With harvests failing and wars draining resources, even the greatest cities begin to struggle to feed their populations.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Tikal_Temple_IV.jpg/400px-Tikal_Temple_IV.jpg',
+    caption:'Tikal\'s Temple IV — one of the last great monuments built before the city\'s decline.',
+    emoji:'⚠️',
+  },
+  {
+    date:'900 CE', year:900, type:'decline',
+    title:'Collapse of the Southern Cities',
+    short:'Great cities are abandoned to the jungle.',
+    detail:'The great cities of the southern lowlands — including Tikal, Palenque and Copán — are abandoned one by one over the course of a century. Historians believe a devastating combination of prolonged drought, deforestation, soil exhaustion, warfare and political breakdown caused this dramatic collapse. Yet Maya civilisation itself does not die — it transforms.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Tikal_Temple1_2006_08_11.JPG/400px-Tikal_Temple1_2006_08_11.JPG',
+    caption:'Tikal\'s temples, once the heart of a great city, swallowed by the jungle.',
+    emoji:'🌳',
+  },
+  {
+    date:'1000 CE', year:1000, type:'general',
+    title:'Northern Cities Thrive',
+    short:'Chichén Itzá rises as the new centre of power.',
+    detail:'While the southern cities fall silent, the northern cities of the Yucatán Peninsula continue to grow and flourish. Chichén Itzá becomes one of the most powerful cities in all of Mesoamerica — its great pyramid El Castillo is engineered so that a shadow serpent appears on the staircase at the spring equinox.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Chichen_Itza_3.jpg/400px-Chichen_Itza_3.jpg',
+    caption:'El Castillo at Chichén Itzá — still one of the best-preserved Maya pyramids in the world.',
+    emoji:'🏯',
+  },
+  {
+    date:'1250 CE', year:1250, type:'general',
+    title:'Mayapán Dominates',
+    short:'The last great Maya capital city.',
+    detail:'The walled city of Mayapán becomes the dominant power across the Yucatán Peninsula. Protected by a great stone wall, it is home to around 15,000 people and controls a network of smaller vassal cities. It is the last great Maya capital before the arrival of European explorers.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Mayapan_Castillo.jpg/400px-Mayapan_Castillo.jpg',
+    caption:'The Castillo at Mayapán — modelled on the famous pyramid at Chichén Itzá.',
+    emoji:'🗼',
+  },
+  {
+    date:'1517 CE', year:1517, type:'decline',
+    title:'Spanish Explorers Arrive',
+    short:'First contact between Maya and Europeans.',
+    detail:'Spanish explorer Francisco Hernández de Córdoba leads the first European expedition to make contact with the Maya. The Spanish are astonished to find an advanced, organised civilisation with great cities, markets and written records. The Maya of Yucatán resist the invaders and Córdoba is wounded. He returns to Cuba and dies of his injuries.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Francisco_Hern%C3%A1ndez_de_C%C3%B3rdoba.jpg/300px-Francisco_Hern%C3%A1ndez_de_C%C3%B3rdoba.jpg',
+    caption:'Francisco Hernández de Córdoba, who led the first Spanish expedition to Maya territory.',
+    emoji:'⛵',
+  },
+  {
+    date:'1524 CE', year:1524, type:'decline',
+    title:'Spanish Conquest Begins',
+    short:'The Maya world is invaded.',
+    detail:'Spanish conquistadors begin the systematic conquest of Maya territories. Despite fierce and determined resistance from many Maya city-states, Spanish military technology — steel weapons, firearms, horses and armour — gives the invaders a significant advantage. Millions of Maya people also die from European diseases like smallpox, to which they have no immunity.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Aztec_and_Spanish_fighting_Florentine_Codex.jpg/400px-Aztec_and_Spanish_fighting_Florentine_Codex.jpg',
+    caption:'A contemporary illustration showing indigenous peoples fighting Spanish conquistadors.',
+    emoji:'⚔️',
+  },
+  {
+    date:'1562 CE', year:1562, type:'decline',
+    title:'Maya Books Burned',
+    short:'Spanish bishop destroys priceless Maya manuscripts.',
+    detail:'Spanish bishop Diego de Landa orders the burning of thousands of Maya books — called codices — at Maní in the Yucatán. He calls them "works of the devil." This catastrophic act of destruction wipes out an enormous amount of Maya knowledge, history and science. Only four Maya codices survive to this day.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Dresden_codex_page_2.jpg/240px-Dresden_codex_page_2.jpg',
+    caption:'A page from the Dresden Codex — one of only four Maya books to survive the conquest.',
+    emoji:'📖',
+  },
+  {
+    date:'1697 CE', year:1697, type:'decline',
+    title:'Last Independent Maya City Falls',
+    short:'Nojpetén is conquered by the Spanish.',
+    detail:'Nojpetén — the last independent Maya city-state, located on an island in Lake Petén Itzá in Guatemala — falls to the Spanish after a naval assault. After nearly 170 years of resistance, the Maya come under full Spanish colonial rule. Yet Maya culture, language, traditions and identity survive and continue to this day across millions of people.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Lake_Peten_Itza_Guatemala.jpg/400px-Lake_Peten_Itza_Guatemala.jpg',
+    caption:'Lake Petén Itzá, Guatemala — site of the last independent Maya city, Nojpetén.',
+    emoji:'🌊',
+  },
+];
+
+const ERAS = [
+  { label:'Early Preclassic', start:-2000 },
+  { label:'Late Preclassic',  start:-400  },
+  { label:'Early Classic',    start:250   },
+  { label:'Late Classic',     start:550   },
+  { label:'Terminal Classic', start:800   },
+  { label:'Postclassic',      start:900   },
+  { label:'Spanish Contact',  start:1500  },
+];
+
+// ── CONFIG ────────────────────────────────────────────────────────────
+const PX_PER_YEAR = 0.55;
+const MIN_YEAR    = -2200;
+const MAX_YEAR    = 1900;
+const PAD         = 260;
+const SPINE_FRAC  = 0.5;
+const BASE_LINE   = 90;
+
+const TOTAL_W = PAD * 2 + (MAX_YEAR - MIN_YEAR) * PX_PER_YEAR;
+
+function yearToX(y) { return PAD + (y - MIN_YEAR) * PX_PER_YEAR; }
+
+// ── BUILD ─────────────────────────────────────────────────────────────
+function build() {
+  const vp     = document.getElementById('viewport');
+  const canvas = document.getElementById('canvas');
+  canvas.innerHTML = '';
+  canvas.style.width = TOTAL_W + 'px';
+
+  const H      = vp.clientHeight;
+  const spineY = H * SPINE_FRAC;
+
+  // Spine
+  const spine       = document.createElement('div');
+  spine.className   = 'spine';
+  spine.style.top   = spineY + 'px';
+  spine.style.width = TOTAL_W + 'px';
+  canvas.appendChild(spine);
+
+  // Era bands
+  ERAS.forEach((era, i) => {
+    const x    = yearToX(era.start);
+    const band = document.createElement('div');
+    band.className      = 'era-band';
+    band.style.left     = x + 'px';
+    const nextX = i < ERAS.length - 1 ? yearToX(ERAS[i+1].start) : TOTAL_W;
+    band.style.width    = (nextX - x) + 'px';
+    const lbl           = document.createElement('div');
+    lbl.className       = 'era-label';
+    lbl.textContent     = era.label;
+    band.appendChild(lbl);
+    canvas.appendChild(band);
+  });
+
+  // Events
+  EVENTS.forEach((ev, i) => {
+    const x      = yearToX(ev.year);
+    const above  = i % 2 === 0;
+    const lineH  = BASE_LINE + (i % 4) * 20;
+
+    const el         = document.createElement('div');
+    el.className     = `event ${ev.type} ${above ? 'above' : 'below'}`;
+    el.style.left    = (x - 100) + 'px'; // 200px card centred
+
+    // Image or emoji fallback
+    const imgEl = ev.img
+      ? `<img class="card-img" src="${ev.img}" alt="${ev.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+        + `<div class="card-img-placeholder" style="display:none">${ev.emoji}</div>`
+      : `<div class="card-img-placeholder">${ev.emoji}</div>`;
+
+    const card = `
+      <div class="event-card">
+        ${imgEl}
+        <div class="card-body">
+          <div class="card-date">${ev.date}</div>
+          <div class="card-title">${ev.title}</div>
+        </div>
+      </div>`;
+    const line = `<div class="event-line" style="height:${lineH}px"></div>`;
+    const dot  = `<div class="event-dot"></div>`;
+
+    el.innerHTML = above
+      ? card + line + dot
+      : dot + line + card;
+
+    if (above) {
+      el.style.bottom = (H - spineY + 6) + 'px';
+    } else {
+      el.style.top    = (spineY + 6) + 'px';
+    }
+
+    el.addEventListener('click', () => { if (!didDrag) openModal(ev); });
+    canvas.appendChild(el);
+  });
+}
+
+// ── SCROLL ────────────────────────────────────────────────────────────
+let scrollX = 0, didDrag = false;
+
+function setScroll(x) {
+  const vp  = document.getElementById('viewport');
+  const max = TOTAL_W - vp.clientWidth;
+  scrollX   = Math.max(0, Math.min(max, x));
+  document.getElementById('canvas').style.transform = `translateX(${-scrollX}px)`;
+  updateUI();
+}
+function scrollBy(dx) { setScroll(scrollX + dx); }
+
+function updateUI() {
+  const vp    = document.getElementById('viewport');
+  const ratio = vp.clientWidth / TOTAL_W;
+  const track = document.getElementById('minimap-track');
+  const tw    = track.clientWidth;
+  const thumb = document.getElementById('minimap-thumb');
+  thumb.style.width = Math.max(14, ratio * tw) + 'px';
+  thumb.style.left  = (scrollX / TOTAL_W * tw) + 'px';
+
+  const centreYear = MIN_YEAR + (scrollX + vp.clientWidth / 2 - PAD) / PX_PER_YEAR;
+  let label = ERAS[0].label;
+  for (const era of ERAS) { if (centreYear >= era.start) label = era.label; }
+  document.getElementById('era-now').textContent = label;
+}
+
+// ── DRAG ──────────────────────────────────────────────────────────────
+let dragging = false, dragX0 = 0, scrollX0 = 0;
+const vp = document.getElementById('viewport');
+
+vp.addEventListener('mousedown', e => {
+  dragging = true; didDrag = false;
+  dragX0 = e.clientX; scrollX0 = scrollX;
+  vp.classList.add('grabbing');
+});
+window.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  const dx = e.clientX - dragX0;
+  if (Math.abs(dx) > 5) didDrag = true;
+  setScroll(scrollX0 - dx);
+});
+window.addEventListener('mouseup', () => { dragging = false; vp.classList.remove('grabbing'); });
+
+let tx0 = 0, sx0 = 0;
+vp.addEventListener('touchstart', e => { tx0 = e.touches[0].clientX; sx0 = scrollX; didDrag = false; }, { passive:true });
+vp.addEventListener('touchmove',  e => {
+  const dx = e.touches[0].clientX - tx0;
+  if (Math.abs(dx) > 8) didDrag = true;
+  setScroll(sx0 - dx);
+}, { passive:true });
+
+window.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') scrollBy(180);
+  if (e.key === 'ArrowLeft')  scrollBy(-180);
+  if (e.key === 'Escape')     closeModal();
+});
+
+document.getElementById('minimap-track').addEventListener('click', e => {
+  const r = e.currentTarget.getBoundingClientRect();
+  setScroll((e.clientX - r.left) / r.width * TOTAL_W);
+});
+
+// ── MODAL ─────────────────────────────────────────────────────────────
+function openModal(ev) {
+  const overlay = document.getElementById('modal-overlay');
+  const modal   = document.getElementById('modal');
+  modal.className = 'modal';
+  if (ev.type === 'pakal')   modal.classList.add('pakal-modal');
+  if (ev.type === 'decline') modal.classList.add('decline-modal');
+
+  // Hero image
+  const heroWrap = document.getElementById('modal-hero-wrap');
+  if (ev.img) {
+    heroWrap.innerHTML = `<img class="modal-hero" src="${ev.img}" alt="${ev.title}"
+      onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="modal-hero-placeholder" style="display:none">${ev.emoji}</div>`;
+  } else {
+    heroWrap.innerHTML = `<div class="modal-hero-placeholder">${ev.emoji}</div>`;
+  }
+
+  const ey = document.getElementById('modal-eyebrow');
+  ey.className  = `modal-eyebrow ${ev.type}`;
+  ey.textContent = ev.type === 'pakal'   ? '★ Pakal Votan & Palenque'
+                 : ev.type === 'decline' ? '⚠ Decline & Conquest'
+                 : '◆ Maya Civilisation';
+
+  document.getElementById('modal-date').textContent    = ev.date;
+  document.getElementById('modal-title').textContent   = ev.title;
+  document.getElementById('modal-body').textContent    = ev.detail;
+  document.getElementById('modal-caption').textContent = ev.caption || '';
+
+  overlay.classList.add('open');
+}
+function closeModal()       { document.getElementById('modal-overlay').classList.remove('open'); }
+function overlayClick(e)    { if (e.target === document.getElementById('modal-overlay')) closeModal(); }
+
+// ── INIT ──────────────────────────────────────────────────────────────
+build();
+setScroll(yearToX(-700) - document.getElementById('viewport').clientWidth * 0.15);
+window.addEventListener('resize', () => { build(); setScroll(scrollX); });
+</script>
+</body>
+</html>
