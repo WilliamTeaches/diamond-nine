@@ -1,0 +1,14 @@
+{
+  "name": "diamond-nine",
+  "version": "1.0.0",
+  "description": "Diamond Nine interactive game — Lesson 5, Maya/Palenque enquiry",
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "license": "MIT"
+}
