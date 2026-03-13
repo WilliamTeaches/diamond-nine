@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diamond Nine · Results</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<style>
+  :root {
+    --jade:    #2d6a4f;
+    --jade-lt: #40916c;
+    --gold:    #c9a84c;
+    --gold-lt: #e9c46a;
+    --stone:   #3d2b1f;
+    --cream:   #f5edd6;
+    --sand:    #e8d5b0;
+    --terracotta: #c1440e;
+    --shadow:  rgba(30,15,5,.45);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: var(--stone);
+    color: var(--cream);
+    min-height: 100vh;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.06) 2px, rgba(0,0,0,.06) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px);
+    pointer-events: none; z-index: 0;
+  }
+  header {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 28px 16px 18px;
+    border-bottom: 2px solid var(--gold);
+    background: linear-gradient(180deg, #1e0f07 0%, rgba(30,15,7,.4) 100%);
+  }
+  .eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: .7rem; letter-spacing: .22em;
+    color: var(--gold); text-transform: uppercase; margin-bottom: 6px;
+  }
+  h1 { font-family: 'Cinzel', serif; font-size: clamp(1.4rem,4vw,2.2rem); font-weight: 700; color: var(--gold-lt); letter-spacing: .04em; }
+  .subtitle { font-size: 1rem; font-style: italic; color: var(--sand); margin-top: 6px; }
+
+  main {
+    position: relative; z-index: 1;
+    max-width: 1100px; margin: 0 auto;
+    padding: 32px 20px 60px;
+    display: flex; flex-direction: column; gap: 36px;
+  }
+
+  /* ── STAT ROW ── */
+  .stat-row {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+  .stat-card {
+    background: rgba(0,0,0,.3);
+    border: 1px solid rgba(201,168,76,.3);
+    border-radius: 10px;
+    padding: 20px 32px;
+    text-align: center;
+    flex: 1 1 160px;
+  }
+  .stat-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2.8rem; font-weight: 700;
+    color: var(--gold-lt); line-height: 1;
+  }
+  .stat-label {
+    font-size: .82rem; font-style: italic;
+    color: var(--sand); margin-top: 6px;
+  }
+
+  /* ── SECTION ── */
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: .75rem; letter-spacing: .18em;
+    color: var(--gold); text-transform: uppercase;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(201,168,76,.35);
+    margin-bottom: 20px;
+  }
+
+  /* ── CHARTS ── */
+  .charts-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  }
+  @media (max-width: 700px) { .charts-row { grid-template-columns: 1fr; } }
+  .chart-box {
+    background: rgba(0,0,0,.3);
+    border: 1px solid rgba(201,168,76,.25);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .chart-box h3 {
+    font-family: 'Cinzel', serif; font-size: .72rem;
+    letter-spacing: .12em; color: var(--gold-lt);
+    text-transform: uppercase; margin-bottom: 14px; text-align: center;
+  }
+  .chart-box.top-box { border-color: rgba(201,168,76,.5); }
+  .chart-box.bot-box { border-color: rgba(193,68,14,.4); }
+  canvas { max-height: 300px; }
+
+  /* ── SUMMARY ── */
+  .summary-box {
+    background: rgba(0,0,0,.3);
+    border: 1px solid rgba(201,168,76,.25);
+    border-radius: 10px;
+    padding: 24px 28px;
+  }
+  .summary-text {
+    font-size: 1.05rem; line-height: 1.75;
+    color: var(--sand);
+  }
+  .summary-text strong { color: var(--gold-lt); font-weight: 400; font-family: 'Cinzel', serif; font-size: .9rem; }
+
+  /* ── RESPONSES TABLE ── */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+  thead tr { background: rgba(201,168,76,.15); }
+  th {
+    font-family: 'Cinzel', serif; font-size: .62rem; letter-spacing: .12em;
+    color: var(--gold); text-transform: uppercase; padding: 10px 12px; text-align: left;
+  }
+  td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.07); color: var(--sand); vertical-align: top; }
+  tr:hover td { background: rgba(255,255,255,.04); }
+
+  /* ── ACTIONS ── */
+  .actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  button {
+    font-family: 'Cinzel', serif; font-size: .72rem; letter-spacing: .12em;
+    text-transform: uppercase; padding: 14px 32px;
+    border: none; border-radius: 5px; cursor: pointer; transition: all .2s; min-width: 200px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold) 0%, #a8832a 100%);
+    color: var(--stone); box-shadow: 0 4px 14px rgba(201,168,76,.3);
+  }
+  .btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,168,76,.4); }
+  .btn-primary:disabled { opacity: .5; cursor: default; }
+  .btn-secondary { background: transparent; color: var(--sand); border: 1px solid rgba(201,168,76,.4); }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold-lt); }
+
+  /* ── LOADING / ERROR ── */
+  .status {
+    text-align: center; padding: 60px 20px;
+    font-size: 1.1rem; font-style: italic; color: var(--sand);
+  }
+  .status.error { color: #e07050; }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Teacher View · Lesson 5 · Maya Enquiry</p>
+  <h1>Diamond Nine — Results</h1>
+  <p class="subtitle">Live class responses · updates automatically</p>
+</header>
+
+<main id="main">
+  <div class="status" id="status">Loading responses…</div>
+</main>
+
+<script>
+// ── REPLACE with your published Google Sheet CSV URL ──────────────────
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRPRURE9g1iYKrOtQCF3PMwggQDR2qeudR7fzOStsUr_L-ZvNvPRoW2Q0nEFFNsDAFaA7Ow8VuGAVDI/pub?gid=0&single=true&output=csv';
+// ─────────────────────────────────────────────────────────────────────
+
+const CARDS = ['The King','Nobles','Farmers','Artisans','Slaves','Animal Companions','Divine Right','Unpaid Labour','Ahau Pacal Votan'];
+
+const GOLD        = '#c9a84c';
+const GOLD_LT     = '#e9c46a';
+const JADE        = '#40916c';
+const TERRACOTTA  = '#c1440e';
+const CREAM       = '#f5edd6';
+const SAND        = '#e8d5b0';
+const STONE       = '#3d2b1f';
+
+let parsedData = [];
+let topChart, botChart;
+
+// ── FETCH & PARSE ─────────────────────────────────────────────────────
+async function load() {
+  try {
+    const res  = await fetch(CSV_URL + '&t=' + Date.now());
+    const text = await res.text();
+    parsedData = parseCSV(text);
+    render(parsedData);
+  } catch (e) {
+    document.getElementById('status').textContent = 'Could not load data. Make sure the sheet is published to web as CSV.';
+    document.getElementById('status').classList.add('error');
+  }
+}
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n').filter(l => l.trim());
+  if (lines.length < 2) return [];
+  // headers: Timestamp, Name, TopCard, TopReason, BottomCard, BottomReason
+  return lines.slice(1).map(line => {
+    const cols = splitCSVLine(line);
+    return {
+      timestamp:    cols[0] || '',
+      name:         cols[1] || '',
+      topCard:      cols[2] || '',
+      topReason:    cols[3] || '',
+      bottomCard:   cols[4] || '',
+      bottomReason: cols[5] || '',
+    };
+  }).filter(r => r.name || r.topCard);
+}
+
+function splitCSVLine(line) {
+  const result = [];
+  let cur = '', inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') { inQ = !inQ; }
+    else if (ch === ',' && !inQ) { result.push(cur.trim()); cur = ''; }
+    else { cur += ch; }
+  }
+  result.push(cur.trim());
+  return result;
+}
+
+function countCards(data, field) {
+  const counts = {};
+  CARDS.forEach(c => counts[c] = 0);
+  data.forEach(r => {
+    const card = r[field];
+    if (counts[card] !== undefined) counts[card]++;
+    else if (card) counts[card] = (counts[card] || 0) + 1;
+  });
+  return counts;
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────
+function render(data) {
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+
+  if (!data.length) {
+    main.innerHTML = '<div class="status">No responses yet — share the game link with your class!</div>';
+    return;
+  }
+
+  const topCounts = countCards(data, 'topCard');
+  const botCounts = countCards(data, 'bottomCard');
+
+  const topSorted = Object.entries(topCounts).sort((a,b) => b[1]-a[1]);
+  const botSorted = Object.entries(botCounts).sort((a,b) => b[1]-a[1]);
+
+  const topWinner = topSorted[0];
+  const botWinner = botSorted[0];
+  const topReasons = data.filter(r => r.topCard === topWinner[0]).map(r => r.topReason).filter(Boolean);
+  const botReasons = data.filter(r => r.bottomCard === botWinner[0]).map(r => r.bottomReason).filter(Boolean);
+
+  // ── STATS ──
+  const statRow = document.createElement('div');
+  statRow.className = 'stat-row';
+  statRow.innerHTML = `
+    <div class="stat-card"><div class="stat-num">${data.length}</div><div class="stat-label">trios responded</div></div>
+    <div class="stat-card"><div class="stat-num">${topWinner[1]}</div><div class="stat-label">chose <em>${topWinner[0]}</em> as most significant</div></div>
+    <div class="stat-card"><div class="stat-num">${botWinner[1]}</div><div class="stat-label">chose <em>${botWinner[0]}</em> as least significant</div></div>
+  `;
+  main.appendChild(statRow);
+
+  // ── CHARTS ──
+  const chartsSection = document.createElement('div');
+  chartsSection.innerHTML = '<p class="section-title">◆ Card Frequency</p>';
+  const chartsRow = document.createElement('div');
+  chartsRow.className = 'charts-row';
+
+  const topBox = document.createElement('div');
+  topBox.className = 'chart-box top-box';
+  topBox.innerHTML = '<h3>◆ Most Significant — Top Card Choices</h3><canvas id="top-chart"></canvas>';
+
+  const botBox = document.createElement('div');
+  botBox.className = 'chart-box bot-box';
+  botBox.innerHTML = '<h3>◇ Least Significant — Bottom Card Choices</h3><canvas id="bot-chart"></canvas>';
+
+  chartsRow.appendChild(topBox);
+  chartsRow.appendChild(botBox);
+  chartsSection.appendChild(chartsRow);
+  main.appendChild(chartsSection);
+
+  // Build charts
+  const topLabels = topSorted.map(([k]) => k);
+  const topVals   = topSorted.map(([,v]) => v);
+  const botLabels = botSorted.map(([k]) => k);
+  const botVals   = botSorted.map(([,v]) => v);
+
+  const chartDefaults = {
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { color: SAND, stepSize: 1 }, grid: { color: 'rgba(255,255,255,.08)' }, border: { color: 'rgba(255,255,255,.1)' } },
+      y: { ticks: { color: SAND }, grid: { display: false }, border: { display: false } },
+    },
+    responsive: true,
+  };
+
+  topChart = new Chart(document.getElementById('top-chart'), {
+    type: 'bar',
+    data: {
+      labels: topLabels,
+      datasets: [{ data: topVals, backgroundColor: topLabels.map((_,i) => i===0 ? GOLD : 'rgba(201,168,76,.35)'), borderRadius: 4 }]
+    },
+    options: { ...chartDefaults }
+  });
+
+  botChart = new Chart(document.getElementById('bot-chart'), {
+    type: 'bar',
+    data: {
+      labels: botLabels,
+      datasets: [{ data: botVals, backgroundColor: botLabels.map((_,i) => i===0 ? TERRACOTTA : 'rgba(193,68,14,.35)'), borderRadius: 4 }]
+    },
+    options: { ...chartDefaults }
+  });
+
+  // ── SUMMARY ──
+  const summarySection = document.createElement('div');
+  summarySection.innerHTML = '<p class="section-title">◆ Written Summary</p>';
+  const summaryBox = document.createElement('div');
+  summaryBox.className = 'summary-box';
+
+  const topPercent = Math.round(topWinner[1] / data.length * 100);
+  const botPercent = Math.round(botWinner[1] / data.length * 100);
+  const topExample = topReasons[0] ? `One group wrote: "${topReasons[0]}"` : '';
+  const botExample = botReasons[0] ? `One group wrote: "${botReasons[0]}"` : '';
+  const secondTop  = topSorted[1] && topSorted[1][1] > 0 ? topSorted[1][0] : null;
+
+  summaryBox.innerHTML = `<p class="summary-text">
+    <strong>${data.length}</strong> trio${data.length !== 1 ? 's' : ''} completed the Diamond Nine activity.<br><br>
+    The most popular choice for <strong>most significant</strong> was <strong>${topWinner[0]}</strong>,
+    chosen by ${topWinner[1]} group${topWinner[1] !== 1 ? 's' : ''} (${topPercent}% of the class).
+    ${secondTop ? `<strong>${secondTop}</strong> was the second most common choice.` : ''}
+    ${topExample ? `<br><br>${topExample}` : ''}<br><br>
+    For <strong>least significant</strong>, <strong>${botWinner[0]}</strong> was the most common bottom choice,
+    selected by ${botWinner[1]} group${botWinner[1] !== 1 ? 's' : ''} (${botPercent}% of the class).
+    ${botExample ? `<br><br>${botExample}` : ''}
+  </p>`;
+  summarySection.appendChild(summaryBox);
+  main.appendChild(summarySection);
+
+  // ── RESPONSES TABLE ──
+  const tableSection = document.createElement('div');
+  tableSection.innerHTML = '<p class="section-title">◆ All Responses</p>';
+  const tableWrap = document.createElement('div');
+  tableWrap.className = 'table-wrap';
+  tableWrap.innerHTML = `<table>
+    <thead><tr><th>Trio</th><th>Top Card</th><th>Reason</th><th>Bottom Card</th><th>Reason</th></tr></thead>
+    <tbody>${data.map(r => `
+      <tr>
+        <td>${r.name}</td>
+        <td>${r.topCard}</td>
+        <td>${r.topReason}</td>
+        <td>${r.bottomCard}</td>
+        <td>${r.bottomReason}</td>
+      </tr>`).join('')}
+    </tbody>
+  </table>`;
+  tableSection.appendChild(tableWrap);
+  main.appendChild(tableSection);
+
+  // ── ACTIONS ──
+  const actions = document.createElement('div');
+  actions.className = 'actions';
+  actions.innerHTML = `
+    <button class="btn-secondary" onclick="load()">↺ Refresh Data</button>
+    <button class="btn-primary" onclick="downloadPptx()">⬇ Download PowerPoint</button>
+  `;
+  main.appendChild(actions);
+}
+
+// ── POWERPOINT EXPORT ─────────────────────────────────────────────────
+async function downloadPptx() {
+  const data = parsedData;
+  if (!data.length) return;
+
+  const topCounts = countCards(data, 'topCard');
+  const botCounts = countCards(data, 'bottomCard');
+  const topSorted = Object.entries(topCounts).sort((a,b)=>b[1]-a[1]);
+  const botSorted = Object.entries(botCounts).sort((a,b)=>b[1]-a[1]);
+  const topWinner = topSorted[0];
+  const botWinner = botSorted[0];
+  const topPercent = Math.round(topWinner[1]/data.length*100);
+  const botPercent = Math.round(botWinner[1]/data.length*100);
+  const topReasons = data.filter(r=>r.topCard===topWinner[0]).map(r=>r.topReason).filter(Boolean);
+  const botReasons = data.filter(r=>r.bottomCard===botWinner[0]).map(r=>r.bottomReason).filter(Boolean);
+  const secondTop  = topSorted[1]&&topSorted[1][1]>0 ? topSorted[1][0] : null;
+
+  const pptx = new PptxGenJS();
+  pptx.layout = 'LAYOUT_16x9';
+  pptx.title  = 'Diamond Nine — Class Results';
+
+  const BG      = '3d2b1f';
+  const BG_CARD = '2a1a0f';
+  const GOLD_H  = 'c9a84c';
+  const GOLD_L  = 'e9c46a';
+  const SAND_H  = 'e8d5b0';
+  const CREAM_H = 'f5edd6';
+  const JADE_H  = '40916c';
+  const TERRA_H = 'c1440e';
+
+  const makeShadow = () => ({ type:'outer', blur:8, offset:3, angle:135, color:'000000', opacity:0.3 });
+
+  // ── SLIDE 1: TITLE ──────────────────────────────────────────────────
+  {
+    const s = pptx.addSlide();
+    s.background = { color: BG };
+    // Top gold bar
+    s.addShape(pptx.ShapeType.rect, { x:0, y:0, w:10, h:0.08, fill:{ color:GOLD_H }, line:{ color:GOLD_H } });
+    // Bottom gold bar
+    s.addShape(pptx.ShapeType.rect, { x:0, y:5.545, w:10, h:0.08, fill:{ color:GOLD_H }, line:{ color:GOLD_H } });
+
+    s.addText('DIAMOND NINE', { x:0.5, y:1.2, w:9, h:0.6, fontSize:11, fontFace:'Georgia', color:GOLD_H, charSpacing:8, align:'center' });
+    s.addText('Class Results', { x:0.5, y:1.9, w:9, h:1.2, fontSize:40, fontFace:'Georgia', bold:true, color:GOLD_L, align:'center' });
+    s.addText('Lesson 5 · Maya Enquiry · Who mattered most?', { x:0.5, y:3.1, w:9, h:0.5, fontSize:16, fontFace:'Georgia', italic:true, color:SAND_H, align:'center' });
+    s.addText(`${data.length} trio${data.length!==1?'s':''} responded`, { x:0.5, y:3.9, w:9, h:0.4, fontSize:13, fontFace:'Calibri', color:GOLD_H, align:'center', charSpacing:3 });
+  }
+
+  // ── SLIDE 2: TOP CHART ──────────────────────────────────────────────
+  {
+    const s = pptx.addSlide();
+    s.background = { color: BG };
+    s.addShape(pptx.ShapeType.rect, { x:0, y:0, w:10, h:0.08, fill:{ color:GOLD_H }, line:{ color:GOLD_H } });
+
+    s.addText('◆  Most Significant — Top Card Choices', { x:0.5, y:0.22, w:9, h:0.5, fontSize:18, fontFace:'Georgia', bold:true, color:GOLD_L });
+
+    const topLabels = topSorted.map(([k])=>k);
+    const topVals   = topSorted.map(([,v])=>v);
+    const topColors = topLabels.map((_,i)=> i===0 ? GOLD_H : 'C4973A');
+
+    s.addChart(pptx.ChartType.bar, [{ name:'Groups', labels:topLabels, values:topVals }], {
+      x:0.4, y:0.85, w:9.2, h:4.5,
+      barDir:'bar',
+      chartColors: topColors,
+      chartArea: { fill:{ color:'2a1a0f' } },
+      catAxisLabelColor: SAND_H,
+      valAxisLabelColor: SAND_H,
+      catAxisLineShow: false,
+      valGridLine: { color:'5a3d2a', size:0.5 },
+      catGridLine: { style:'none' },
+      showValue: true,
+      dataLabelColor: CREAM_H,
+      dataLabelFontSize: 11,
+      valAxisMinVal: 0,
+      valAxisMajorUnit: 1,
+      showLegend: false,
+    });
+  }
+
+  // ── SLIDE 3: BOTTOM CHART ───────────────────────────────────────────
+  {
+    const s = pptx.addSlide();
+    s.background = { color: BG };
+    s.addShape(pptx.ShapeType.rect, { x:0, y:0, w:10, h:0.08, fill:{ color:TERRA_H }, line:{ color:TERRA_H } });
+
+    s.addText('◇  Least Significant — Bottom Card Choices', { x:0.5, y:0.22, w:9, h:0.5, fontSize:18, fontFace:'Georgia', bold:true, color:CREAM_H });
+
+    const botLabels = botSorted.map(([k])=>k);
+    const botVals   = botSorted.map(([,v])=>v);
+    const botColors = botLabels.map((_,i)=> i===0 ? TERRA_H : '8B3010');
+
+    s.addChart(pptx.ChartType.bar, [{ name:'Groups', labels:botLabels, values:botVals }], {
+      x:0.4, y:0.85, w:9.2, h:4.5,
+      barDir:'bar',
+      chartColors: botColors,
+      chartArea: { fill:{ color:'2a1a0f' } },
+      catAxisLabelColor: SAND_H,
+      valAxisLabelColor: SAND_H,
+      catAxisLineShow: false,
+      valGridLine: { color:'5a3d2a', size:0.5 },
+      catGridLine: { style:'none' },
+      showValue: true,
+      dataLabelColor: CREAM_H,
+      dataLabelFontSize: 11,
+      valAxisMinVal: 0,
+      valAxisMajorUnit: 1,
+      showLegend: false,
+    });
+  }
+
+  // ── SLIDE 4: SUMMARY ────────────────────────────────────────────────
+  {
+    const s = pptx.addSlide();
+    s.background = { color: BG };
+    s.addShape(pptx.ShapeType.rect, { x:0, y:0, w:10, h:0.08, fill:{ color:GOLD_H }, line:{ color:GOLD_H } });
+
+    s.addText('Class Summary', { x:0.5, y:0.2, w:9, h:0.55, fontSize:22, fontFace:'Georgia', bold:true, color:GOLD_L });
+
+    // Top card box
+    s.addShape(pptx.ShapeType.rect, { x:0.4, y:0.95, w:4.3, h:2.0, fill:{ color:'1e100a' }, shadow:makeShadow(), line:{ color:GOLD_H, width:1 } });
+    s.addShape(pptx.ShapeType.rect, { x:0.4, y:0.95, w:0.08, h:2.0, fill:{ color:GOLD_H }, line:{ color:GOLD_H } });
+    s.addText('◆  Most Significant', { x:0.55, y:1.0, w:4.0, h:0.35, fontSize:9, fontFace:'Georgia', color:GOLD_H, charSpacing:3 });
+    s.addText(topWinner[0], { x:0.55, y:1.35, w:4.0, h:0.45, fontSize:18, fontFace:'Georgia', bold:true, color:GOLD_L });
+    s.addText(`Chosen by ${topWinner[1]} of ${data.length} groups (${topPercent}%)`, { x:0.55, y:1.78, w:4.0, h:0.3, fontSize:11, fontFace:'Calibri', color:SAND_H });
+    if (secondTop) s.addText(`Runner-up: ${secondTop}`, { x:0.55, y:2.08, w:4.0, h:0.25, fontSize:10, fontFace:'Calibri', italic:true, color:GOLD_H });
+
+    // Bottom card box
+    s.addShape(pptx.ShapeType.rect, { x:5.3, y:0.95, w:4.3, h:2.0, fill:{ color:'1e100a' }, shadow:makeShadow(), line:{ color:TERRA_H, width:1 } });
+    s.addShape(pptx.ShapeType.rect, { x:5.3, y:0.95, w:0.08, h:2.0, fill:{ color:TERRA_H }, line:{ color:TERRA_H } });
+    s.addText('◇  Least Significant', { x:5.45, y:1.0, w:4.0, h:0.35, fontSize:9, fontFace:'Georgia', color:TERRA_H, charSpacing:3 });
+    s.addText(botWinner[0], { x:5.45, y:1.35, w:4.0, h:0.45, fontSize:18, fontFace:'Georgia', bold:true, color:CREAM_H });
+    s.addText(`Chosen by ${botWinner[1]} of ${data.length} groups (${botPercent}%)`, { x:5.45, y:1.78, w:4.0, h:0.3, fontSize:11, fontFace:'Calibri', color:SAND_H });
+
+    // Reasons
+    s.addText('What groups said about their top choice:', { x:0.4, y:3.15, w:9.2, h:0.3, fontSize:10, fontFace:'Georgia', color:GOLD_H, charSpacing:2 });
+
+    const reasonItems = topReasons.slice(0, 3).map((r, i) => [
+      { text: `"${r}"`, options: { italic:true, breakLine: i < Math.min(topReasons.length,3)-1 } }
+    ]).flat();
+
+    if (reasonItems.length) {
+      s.addText(reasonItems, { x:0.4, y:3.5, w:9.2, h:1.7, fontSize:12, fontFace:'Calibri', color:SAND_H, valign:'top' });
+    }
+  }
+
+  // ── SLIDE 5: RESPONSES ──────────────────────────────────────────────
+  {
+    const s = pptx.addSlide();
+    s.background = { color: BG };
+    s.addShape(pptx.ShapeType.rect, { x:0, y:0, w:10, h:0.08, fill:{ color:GOLD_H }, line:{ color:GOLD_H } });
+    s.addText('All Group Responses', { x:0.5, y:0.2, w:9, h:0.5, fontSize:22, fontFace:'Georgia', bold:true, color:GOLD_L });
+
+    const rows = [
+      [
+        { text:'Trio', options:{ bold:true, color:STONE, fill:{ color:GOLD_H } } },
+        { text:'Top Card', options:{ bold:true, color:STONE, fill:{ color:GOLD_H } } },
+        { text:'Reason', options:{ bold:true, color:STONE, fill:{ color:GOLD_H } } },
+        { text:'Bottom Card', options:{ bold:true, color:STONE, fill:{ color:GOLD_H } } },
+        { text:'Reason', options:{ bold:true, color:STONE, fill:{ color:GOLD_H } } },
+      ],
+      ...data.slice(0,10).map(r => [r.name, r.topCard, r.topReason.slice(0,60)+(r.topReason.length>60?'…':''), r.bottomCard, r.bottomReason.slice(0,60)+(r.bottomReason.length>60?'…':'')]),
+    ];
+
+    s.addTable(rows, {
+      x:0.3, y:0.85, w:9.4,
+      fontSize:9, fontFace:'Calibri',
+      color: SAND_H,
+      border: { type:'solid', pt:0.5, color:'5a3d2a' },
+      fill: { color:'2a1a0f' },
+      colW:[2.0,1.4,2.6,1.4,2.0],
+      rowH: 0.32,
+    });
+
+    if (data.length > 10) {
+      s.addText(`… and ${data.length-10} more responses`, { x:0.3, y:5.2, w:9.4, h:0.25, fontSize:10, fontFace:'Calibri', italic:true, color:GOLD_H, align:'center' });
+    }
+  }
+
+  await pptx.writeFile({ fileName: 'Diamond-Nine-Results.pptx' });
+}
+
+load();
+// Auto-refresh every 60 seconds
+setInterval(load, 60000);
+</script>
+</body>
+</html>
