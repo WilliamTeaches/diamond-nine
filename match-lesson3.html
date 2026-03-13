@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Match Them Up · Lesson 3 · Maya Enquiry</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --jade:    #2d6a4f;
+    --jade-lt: #40916c;
+    --gold:    #c9a84c;
+    --gold-lt: #e9c46a;
+    --stone:   #3d2b1f;
+    --cream:   #f5edd6;
+    --sand:    #e8d5b0;
+    --terra:   #c1440e;
+    --shadow:  rgba(30,15,5,.45);
+    --correct: #2d6a4f;
+    --wrong:   #8b1a1a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%; height: 100%;
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: var(--stone);
+    color: var(--cream);
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.06) 2px, rgba(0,0,0,.06) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    position: relative; z-index: 1;
+    width: 100%; height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(180deg, #1e0f07 0%, rgba(30,15,7,.5) 100%);
+    border-bottom: 2px solid var(--gold);
+    padding: 10px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+  }
+  .header-left .eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: .62rem; letter-spacing: .2em;
+    color: var(--gold); text-transform: uppercase;
+  }
+  .header-left h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    font-weight: 700; color: var(--gold-lt); letter-spacing: .04em;
+    line-height: 1.1;
+  }
+  .header-right {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .score-badge {
+    font-family: 'Cinzel', serif;
+    font-size: .7rem; letter-spacing: .1em;
+    color: var(--gold);
+    background: rgba(0,0,0,.3);
+    border: 1px solid rgba(201,168,76,.3);
+    border-radius: 20px;
+    padding: 4px 14px;
+    white-space: nowrap;
+  }
+  .score-num { color: var(--gold-lt); font-size: .95rem; font-weight: 700; }
+
+  /* ── SCREENS ── */
+  .screen { display: none; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* ── INSTRUCTIONS SCREEN ── */
+  #screen-intro {
+    align-items: center; justify-content: center;
+    padding: 20px; gap: 18px; text-align: center;
+  }
+  .intro-icon { font-size: 3rem; }
+  .intro-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.1rem, 3vw, 1.8rem);
+    color: var(--gold-lt); font-weight: 700;
+  }
+  .intro-body {
+    font-size: clamp(.9rem, 2vw, 1.1rem);
+    color: var(--sand); line-height: 1.65;
+    max-width: 520px;
+  }
+  .badge-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .badge {
+    font-family: 'Cinzel', serif; font-size: .62rem; letter-spacing: .1em;
+    text-transform: uppercase; padding: 4px 12px; border-radius: 4px;
+  }
+  .badge.core { background: var(--gold); color: var(--stone); }
+  .badge.ext  { background: var(--terra); color: var(--cream); }
+
+  /* ── GAME SCREEN ── */
+  #screen-game {
+    padding: 12px 16px;
+    gap: 10px;
+  }
+
+  .columns {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    min-height: 0;
+  }
+
+  .col-label {
+    font-family: 'Cinzel', serif;
+    font-size: .62rem; letter-spacing: .16em;
+    color: var(--gold); text-transform: uppercase;
+    margin-bottom: 6px; padding-bottom: 5px;
+    border-bottom: 1px solid rgba(201,168,76,.3);
+  }
+
+  /* ── QUESTION ITEMS ── */
+  .q-item {
+    background: rgba(0,0,0,.3);
+    border: 1px solid rgba(201,168,76,.25);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 7px;
+    cursor: pointer;
+    transition: all .2s;
+    font-size: clamp(.78rem, 1.6vw, .95rem);
+    line-height: 1.4;
+    color: var(--sand);
+    position: relative;
+    user-select: none; -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+  .q-item:hover { border-color: var(--gold); background: rgba(201,168,76,.08); }
+  .q-item.selected {
+    border-color: var(--gold-lt);
+    background: rgba(201,168,76,.18);
+    box-shadow: 0 0 0 2px rgba(201,168,76,.4);
+    color: var(--cream);
+  }
+  .q-item.matched-correct {
+    border-color: var(--jade-lt);
+    background: rgba(45,106,79,.25);
+    color: var(--cream);
+    cursor: default;
+    pointer-events: none;
+  }
+  .q-item.matched-correct::after {
+    content: '✓';
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    color: var(--jade-lt); font-size: 1rem;
+  }
+  .q-item.shake {
+    animation: shake .35s ease;
+    border-color: var(--terra);
+    background: rgba(139,26,26,.25);
+  }
+
+  /* ── ANSWER ITEMS ── */
+  .a-item {
+    background: rgba(0,0,0,.35);
+    border: 1px solid rgba(201,168,76,.2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 7px;
+    cursor: pointer;
+    transition: all .2s;
+    font-size: clamp(.78rem, 1.6vw, .95rem);
+    line-height: 1.4;
+    color: var(--sand);
+    user-select: none; -webkit-user-select: none;
+    touch-action: manipulation;
+    position: relative;
+  }
+  .a-item:hover { border-color: var(--gold); background: rgba(201,168,76,.08); }
+  .a-item.selected {
+    border-color: var(--gold-lt);
+    background: rgba(201,168,76,.18);
+    box-shadow: 0 0 0 2px rgba(201,168,76,.4);
+    color: var(--cream);
+  }
+  .a-item.matched-correct {
+    border-color: var(--jade-lt);
+    background: rgba(45,106,79,.25);
+    color: var(--cream);
+    cursor: default;
+    pointer-events: none;
+  }
+  .a-item.matched-correct::after {
+    content: '✓';
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    color: var(--jade-lt); font-size: 1rem;
+  }
+  .a-item.shake {
+    animation: shake .35s ease;
+    border-color: var(--terra);
+    background: rgba(139,26,26,.25);
+  }
+  .a-item.spare {
+    border-style: dashed;
+    border-color: rgba(193,68,14,.5);
+    background: rgba(193,68,14,.06);
+  }
+  .spare-label {
+    font-family: 'Cinzel', serif;
+    font-size: .55rem; letter-spacing: .1em;
+    color: var(--terra); text-transform: uppercase;
+    display: block; margin-bottom: 3px;
+  }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%      { transform: translateX(-6px); }
+    40%      { transform: translateX(6px); }
+    60%      { transform: translateX(-4px); }
+    80%      { transform: translateX(4px); }
+  }
+
+  /* ── EXTEND BOX ── */
+  .extend-box {
+    background: rgba(193,68,14,.1);
+    border: 1px solid rgba(193,68,14,.4);
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: none;
+    gap: 8px;
+    flex-direction: column;
+  }
+  .extend-box.visible { display: flex; }
+  .extend-title {
+    font-family: 'Cinzel', serif;
+    font-size: .65rem; letter-spacing: .12em;
+    color: var(--terra); text-transform: uppercase;
+  }
+  .extend-prompt {
+    font-size: .85rem; font-style: italic; color: var(--sand);
+  }
+  .extend-input {
+    background: rgba(0,0,0,.35);
+    border: 1px solid rgba(193,68,14,.4);
+    border-radius: 5px;
+    color: var(--cream);
+    font-family: 'Crimson Pro', serif; font-size: .95rem;
+    padding: 7px 10px; outline: none;
+    transition: border-color .2s;
+    width: 100%;
+  }
+  .extend-input:focus { border-color: var(--terra); }
+  .extend-input::placeholder { color: rgba(245,237,214,.3); font-style: italic; }
+  .extend-feedback {
+    font-size: .82rem; font-style: italic;
+    color: var(--jade-lt);
+    min-height: 1.2em;
+  }
+  .extend-feedback.wrong { color: #e07050; }
+
+  /* ── COMPLETE SCREEN ── */
+  #screen-complete {
+    align-items: center; justify-content: center;
+    padding: 20px; gap: 16px; text-align: center;
+  }
+  .complete-icon { font-size: 3.5rem; }
+  .complete-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.2rem,3vw,2rem);
+    color: var(--gold-lt); font-weight: 700;
+  }
+  .complete-sub {
+    font-size: clamp(.9rem,2vw,1.1rem);
+    color: var(--sand); font-style: italic;
+  }
+  .final-score {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2rem,5vw,3.5rem);
+    font-weight: 700; color: var(--gold-lt);
+    line-height: 1;
+  }
+  .final-label { font-size: .8rem; color: var(--gold); letter-spacing: .1em; }
+  .star-row { font-size: 1.8rem; letter-spacing: 6px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: rgba(0,0,0,.35);
+    border-top: 1px solid rgba(201,168,76,.2);
+    padding: 7px 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+  .hint-text {
+    font-size: .72rem; font-style: italic; color: rgba(232,213,176,.45);
+  }
+  button {
+    font-family: 'Cinzel', serif; font-size: .68rem; letter-spacing: .1em;
+    text-transform: uppercase; padding: 9px 24px;
+    border: none; border-radius: 5px; cursor: pointer; transition: all .2s;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold) 0%, #a8832a 100%);
+    color: var(--stone); box-shadow: 0 3px 10px rgba(201,168,76,.3);
+  }
+  .btn-primary:hover { transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent; color: var(--sand);
+    border: 1px solid rgba(201,168,76,.35);
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold-lt); }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar {
+    height: 3px; width: 100%;
+    background: rgba(201,168,76,.15); border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--jade-lt), var(--gold));
+    border-radius: 2px; transition: width .4s ease;
+  }
+
+  /* ── PULSE ANIMATION for correct match ── */
+  @keyframes popIn {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.04); }
+    100% { transform: scale(1); }
+  }
+  .pop { animation: popIn .25s ease; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-left">
+      <div class="eyebrow">Lesson 3 · Cat. 1 Retrieval · Maya Enquiry</div>
+      <h1>Match Them Up</h1>
+    </div>
+    <div class="header-right">
+      <div class="score-badge">Score <span class="score-num" id="score-num">0</span></div>
+    </div>
+  </header>
+
+  <!-- INTRO SCREEN -->
+  <div class="screen active" id="screen-intro">
+    <div class="intro-icon">🗺️</div>
+    <div class="intro-title">Match the words to their meanings</div>
+    <p class="intro-body">
+      Tap a <strong style="color:var(--gold-lt)">question</strong> on the left, then tap the <strong style="color:var(--gold-lt)">matching definition</strong> on the right.<br><br>
+      There are five definitions but only four questions — can you work out which one is left over?
+    </p>
+    <div class="badge-row">
+      <span class="badge core">Core — match all four</span>
+      <span class="badge ext">Extend — write a question for the odd one out</span>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div class="screen" id="screen-game">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="columns">
+      <div>
+        <div class="col-label">◆ Questions</div>
+        <div id="questions-col"></div>
+      </div>
+      <div>
+        <div class="col-label">◆ Definitions</div>
+        <div id="answers-col"></div>
+      </div>
+    </div>
+    <div class="extend-box" id="extend-box">
+      <div class="extend-title">◇ Extend — The Odd One Out</div>
+      <div class="extend-prompt">This definition didn't have a match. Can you write the question it belongs to?</div>
+      <div class="extend-prompt" id="extend-prompt"></div>
+      <input class="extend-input" id="extend-input" type="text" placeholder="Write the question for this definition…" autocomplete="off">
+      <div class="extend-feedback" id="extend-feedback"></div>
+    </div>
+  </div>
+
+  <!-- COMPLETE SCREEN -->
+  <div class="screen" id="screen-complete">
+    <div class="complete-icon" id="complete-icon">🏆</div>
+    <div class="complete-title" id="complete-title">Excellent work!</div>
+    <div class="complete-sub" id="complete-sub">You matched all four definitions correctly.</div>
+    <div>
+      <div class="final-score" id="final-score">4</div>
+      <div class="final-label">/ 4 CORRECT</div>
+    </div>
+    <div class="star-row" id="star-row">⭐⭐⭐⭐</div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="hint-text" id="hint-text">Tap a question to begin</div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn-secondary" id="btn-reset" onclick="resetGame()" style="display:none">↺ Reset</button>
+      <button class="btn-primary" id="btn-start" onclick="startGame()">Start →</button>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+const PAIRS = [
+  {
+    id: 'region',
+    question: 'What is a region?',
+    answer: 'A large area of land that shares similar features, such as its landscape, climate or culture.',
+  },
+  {
+    id: 'environment',
+    question: 'What is an environment?',
+    answer: 'The natural surroundings — land, water, plants and weather — that people and animals live in.',
+  },
+  {
+    id: 'source',
+    question: 'What is a source?',
+    answer: 'An object, image or piece of writing that gives us information about the past.',
+  },
+  {
+    id: 'evidence',
+    question: 'What is evidence?',
+    answer: 'Information or clues that help us decide whether something is true or likely to have happened.',
+  },
+];
+
+const SPARE = {
+  id: 'spare',
+  answer: 'A person who studies people, places and events from the past.',
+  correctQuestion: 'What is a historian?',
+};
+
+let selectedQ  = null;  // id of selected question
+let selectedA  = null;  // id of selected answer
+let matched    = new Set();
+let score      = 0;
+let attempts   = 0;
+
+// ── SHUFFLE ──────────────────────────────────────────────
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+// ── START ─────────────────────────────────────────────────
+function startGame() {
+  showScreen('screen-game');
+  document.getElementById('btn-start').style.display   = 'none';
+  document.getElementById('btn-reset').style.display   = 'inline-block';
+  document.getElementById('hint-text').textContent     = 'Tap a question, then tap a definition';
+  buildColumns();
+}
+
+function buildColumns() {
+  const qCol = document.getElementById('questions-col');
+  const aCol = document.getElementById('answers-col');
+  qCol.innerHTML = '';
+  aCol.innerHTML = '';
+
+  // Questions (fixed order)
+  PAIRS.forEach(p => {
+    const el = document.createElement('div');
+    el.className = 'q-item';
+    el.id = `q-${p.id}`;
+    el.textContent = p.question;
+    el.onclick = () => selectQ(p.id);
+    qCol.appendChild(el);
+  });
+
+  // Answers (shuffled) + spare
+  const allAnswers = shuffle([...PAIRS.map(p => ({ id: p.id, text: p.answer, spare: false })),
+                               { id: 'spare', text: SPARE.answer, spare: true }]);
+  allAnswers.forEach(a => {
+    const el = document.createElement('div');
+    el.className = 'a-item';
+    el.id = `a-${a.id}`;
+    el.textContent = a.text;
+    el.onclick = () => selectA(a.id);
+    aCol.appendChild(el);
+  });
+}
+
+// ── SELECT ────────────────────────────────────────────────
+function selectQ(id) {
+  if (matched.has(id)) return;
+
+  // Deselect previous
+  if (selectedQ) document.getElementById(`q-${selectedQ}`)?.classList.remove('selected');
+
+  if (selectedQ === id) { selectedQ = null; return; } // toggle off
+
+  selectedQ = id;
+  document.getElementById(`q-${id}`).classList.add('selected');
+  document.getElementById('hint-text').textContent = 'Now tap the matching definition';
+
+  if (selectedA !== null) tryMatch();
+}
+
+function selectA(id) {
+  if (id === 'spare') {
+    // Clicking spare just highlights it — no match possible
+    document.querySelectorAll('.a-item').forEach(el => el.classList.remove('selected'));
+    document.getElementById('a-spare').classList.toggle('selected');
+    return;
+  }
+  if (matched.has(id)) return;
+
+  if (selectedA) document.getElementById(`a-${selectedA}`)?.classList.remove('selected');
+  if (selectedA === id) { selectedA = null; return; }
+
+  selectedA = id;
+  document.getElementById(`a-${id}`).classList.add('selected');
+  document.getElementById('hint-text').textContent = 'Now tap the matching question';
+
+  if (selectedQ !== null) tryMatch();
+}
+
+// ── MATCH LOGIC ───────────────────────────────────────────
+function tryMatch() {
+  const qId = selectedQ;
+  const aId = selectedA;
+  attempts++;
+
+  if (qId === aId) {
+    // ✓ Correct
+    score++;
+    matched.add(qId);
+
+    const qEl = document.getElementById(`q-${qId}`);
+    const aEl = document.getElementById(`a-${aId}`);
+    qEl.classList.remove('selected');
+    aEl.classList.remove('selected');
+    qEl.classList.add('matched-correct', 'pop');
+    aEl.classList.add('matched-correct', 'pop');
+
+    selectedQ = null; selectedA = null;
+    updateScore();
+    updateProgress();
+    document.getElementById('hint-text').textContent =
+      matched.size < PAIRS.length ? '✓ Correct! Keep going…' : '✓ All matched!';
+
+    if (matched.size === PAIRS.length) {
+      setTimeout(showExtend, 400);
+    }
+  } else {
+    // ✗ Wrong
+    const qEl = document.getElementById(`q-${qId}`);
+    const aEl = document.getElementById(`a-${aId}`);
+    qEl.classList.remove('selected');
+    aEl.classList.remove('selected');
+    qEl.classList.add('shake');
+    aEl.classList.add('shake');
+    setTimeout(() => { qEl.classList.remove('shake'); aEl.classList.remove('shake'); }, 400);
+    selectedQ = null; selectedA = null;
+    document.getElementById('hint-text').textContent = '✗ Not quite — try again';
+  }
+}
+
+function updateScore() {
+  document.getElementById('score-num').textContent = score;
+}
+
+function updateProgress() {
+  const pct = Math.round(matched.size / PAIRS.length * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+// ── EXTEND ────────────────────────────────────────────────
+function showExtend() {
+  const box = document.getElementById('extend-box');
+  document.getElementById('extend-prompt').textContent = `"${SPARE.answer}"`;
+  box.classList.add('visible');
+  document.getElementById('hint-text').textContent = '★ Extend: one definition had no match — write its question';
+  document.getElementById('hint-text').textContent = '★ Extend: write the question for the spare answer';
+
+  const input = document.getElementById('extend-input');
+  input.addEventListener('input', checkExtend);
+  input.focus();
+}
+
+function checkExtend() {
+  const val = document.getElementById('extend-input').value.trim().toLowerCase();
+  const fb  = document.getElementById('extend-feedback');
+  if (!val) { fb.textContent = ''; fb.className = 'extend-feedback'; return; }
+
+  const keywords = ['historian', 'history', 'past', 'studies'];
+  const hasKeyword = keywords.some(k => val.includes(k));
+  const isQuestion = val.includes('?') || val.startsWith('what') || val.startsWith('who');
+
+  if (hasKeyword && isQuestion) {
+    fb.textContent = '✓ Great — the answer is "What is a historian?"';
+    fb.className   = 'extend-feedback';
+    setTimeout(showComplete, 1200);
+  } else if (hasKeyword) {
+    fb.textContent = 'Good thinking — try phrasing it as a question';
+    fb.className   = 'extend-feedback';
+  } else if (val.length > 8) {
+    fb.textContent = 'Think about what kind of person studies the past…';
+    fb.className   = 'extend-feedback wrong';
+  }
+}
+
+// ── COMPLETE ──────────────────────────────────────────────
+function showComplete() {
+  const accuracy = Math.round(score / attempts * 100);
+  let icon, title, sub, stars;
+
+  if (accuracy === 100) {
+    icon = '🏆'; title = 'Perfect score!'; stars = '⭐⭐⭐⭐';
+    sub = 'You matched every definition first time. Brilliant!';
+  } else if (accuracy >= 75) {
+    icon = '🌟'; title = 'Well done!'; stars = '⭐⭐⭐';
+    sub = 'Great matching — nearly perfect!';
+  } else {
+    icon = '👏'; title = 'Good effort!'; stars = '⭐⭐';
+    sub = 'Keep practising these key words.';
+  }
+
+  document.getElementById('complete-icon').textContent  = icon;
+  document.getElementById('complete-title').textContent = title;
+  document.getElementById('complete-sub').textContent   = sub;
+  document.getElementById('final-score').textContent    = score;
+  document.getElementById('star-row').textContent       = stars;
+
+  setTimeout(() => showScreen('screen-complete'), 600);
+  document.getElementById('hint-text').textContent = '';
+  document.getElementById('btn-reset').style.display = 'inline-block';
+}
+
+// Also allow completing without extend
+function maybeComplete() {
+  if (matched.size === PAIRS.length) showComplete();
+}
+
+// ── RESET ─────────────────────────────────────────────────
+function resetGame() {
+  selectedQ = null; selectedA = null;
+  matched   = new Set();
+  score     = 0; attempts = 0;
+  updateScore();
+  document.getElementById('progress-fill').style.width = '0%';
+  document.getElementById('extend-box').classList.remove('visible');
+  document.getElementById('extend-input').value = '';
+  document.getElementById('extend-feedback').textContent = '';
+  document.getElementById('hint-text').textContent = 'Tap a question to begin';
+  buildColumns();
+  showScreen('screen-game');
+}
+
+// ── SCREENS ───────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// Skip intro button behaviour — also allow pressing Enter on intro
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('screen-intro').classList.contains('active')) startGame();
+});
+</script>
+</body>
+</html>
