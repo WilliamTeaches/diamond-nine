@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grammar Lesson 4 · Print View</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  /* ── SCREEN CHROME ── */
+  :root {
+    --gold:#c9a84c; --gold-lt:#e9c46a;
+    --stone-dk:#140a04; --cream:#f5edd6; --sand:#e8d5b0;
+    --jade:#2d6a4f; --jade-lt:#40916c;
+    --terra:#c1440e;
+  }
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+  body {
+    font-family:'Crimson Pro',Georgia,serif;
+    background:#e8e4dc;
+    color:#1a1a1a;
+    min-height:100vh;
+  }
+
+  .screen-header {
+    background:linear-gradient(180deg,#0d0604 0%,rgba(13,6,4,.9) 100%);
+    border-bottom:2px solid var(--gold);
+    padding:12px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:12px; flex-wrap:wrap;
+    position:sticky; top:0; z-index:100;
+  }
+  .eyebrow { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.22em; color:var(--gold); text-transform:uppercase; margin-bottom:3px; }
+  .screen-header h1 { font-family:'Cinzel',serif; font-size:clamp(.9rem,2vw,1.3rem); font-weight:700; color:var(--gold-lt); }
+  .hdr-right { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .live-dot { width:8px; height:8px; border-radius:50%; background:var(--jade-lt); animation:pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
+
+  .screen-btn {
+    font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.1em; text-transform:uppercase;
+    padding:10px 22px; border:none; border-radius:5px; cursor:pointer; transition:all .2s;
+  }
+  .btn-print { background:linear-gradient(135deg,var(--gold) 0%,#a8832a 100%); color:#1e0f07; }
+  .btn-print:hover { transform:translateY(-1px); }
+  .btn-refresh { background:transparent; color:var(--sand); border:1px solid rgba(201,168,76,.4); }
+  .btn-refresh:hover { border-color:var(--gold); color:var(--gold-lt); }
+
+  .screen-main { max-width:900px; margin:24px auto; padding:0 16px 60px; display:flex; flex-direction:column; gap:20px; }
+
+  .status { text-align:center; padding:60px 20px; font-family:'Cinzel',serif; font-size:.8rem; letter-spacing:.1em; color:rgba(26,26,26,.5); text-transform:uppercase; }
+
+  .pupil-pill {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(45,106,79,.15); border:1px solid rgba(45,106,79,.35);
+    border-radius:20px; padding:5px 14px;
+    font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.08em; color:#2d6a4f;
+    cursor:pointer; transition:all .15s;
+  }
+  .pupil-pill:hover { background:rgba(45,106,79,.25); }
+  .pupil-list { display:flex; flex-wrap:wrap; gap:8px; }
+
+  /* ── A4 SHEETS ── */
+  .a4-sheet {
+    background:#fff;
+    width:100%;
+    max-width:794px;
+    margin:0 auto;
+    padding:28px 32px;
+    border:1px solid #ccc;
+    box-shadow:0 2px 16px rgba(0,0,0,.12);
+    font-family:'Crimson Pro',Georgia,serif;
+    font-size:10.5pt;
+    color:#1a1a1a;
+    page-break-after:always;
+    position:relative;
+  }
+
+  /* School header bar */
+  .sheet-header {
+    display:flex; align-items:flex-start; justify-content:space-between;
+    border-bottom:2.5px solid #1a1a2e;
+    padding-bottom:10px; margin-bottom:14px;
+    gap:10px;
+  }
+  .sheet-school { font-size:7.5pt; color:#555; line-height:1.4; }
+  .sheet-title { font-family:'Cinzel',Georgia,serif; font-size:13pt; font-weight:700; color:#1a1a2e; letter-spacing:.03em; }
+  .sheet-subtitle { font-family:'Cinzel',Georgia,serif; font-size:8pt; color:#555; letter-spacing:.08em; text-transform:uppercase; margin-top:2px; }
+  .sheet-name-box {
+    border:1.5px solid #1a1a2e; border-radius:4px; padding:6px 14px;
+    min-width:180px; text-align:center;
+  }
+  .sheet-name-label { font-size:7pt; color:#777; text-transform:uppercase; letter-spacing:.1em; }
+  .sheet-name { font-family:'Cinzel',Georgia,serif; font-size:12pt; font-weight:700; color:#1a1a2e; margin-top:2px; }
+
+  /* Section blocks */
+  .section {
+    margin-bottom:14px;
+    border:1px solid #ddd; border-radius:5px;
+    overflow:hidden;
+  }
+  .section-header {
+    background:#1a1a2e; color:#fff;
+    padding:5px 12px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:8px;
+  }
+  .section-title { font-family:'Cinzel',Georgia,serif; font-size:8pt; letter-spacing:.1em; text-transform:uppercase; }
+  .section-score { font-family:'Cinzel',Georgia,serif; font-size:8pt; letter-spacing:.06em; opacity:.8; }
+  .section-body { padding:10px 12px; }
+
+  /* Quiz grid */
+  .quiz-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+  .quiz-cell { border:1px solid #e0e0e0; border-radius:3px; padding:5px 4px; text-align:center; }
+  .quiz-cell-label { font-size:6.5pt; color:#888; text-transform:uppercase; letter-spacing:.06em; margin-bottom:3px; }
+  .quiz-cell-ans { font-size:8pt; line-height:1.3; color:#1a1a2e; }
+  .quiz-cell.correct { background:#f0f9f4; border-color:#a8d5ba; }
+  .quiz-cell.wrong   { background:#fdf0ef; border-color:#f0b8b0; }
+  .quiz-tick { font-size:9pt; }
+  .correct .quiz-tick { color:#2d7a4f; }
+  .wrong   .quiz-tick { color:#c1440e; }
+
+  /* Sort result */
+  .sort-result { font-size:9pt; color:#333; line-height:1.5; }
+  .sort-score-badge {
+    display:inline-block; background:#1a1a2e; color:#fff;
+    font-family:'Cinzel',Georgia,serif; font-size:8pt; letter-spacing:.06em;
+    padding:2px 10px; border-radius:20px; margin-bottom:7px;
+  }
+  .extension-box {
+    margin-top:8px; padding:7px 10px;
+    background:#f8f6f0; border:1px solid #ddd; border-radius:4px;
+  }
+  .extension-label { font-size:7pt; text-transform:uppercase; letter-spacing:.1em; color:#888; margin-bottom:3px; }
+
+  /* Upgrade grid */
+  .upgrade-grid { display:flex; flex-direction:column; gap:5px; }
+  .upgrade-row { display:grid; grid-template-columns:auto 1fr; gap:8px; align-items:start; }
+  .upgrade-orig { font-size:8.5pt; color:#888; font-style:italic; padding-top:1px; white-space:nowrap; }
+  .upgrade-ans {
+    font-size:9pt; color:#1a1a2e; border-bottom:1px solid #ccc;
+    padding:2px 0 3px; line-height:1.4; min-height:20px;
+  }
+  .upgrade-ans.empty { color:#bbb; font-style:italic; }
+  .extend-row { margin-top:8px; padding:6px 10px; background:#f8f6f0; border:1px solid #ddd; border-radius:4px; }
+  .extend-label { font-size:7pt; text-transform:uppercase; letter-spacing:.1em; color:#888; margin-bottom:4px; }
+  .extend-line { font-size:9pt; color:#1a1a2e; min-height:16px; padding-bottom:2px; border-bottom:1px solid #ddd; margin-bottom:3px; }
+  .extend-line.empty { color:#bbb; font-style:italic; }
+
+  /* Footer */
+  .sheet-footer {
+    margin-top:14px; padding-top:8px; border-top:1px solid #ddd;
+    display:flex; justify-content:space-between;
+    font-size:7pt; color:#aaa;
+  }
+
+  /* No data box */
+  .no-data { font-size:9pt; color:#aaa; font-style:italic; padding:8px 0; }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background:#fff; }
+    .screen-header, .screen-main > *:not(.a4-sheet) { display:none !important; }
+    .screen-main { max-width:none; margin:0; padding:0; gap:0; }
+    .a4-sheet {
+      width:210mm; max-width:none;
+      min-height:297mm;
+      margin:0; padding:18mm 18mm 16mm;
+      border:none; box-shadow:none;
+      page-break-after:always;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="screen-header">
+  <div>
+    <div class="eyebrow">Teacher View · Lesson 4 · Grammar</div>
+    <h1>Print View — Learner Work Collation</h1>
+  </div>
+  <div class="hdr-right">
+    <div class="live-dot" title="Refreshes automatically"></div>
+    <button class="screen-btn btn-refresh" onclick="load()">↺ Refresh</button>
+    <button class="screen-btn btn-print" onclick="window.print()">🖨 Print All</button>
+  </div>
+</div>
+
+<div class="screen-main" id="main">
+  <div class="status" id="status">Loading data from all three activities…</div>
+</div>
+
+<script>
+const QUIZ_CSV    = 'YOUR_GRAMMAR_QUIZ_CSV_URL';
+const SORT_CSV    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSKF-3iCO8Ni6kVvn4Knp2WTwFzDd5-5s1gFW3tYnK6rt6-9SB7pdGCSlhUPh-Rz-acmZaBA9aI7z6_/pub?gid=0&single=true&output=csv';
+const UPGRADE_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQIJf1vMTxymKWR1mv0-pF6Ze66TxBL0zFI0hrRu7Ab6dQpwVHo4g46-vX5jy5xYLv1zjhCO7tEBTlK/pub?gid=0&single=true&output=csv';
+
+const ORIG_SENTENCES = [
+  'The Maya built great temples.',
+  'Historians discovered evidence of Maya cities.',
+  'The Maya developed a complex calendar.',
+  'Farmers grew maize to feed the city.',
+  'The Ahau ruled with divine power.',
+  'Archaeologists found ancient Maya writing.',
+];
+
+const Q_LABELS = [
+  'Expanded noun phrase',
+  'Fronted adverbial',
+  'Subord. conjunction',
+  'Apostrophe',
+  'Word class',
+  'Inverted commas',
+  'Compound sentence',
+];
+
+function splitCSV(line) {
+  const r=[]; let c='',q=false;
+  for(const ch of line){ if(ch==='"'){q=!q;}else if(ch===','&&!q){r.push(c.trim());c='';}else{c+=ch;} }
+  r.push(c.trim()); return r;
+}
+
+function normName(n) { return (n||'').toLowerCase().replace(/[^a-z]/g,''); }
+
+async function fetchCSV(url) {
+  const res  = await fetch(url + '&t=' + Date.now());
+  const text = await res.text();
+  const lines = text.trim().split('\n').filter(l=>l.trim());
+  if (lines.length < 2) return [];
+  const headers = splitCSV(lines[0]).map(h => h.trim().toLowerCase());
+  return lines.slice(1).map(l => {
+    const cols = splitCSV(l);
+    const obj  = {};
+    headers.forEach((h,i) => obj[h] = cols[i]||'');
+    return obj;
+  });
+}
+
+// Keep latest row per name
+function latestByName(rows) {
+  const map = {};
+  rows.forEach(r => {
+    const key = normName(r.name);
+    if (!key) return;
+    if (!map[key] || (r.timestamp > map[key].timestamp)) map[key] = r;
+  });
+  return map;
+}
+
+async function load() {
+  const main = document.getElementById('main');
+  main.innerHTML = '<div class="status" id="status">Loading…</div>';
+
+  try {
+    const [quizRows, sortRows, upgradeRows] = await Promise.all([
+      fetchCSV(QUIZ_CSV).catch(()=>[]),
+      fetchCSV(SORT_CSV).catch(()=>[]),
+      fetchCSV(UPGRADE_CSV).catch(()=>[]),
+    ]);
+
+    const quizMap    = latestByName(quizRows);
+    const sortMap    = latestByName(sortRows);
+    const upgradeMap = latestByName(upgradeRows);
+
+    // Union of all known names
+    const allKeys = new Set([...Object.keys(quizMap), ...Object.keys(sortMap), ...Object.keys(upgradeMap)]);
+    if (!allKeys.size) {
+      main.innerHTML = '<div class="status">No submissions yet across any of the three activities.</div>';
+      return;
+    }
+
+    main.innerHTML = '';
+
+    // Sort names alphabetically by display name
+    const entries = [...allKeys].map(key => {
+      const displayName = (quizMap[key] || sortMap[key] || upgradeMap[key])?.name || key;
+      return { key, displayName };
+    }).sort((a,b) => a.displayName.localeCompare(b.displayName));
+
+    entries.forEach(({ key, displayName }) => {
+      const quiz    = quizMap[key]    || null;
+      const sort    = sortMap[key]    || null;
+      const upgrade = upgradeMap[key] || null;
+      main.appendChild(buildSheet(displayName, quiz, sort, upgrade));
+    });
+
+  } catch(e) {
+    main.innerHTML = `<div class="status">Could not load — check all three sheets are published as CSV.<br><small>${e.message}</small></div>`;
+  }
+}
+
+function buildSheet(name, quiz, sort, upgrade) {
+  const sheet = document.createElement('div');
+  sheet.className = 'a4-sheet';
+  const now = new Date().toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'});
+
+  // ── QUIZ SECTION ──────────────────────────────────────────────────
+  let quizHTML = '';
+  if (quiz) {
+    const cells = Q_LABELS.map((label, i) => {
+      const raw = quiz[`q${i+1}`] || '';
+      const isCorrect = raw.startsWith('✓');
+      const isWrong   = raw.startsWith('✗');
+      const text = raw.replace(/^[✓✗]\s*/,'');
+      const tick = isCorrect ? '✓' : isWrong ? '✗' : '—';
+      const cls  = isCorrect ? 'correct' : isWrong ? 'wrong' : '';
+      return `<div class="quiz-cell ${cls}">
+        <div class="quiz-cell-label">${label}</div>
+        <div class="quiz-tick">${tick}</div>
+        <div class="quiz-cell-ans">${text || '—'}</div>
+      </div>`;
+    }).join('');
+    quizHTML = `<div class="quiz-grid">${cells}</div>`;
+  } else {
+    quizHTML = `<div class="no-data">No quiz submission recorded.</div>`;
+  }
+
+  // ── SORT SECTION ──────────────────────────────────────────────────
+  let sortHTML = '';
+  if (sort) {
+    const ext = sort.extension && sort.extension !== '—' ? sort.extension : '';
+    sortHTML = `
+      <span class="sort-score-badge">Score: ${sort.score || '—'}</span>
+      <div class="sort-result">${(sort.results||'').replace(/\|/g,'<br>')}</div>
+      ${ext ? `<div class="extension-box"><div class="extension-label">★ Extension</div>${ext}</div>` : ''}`;
+  } else {
+    sortHTML = `<div class="no-data">No sort submission recorded.</div>`;
+  }
+
+  // ── UPGRADE SECTION ───────────────────────────────────────────────
+  let upgradeHTML = '';
+  if (upgrade) {
+    const rows = ORIG_SENTENCES.map((orig, i) => {
+      const ans = upgrade[`s${i+1}`] || '';
+      return `<div class="upgrade-row">
+        <div class="upgrade-orig">${orig}</div>
+        <div class="upgrade-ans ${ans && ans !== '—' ? '' : 'empty'}">${ans && ans !== '—' ? ans : 'Not answered'}</div>
+      </div>`;
+    }).join('');
+
+    const e1 = upgrade['extend 1'] || upgrade['extend1'] || '';
+    const e2 = upgrade['extend 2'] || upgrade['extend2'] || '';
+    const extHTML = (e1 || e2) ? `
+      <div class="extend-row">
+        <div class="extend-label">★ Own sentences</div>
+        <div class="extend-line ${e1&&e1!=='—'?'':'empty'}">${e1&&e1!=='—'?e1:'—'}</div>
+        <div class="extend-line ${e2&&e2!=='—'?'':'empty'}">${e2&&e2!=='—'?e2:'—'}</div>
+      </div>` : '';
+
+    upgradeHTML = `<div class="upgrade-grid">${rows}</div>${extHTML}`;
+  } else {
+    upgradeHTML = `<div class="no-data">No upgrade submission recorded.</div>`;
+  }
+
+  sheet.innerHTML = `
+    <div class="sheet-header">
+      <div>
+        <div class="sheet-school">Wallscourt Farm Academy · Year 4 · Maya Enquiry</div>
+        <div class="sheet-title">Grammar Lesson 4 — Present Perfect Tense</div>
+        <div class="sheet-subtitle">Writing Skills · ${now}</div>
+      </div>
+      <div class="sheet-name-box">
+        <div class="sheet-name-label">Learner</div>
+        <div class="sheet-name">${name}</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">❓ Opener Quiz — Writing Skills Check</span>
+        <span class="section-score">${quiz ? quiz.score : '—'}</span>
+      </div>
+      <div class="section-body">${quizHTML}</div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">🔀 Sort Them Out — Simple Past / Present Perfect</span>
+        <span class="section-score">${sort ? sort.score : '—'}</span>
+      </div>
+      <div class="section-body">${sortHTML}</div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">⬆️ Upgrade It — Rewrite in Present Perfect</span>
+      </div>
+      <div class="section-body">${upgradeHTML}</div>
+    </div>
+
+    <div class="sheet-footer">
+      <span>williamteaches.github.io/diamond-nine</span>
+      <span>Lesson 4 · Grammar · Present Perfect Tense</span>
+    </div>`;
+
+  return sheet;
+}
+
+load();
+setInterval(load, 60000);
+</script>
+</body>
+</html>
