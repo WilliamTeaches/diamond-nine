@@ -54,19 +54,25 @@
     position:absolute;
     display:flex; flex-direction:column; gap:3px;
     align-items:center;
-    pointer-events:none;
-    overflow:hidden;
+    pointer-events:auto; /* enable tapping */
+    overflow:visible;
   }
 
   /* Tiny chips inside circles */
   .zone-chip {
     font-family:'Crimson Pro',Georgia,serif;
     font-size:clamp(.5rem,.9vw,.68rem);
-    line-height:1.25; padding:2px 6px; border-radius:4px;
+    line-height:1.25; padding:3px 7px; border-radius:4px;
     text-align:center; word-break:break-word;
     animation:chipIn .25s ease;
     max-width:100%;
+    cursor:pointer;
+    transition:transform .15s, box-shadow .15s, opacity .15s;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
   }
+  .zone-chip:hover { transform:scale(1.06); box-shadow:0 2px 10px rgba(0,0,0,.5); }
+  .zone-chip:active { transform:scale(.97); }
   @keyframes chipIn { from{opacity:0;transform:scale(.88)} to{opacity:1;transform:scale(1)} }
 
   .zone-chip.maya-only  { background:rgba(184,115,58,.45); color:#f0b070; border:1px solid rgba(224,144,80,.4); }
@@ -76,7 +82,83 @@
   .zone-chip.mi         { background:rgba(180,110,20,.45);  color:#f0c060; border:1px solid rgba(196,140,40,.4); }
   .zone-chip.si         { background:rgba(70,100,160,.45);  color:#90b8f0; border:1px solid rgba(90,120,190,.4); }
   .zone-chip.all        { background:rgba(120,120,30,.5);   color:#d8d860; border:1px solid rgba(180,180,60,.5); }
-  .zone-chip.more       { opacity:.6; font-style:italic; font-size:clamp(.45rem,.8vw,.6rem); }
+  .zone-chip.more       { opacity:.6; font-style:italic; font-size:clamp(.45rem,.8vw,.6rem); cursor:default; }
+  .zone-chip.more:hover { transform:none; box-shadow:none; }
+
+  /* ── CHIP DETAIL MODAL ── */
+  .chip-overlay {
+    position:fixed; inset:0; background:rgba(6,3,1,.8);
+    z-index:300; display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .2s;
+    backdrop-filter:blur(5px); padding:20px;
+  }
+  .chip-overlay.open { opacity:1; pointer-events:auto; }
+
+  .chip-modal {
+    border-radius:12px; max-width:460px; width:100%; position:relative;
+    box-shadow:0 24px 64px rgba(0,0,0,.85);
+    transform:translateY(16px) scale(.97);
+    transition:transform .24s cubic-bezier(.34,1.4,.64,1);
+    overflow:hidden;
+  }
+  .chip-overlay.open .chip-modal { transform:translateY(0) scale(1); }
+
+  .chip-modal.maya-only  { background:linear-gradient(145deg,#2a1508,#180c04); border:1px solid rgba(224,144,80,.55); }
+  .chip-modal.saxon-only { background:linear-gradient(145deg,#0e1e2e,#08121c); border:1px solid rgba(122,174,214,.55); }
+  .chip-modal.islam-only { background:linear-gradient(145deg,#1a0e28,#0f0818); border:1px solid rgba(176,126,212,.55); }
+  .chip-modal.ms         { background:linear-gradient(145deg,#28101e,#180810); border:1px solid rgba(196,90,144,.55); }
+  .chip-modal.mi         { background:linear-gradient(145deg,#281808,#181005); border:1px solid rgba(196,140,40,.55); }
+  .chip-modal.si         { background:linear-gradient(145deg,#101828,#081018); border:1px solid rgba(90,120,190,.55); }
+  .chip-modal.all        { background:linear-gradient(145deg,#1e1e08,#101008); border:1px solid rgba(180,180,60,.55); }
+
+  .cm-close {
+    position:absolute; top:10px; right:12px;
+    background:rgba(0,0,0,.5); border:1px solid rgba(255,255,255,.15);
+    color:rgba(232,213,176,.6); border-radius:4px; padding:5px 12px;
+    cursor:pointer; font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.1em;
+    touch-action:manipulation; transition:all .18s; z-index:10;
+  }
+  .cm-close:active { border-color:var(--gold); color:var(--gold-lt); }
+
+  .cm-body { padding:22px 22px 22px; }
+
+  .cm-zone-label {
+    font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.16em;
+    text-transform:uppercase; margin-bottom:8px;
+  }
+  .chip-modal.maya-only  .cm-zone-label { color:#f0b070; }
+  .chip-modal.saxon-only .cm-zone-label { color:#a0d0f0; }
+  .chip-modal.islam-only .cm-zone-label { color:#d0a0f0; }
+  .chip-modal.ms         .cm-zone-label { color:#f090c0; }
+  .chip-modal.mi         .cm-zone-label { color:#f0c060; }
+  .chip-modal.si         .cm-zone-label { color:#90b8f0; }
+  .chip-modal.all        .cm-zone-label { color:#d8d860; }
+
+  .cm-statement {
+    font-family:'Crimson Pro',Georgia,serif; font-size:1.15rem;
+    line-height:1.55; color:var(--cream); margin-bottom:16px;
+  }
+
+  .cm-divider { border:none; border-top:1px solid rgba(255,255,255,.08); margin-bottom:14px; }
+
+  .cm-overlap-label {
+    font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.14em;
+    color:rgba(232,213,176,.45); text-transform:uppercase; margin-bottom:10px;
+  }
+
+  .cm-civs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+  .cm-civ {
+    display:flex; align-items:center; gap:5px;
+    padding:7px 14px; border-radius:7px; font-size:.82rem;
+    font-family:'Cinzel',serif; letter-spacing:.04em;
+  }
+  .cm-civ.maya  { background:rgba(184,115,58,.3); border:1px solid rgba(224,144,80,.4); color:#f0b070; }
+  .cm-civ.saxon { background:rgba(74,127,168,.3);  border:1px solid rgba(122,174,214,.4); color:#a0d0f0; }
+  .cm-civ.islam { background:rgba(122,79,168,.3);  border:1px solid rgba(176,126,212,.4); color:#d0a0f0; }
+
+  .cm-count {
+    font-size:.78rem; font-style:italic; color:rgba(232,213,176,.5);
+  }
 
   /* ── SUBMISSIONS ── */
   .submissions-grid { display:flex; flex-direction:column; gap:12px; }
@@ -199,12 +281,34 @@ function render(rows) {
   container.className = 'venn-container';
 
   // Helper — build overlay chips for a zone
+  const ZONE_LABELS = {
+    'maya-only':  '🏺 Maya Only',
+    'saxon-only': '⚔️ Anglo-Saxon Only',
+    'islam-only': '🌙 Islam Only',
+    'ms':         '🏺 Maya + ⚔️ Anglo-Saxon',
+    'mi':         '🏺 Maya + 🌙 Islam',
+    'si':         '⚔️ Anglo-Saxon + 🌙 Islam',
+    'all':        '★ All Three Civilisations',
+  };
+  const ZONE_CIVS = {
+    'maya-only':  ['maya'],
+    'saxon-only': ['saxon'],
+    'islam-only': ['islam'],
+    'ms':         ['maya','saxon'],
+    'mi':         ['maya','islam'],
+    'si':         ['saxon','islam'],
+    'all':        ['maya','saxon','islam'],
+  };
+  const CIV_LABELS = { maya:'🏺 Maya', saxon:'⚔️ Anglo-Saxon', islam:'🌙 Islam' };
+
   function overlayHTML(list, zone, max) {
     if (!list.length) return '';
     const chips = list.slice(0, max).map(({display, count}) => {
       const label = display.length > 36 ? display.slice(0,34)+'…' : display;
       const badge = count > 1 ? ` <em style="opacity:.65;font-size:.85em">(${count})</em>` : '';
-      return `<div class="zone-chip ${zone}">${label}${badge}</div>`;
+      // Store full text + count in data attrs for the modal
+      const safeText = display.replace(/"/g,'&quot;');
+      return `<div class="zone-chip ${zone}" data-full="${safeText}" data-count="${count}" data-zone="${zone}" onclick="openChipModal(this)">${label}${badge}</div>`;
     }).join('');
     const extra = list.length > max
       ? `<div class="zone-chip ${zone} more">+${list.length - max} more</div>` : '';
@@ -290,6 +394,65 @@ function render(rows) {
 
 load();
 setInterval(load, 30000);
+
+// ── CHIP MODAL ─────────────────────────────────────────────────────────
+function openChipModal(el) {
+  const zone  = el.dataset.zone;
+  const full  = el.dataset.full;
+  const count = parseInt(el.dataset.count) || 1;
+  const total = document.querySelectorAll('.submission-card').length || 1;
+
+  const modal   = document.getElementById('chip-modal');
+  const overlay = document.getElementById('chip-overlay');
+
+  modal.className = `chip-modal ${zone}`;
+  document.getElementById('cm-zone-label').textContent  = ZONE_LABELS[zone] || zone;
+  document.getElementById('cm-statement').textContent   = full;
+
+  // Civilisation pills
+  const civs = ZONE_CIVS[zone] || [];
+  document.getElementById('cm-civs').innerHTML = civs.map(c =>
+    `<div class="cm-civ ${c}">${CIV_LABELS[c]}</div>`
+  ).join('');
+
+  // Count line
+  const countEl = document.getElementById('cm-count');
+  if (count > 1) {
+    countEl.textContent = `${count} group${count!==1?'s':''} placed this here`;
+    countEl.style.display = 'block';
+  } else {
+    countEl.style.display = 'none';
+  }
+
+  overlay.classList.add('open');
+}
+
+function closeChipModal() {
+  document.getElementById('chip-overlay').classList.remove('open');
+}
+
+document.getElementById('chip-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('chip-overlay')) closeChipModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeChipModal();
+});
 </script>
+
+<!-- CHIP DETAIL MODAL -->
+<div class="chip-overlay" id="chip-overlay">
+  <div class="chip-modal" id="chip-modal">
+    <button class="cm-close" onclick="closeChipModal()">✕ Close</button>
+    <div class="cm-body">
+      <div class="cm-zone-label" id="cm-zone-label"></div>
+      <div class="cm-statement"  id="cm-statement"></div>
+      <hr class="cm-divider">
+      <div class="cm-overlap-label">This applies to:</div>
+      <div class="cm-civs" id="cm-civs"></div>
+      <div class="cm-count" id="cm-count"></div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
