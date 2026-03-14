@@ -39,52 +39,44 @@
     background:rgba(0,0,0,.25); border:1px solid rgba(201,168,76,.2);
     border-radius:14px; padding:16px; position:relative;
   }
-  .venn-svg-wrap { position:relative; width:100%; }
-  .venn-svg-wrap svg { display:block; width:100%; height:auto; }
-
-  /* Floating label panels that sit alongside the SVG */
-  .venn-labels {
-    display:grid; grid-template-columns:1fr 1fr 1fr;
-    gap:8px; margin-top:12px;
+  /* Aspect-ratio wrapper so overlay % positions match the SVG */
+  .venn-svg-wrap {
+    position:relative;
+    width:100%;
+    padding-bottom:70%; /* 420/600 = 70% — matches viewBox */
   }
-  .venn-panel {
-    border-radius:8px; padding:9px 11px;
-    display:flex; flex-direction:column; gap:5px;
+  .venn-svg-wrap svg {
+    position:absolute; inset:0; width:100%; height:100%;
   }
-  .vp-maya   { background:rgba(184,115,58,.15); border:1px solid rgba(224,144,80,.35); }
-  .vp-saxon  { background:rgba(74,127,168,.15);  border:1px solid rgba(122,174,214,.35); }
-  .vp-islam  { background:rgba(122,79,168,.15);  border:1px solid rgba(176,126,212,.35); }
-  .vp-ms     { background:rgba(196,90,144,.12);  border:1px solid rgba(196,90,144,.35); }
-  .vp-mi     { background:rgba(196,120,32,.12);  border:1px solid rgba(196,120,32,.35); }
-  .vp-si     { background:rgba(90,110,168,.12);  border:1px solid rgba(90,110,168,.35); }
-  .vp-all    { background:rgba(138,138,42,.18);  border:2px solid rgba(196,196,80,.5); }
 
-  .vp-title { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.08em; text-transform:uppercase; margin-bottom:5px; }
-  .vp-maya  .vp-title { color:var(--maya-lt); }
-  .vp-saxon .vp-title { color:var(--saxon-lt); }
-  .vp-islam .vp-title { color:var(--islam-lt); }
-  .vp-ms    .vp-title { color:var(--ms-c); }
-  .vp-mi    .vp-title { color:var(--mi-c); }
-  .vp-si    .vp-title { color:var(--si-c); }
-  .vp-all   .vp-title { color:var(--all-c); }
+  /* Zone overlays — absolutely positioned on top of the SVG */
+  .zone-overlay {
+    position:absolute;
+    display:flex; flex-direction:column; gap:3px;
+    align-items:center;
+    pointer-events:none;
+    overflow:hidden;
+  }
 
-  .vp-item { font-size:.78rem; color:var(--sand); padding:4px 8px; border-radius:4px; line-height:1.3; }
-  .vp-maya  .vp-item { background:rgba(184,115,58,.2); }
-  .vp-saxon .vp-item { background:rgba(74,127,168,.2); }
-  .vp-islam .vp-item { background:rgba(122,79,168,.2); }
-  .vp-ms    .vp-item { background:rgba(196,90,144,.2); }
-  .vp-mi    .vp-item { background:rgba(196,120,32,.2); }
-  .vp-si    .vp-item { background:rgba(90,110,168,.2); }
-  .vp-all   .vp-item { background:rgba(138,138,42,.2); }
-  .vote-badge { font-family:'Cinzel',serif; font-size:.48rem; padding:1px 5px; border-radius:10px; margin-left:4px; vertical-align:middle; }
-  .vp-maya  .vote-badge { background:rgba(224,144,80,.3);  color:var(--maya-lt); }
-  .vp-saxon .vote-badge { background:rgba(122,174,214,.3); color:var(--saxon-lt); }
-  .vp-islam .vote-badge { background:rgba(176,126,212,.3); color:var(--islam-lt); }
-  .vp-ms    .vote-badge { background:rgba(196,90,144,.3);  color:var(--ms-c); }
-  .vp-mi    .vote-badge { background:rgba(196,120,32,.3);  color:var(--mi-c); }
-  .vp-si    .vote-badge { background:rgba(90,110,168,.3);  color:var(--si-c); }
-  .vp-all   .vote-badge { background:rgba(196,196,80,.3);  color:var(--all-c); }
-  .empty-note { font-size:.72rem; font-style:italic; color:rgba(232,213,176,.28); }
+  /* Tiny chips inside circles */
+  .zone-chip {
+    font-family:'Crimson Pro',Georgia,serif;
+    font-size:clamp(.5rem,.9vw,.68rem);
+    line-height:1.25; padding:2px 6px; border-radius:4px;
+    text-align:center; word-break:break-word;
+    animation:chipIn .25s ease;
+    max-width:100%;
+  }
+  @keyframes chipIn { from{opacity:0;transform:scale(.88)} to{opacity:1;transform:scale(1)} }
+
+  .zone-chip.maya-only  { background:rgba(184,115,58,.45); color:#f0b070; border:1px solid rgba(224,144,80,.4); }
+  .zone-chip.saxon-only { background:rgba(74,127,168,.45);  color:#a0d0f0; border:1px solid rgba(122,174,214,.4); }
+  .zone-chip.islam-only { background:rgba(122,79,168,.45);  color:#d0a0f0; border:1px solid rgba(176,126,212,.4); }
+  .zone-chip.ms         { background:rgba(180,70,130,.45);  color:#f090c0; border:1px solid rgba(196,90,144,.4); }
+  .zone-chip.mi         { background:rgba(180,110,20,.45);  color:#f0c060; border:1px solid rgba(196,140,40,.4); }
+  .zone-chip.si         { background:rgba(70,100,160,.45);  color:#90b8f0; border:1px solid rgba(90,120,190,.4); }
+  .zone-chip.all        { background:rgba(120,120,30,.5);   color:#d8d860; border:1px solid rgba(180,180,60,.5); }
+  .zone-chip.more       { opacity:.6; font-style:italic; font-size:clamp(.45rem,.8vw,.6rem); }
 
   /* ── SUBMISSIONS ── */
   .submissions-grid { display:flex; flex-direction:column; gap:12px; }
@@ -114,11 +106,9 @@
   .btn-secondary:hover { border-color:var(--gold); color:var(--gold-lt); }
 
   @media(max-width:700px) {
-    .venn-labels { grid-template-columns:1fr 1fr; }
     .sub-body { grid-template-columns:1fr 1fr; }
   }
   @media(max-width:480px) {
-    .venn-labels { grid-template-columns:1fr; }
     .sub-body { grid-template-columns:1fr; }
   }
 </style>
@@ -176,13 +166,6 @@ async function load() {
   }
 }
 
-function itemsHTML(list, cls, max=5) {
-  if (!list.length) return `<span class="empty-note">—</span>`;
-  return list.slice(0, max).map(({display,count}) =>
-    `<div class="vp-item">${display}${count>1?`<span class="vote-badge">${count}</span>`:''}</div>`
-  ).join('');
-}
-
 function render(rows) {
   const main = document.getElementById('main');
   main.innerHTML = '';
@@ -215,7 +198,35 @@ function render(rows) {
   const container = document.createElement('div');
   container.className = 'venn-container';
 
-  // SVG Venn circles
+  // Helper — build overlay chips for a zone
+  function overlayHTML(list, zone, max) {
+    if (!list.length) return '';
+    const chips = list.slice(0, max).map(({display, count}) => {
+      const label = display.length > 36 ? display.slice(0,34)+'…' : display;
+      const badge = count > 1 ? ` <em style="opacity:.65;font-size:.85em">(${count})</em>` : '';
+      return `<div class="zone-chip ${zone}">${label}${badge}</div>`;
+    }).join('');
+    const extra = list.length > max
+      ? `<div class="zone-chip ${zone} more">+${list.length - max} more</div>` : '';
+    return chips + extra;
+  }
+
+  // Zone overlay positions as % of the 600×420 viewBox wrapper
+  const ZONES_POS = {
+    'maya-only':  { l:'4%',  t:'18%', w:'20%', max:4 },
+    'saxon-only': { l:'76%', t:'18%', w:'20%', max:4 },
+    'islam-only': { l:'37%', t:'74%', w:'26%', max:3 },
+    'ms':         { l:'39%', t:'10%', w:'22%', max:3 },
+    'mi':         { l:'22%', t:'56%', w:'17%', max:3 },
+    'si':         { l:'61%', t:'56%', w:'17%', max:3 },
+    'all':        { l:'37%', t:'42%', w:'26%', max:4 },
+  };
+  const zoneData = { 'maya-only':T.maya, 'saxon-only':T.saxon, 'islam-only':T.islam, ms:T.ms, mi:T.mi, si:T.si, all:T.all };
+
+  const overlays = Object.entries(ZONES_POS).map(([zone, pos]) =>
+    `<div class="zone-overlay" style="left:${pos.l};top:${pos.t};width:${pos.w}">${overlayHTML(zoneData[zone], zone, pos.max)}</div>`
+  ).join('');
+
   container.innerHTML = `
     <div class="venn-svg-wrap">
       <svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg">
@@ -224,50 +235,17 @@ function render(rows) {
           <clipPath id="cp-saxon"><circle cx="380" cy="160" r="155"/></clipPath>
           <clipPath id="cp-islam"><circle cx="300" cy="295" r="155"/></clipPath>
         </defs>
-        <!-- Three base circles -->
-        <circle cx="220" cy="160" r="155" fill="rgba(184,115,58,.18)" stroke="rgba(224,144,80,.5)" stroke-width="1.5"/>
-        <circle cx="380" cy="160" r="155" fill="rgba(74,127,168,.18)"  stroke="rgba(122,174,214,.5)" stroke-width="1.5"/>
-        <circle cx="300" cy="295" r="155" fill="rgba(122,79,168,.18)"  stroke="rgba(176,126,212,.5)" stroke-width="1.5"/>
-
-        <!-- Overlap hints -->
-        <circle cx="220" cy="160" r="155" fill="rgba(196,90,144,.07)"  clip-path="url(#cp-saxon)"/>
-        <circle cx="220" cy="160" r="155" fill="rgba(196,120,32,.07)"  clip-path="url(#cp-islam)"/>
-        <circle cx="380" cy="160" r="155" fill="rgba(90,110,168,.07)"  clip-path="url(#cp-islam)"/>
-
-        <!-- Circle labels -->
-        <text x="120" y="92"  font-family="Cinzel,serif" font-size="13" font-weight="700" fill="rgba(224,144,80,.9)"  text-anchor="middle">🏺 Maya</text>
-        <text x="480" y="92"  font-family="Cinzel,serif" font-size="13" font-weight="700" fill="rgba(122,174,214,.9)" text-anchor="middle">⚔️ Saxon</text>
-        <text x="300" y="410" font-family="Cinzel,serif" font-size="13" font-weight="700" fill="rgba(176,126,212,.9)" text-anchor="middle">🌙 Islam</text>
-
-        <!-- Zone labels inside circles -->
-        <text x="148" y="170" font-family="Crimson Pro,serif" font-size="10" fill="rgba(224,144,80,.55)" text-anchor="middle" font-style="italic">Maya only</text>
-        <text x="452" y="170" font-family="Crimson Pro,serif" font-size="10" fill="rgba(122,174,214,.55)" text-anchor="middle" font-style="italic">Saxon only</text>
-        <text x="300" y="370" font-family="Crimson Pro,serif" font-size="10" fill="rgba(176,126,212,.55)" text-anchor="middle" font-style="italic">Islam only</text>
-        <text x="300" y="148" font-family="Crimson Pro,serif" font-size="10" fill="rgba(220,120,176,.65)" text-anchor="middle" font-style="italic">Maya+Saxon</text>
-        <text x="210" y="282" font-family="Crimson Pro,serif" font-size="10" fill="rgba(196,160,60,.65)"  text-anchor="middle" font-style="italic">Maya+Islam</text>
-        <text x="390" y="282" font-family="Crimson Pro,serif" font-size="10" fill="rgba(130,150,220,.65)" text-anchor="middle" font-style="italic">Saxon+Islam</text>
-        <text x="300" y="222" font-family="Crimson Pro,serif" font-size="11" fill="rgba(196,196,80,.85)"  text-anchor="middle" font-weight="700">ALL THREE</text>
-
-        <!-- Count badges in each zone -->
-        ${T.maya.length  ? `<text x="148" y="188" font-family="Cinzel,serif" font-size="18" font-weight="700" fill="rgba(224,144,80,.8)" text-anchor="middle">${T.maya.length}</text>` : ''}
-        ${T.saxon.length ? `<text x="452" y="188" font-family="Cinzel,serif" font-size="18" font-weight="700" fill="rgba(122,174,214,.8)" text-anchor="middle">${T.saxon.length}</text>` : ''}
-        ${T.islam.length ? `<text x="300" y="388" font-family="Cinzel,serif" font-size="18" font-weight="700" fill="rgba(176,126,212,.8)" text-anchor="middle">${T.islam.length}</text>` : ''}
-        ${T.ms.length    ? `<text x="300" y="168" font-family="Cinzel,serif" font-size="16" font-weight="700" fill="rgba(220,120,176,.85)" text-anchor="middle">${T.ms.length}</text>` : ''}
-        ${T.mi.length    ? `<text x="210" y="300" font-family="Cinzel,serif" font-size="16" font-weight="700" fill="rgba(196,160,60,.85)"  text-anchor="middle">${T.mi.length}</text>` : ''}
-        ${T.si.length    ? `<text x="390" y="300" font-family="Cinzel,serif" font-size="16" font-weight="700" fill="rgba(130,150,220,.85)" text-anchor="middle">${T.si.length}</text>` : ''}
-        ${T.all.length   ? `<text x="300" y="242" font-family="Cinzel,serif" font-size="20" font-weight="700" fill="rgba(196,196,80,.95)"  text-anchor="middle">${T.all.length}</text>` : ''}
+        <circle cx="220" cy="160" r="155" fill="rgba(184,115,58,.13)" stroke="rgba(224,144,80,.55)" stroke-width="1.5"/>
+        <circle cx="380" cy="160" r="155" fill="rgba(74,127,168,.13)"  stroke="rgba(122,174,214,.55)" stroke-width="1.5"/>
+        <circle cx="300" cy="295" r="155" fill="rgba(122,79,168,.13)"  stroke="rgba(176,126,212,.55)" stroke-width="1.5"/>
+        <circle cx="220" cy="160" r="155" fill="rgba(196,90,144,.06)"  clip-path="url(#cp-saxon)"/>
+        <circle cx="220" cy="160" r="155" fill="rgba(196,120,32,.06)"  clip-path="url(#cp-islam)"/>
+        <circle cx="380" cy="160" r="155" fill="rgba(90,110,168,.06)"  clip-path="url(#cp-islam)"/>
+        <text x="118" y="88"  font-family="Cinzel,serif" font-size="12" font-weight="700" fill="rgba(224,144,80,.9)"  text-anchor="middle">🏺 Maya</text>
+        <text x="482" y="88"  font-family="Cinzel,serif" font-size="12" font-weight="700" fill="rgba(122,174,214,.9)" text-anchor="middle">⚔️ Saxon</text>
+        <text x="300" y="414" font-family="Cinzel,serif" font-size="12" font-weight="700" fill="rgba(176,126,212,.9)" text-anchor="middle">🌙 Islam</text>
       </svg>
-    </div>
-
-    <!-- Detailed panels for each zone -->
-    <div class="venn-labels">
-      <div class="venn-panel vp-maya"><div class="vp-title">🏺 Maya Only</div>${itemsHTML(T.maya,'vp-maya')}</div>
-      <div class="venn-panel vp-all" style="grid-row:span 1"><div class="vp-title">★ All Three</div>${itemsHTML(T.all,'vp-all')}</div>
-      <div class="venn-panel vp-saxon"><div class="vp-title">⚔️ Saxon Only</div>${itemsHTML(T.saxon,'vp-saxon')}</div>
-      <div class="venn-panel vp-ms"><div class="vp-title">Maya &amp; Saxon</div>${itemsHTML(T.ms,'vp-ms')}</div>
-      <div class="venn-panel vp-mi"><div class="vp-title">Maya &amp; Islam</div>${itemsHTML(T.mi,'vp-mi')}</div>
-      <div class="venn-panel vp-si"><div class="vp-title">Saxon &amp; Islam</div>${itemsHTML(T.si,'vp-si')}</div>
-      <div class="venn-panel vp-islam" style="grid-column:2"><div class="vp-title">🌙 Islam Only</div>${itemsHTML(T.islam,'vp-islam')}</div>
+      ${overlays}
     </div>`;
 
   vennSection.appendChild(container);
