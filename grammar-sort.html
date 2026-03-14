@@ -205,6 +205,17 @@
     </div>
     <button class="submit-btn" id="submit-btn" onclick="submitResults()">Share with teacher ◆</button>
     <div class="submit-feedback" id="submit-feedback"></div>
+
+    <!-- Model answer — revealed after submit -->
+    <div id="model-answer" style="display:none;width:100%;max-width:460px;
+      background:rgba(45,106,79,.18);border:1px solid rgba(64,145,108,.45);
+      border-radius:10px;padding:14px 16px;text-align:left;">
+      <div style="font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.14em;
+        color:var(--jade-lt);text-transform:uppercase;margin-bottom:8px;">★ Model Answer</div>
+      <p style="font-size:.92rem;line-height:1.55;color:var(--sand);">
+        A historian would use the <strong style="color:var(--cream)">present perfect</strong> when they want to connect a past event to the present — for example, to show that something the Maya did still matters or has an effect today. Simple past is used when the event is completed and we are just reporting what happened at a specific time in the past.
+      </p>
+    </div>
   </div>
 
   <footer>
@@ -219,16 +230,16 @@
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzO7Edq1HCwxx8o2sB1OKvVFMnTjQgo9JmVwClBnVqeYA_-t4RlKMDJCBfnhVOPvYZS/exec';
 
 const SENTENCES = [
-  { id:'s1',  text:'The Maya built great temples.',           tense:'sp' },
-  { id:'s2',  text:'Historians have found evidence of Maya cities.', tense:'pp' },
-  { id:'s3',  text:'The Ahau ruled his kingdom with divine power.', tense:'sp' },
-  { id:'s4',  text:'The Maya have developed a complex calendar.', tense:'pp' },
-  { id:'s5',  text:'Farmers grew maize to feed the city.',    tense:'sp' },
-  { id:'s6',  text:'We have learned about Maya hieroglyphs.', tense:'pp' },
-  { id:'s7',  text:'Archaeologists discovered ancient writing.', tense:'sp' },
-  { id:'s8',  text:'The Maya have left us a remarkable legacy.', tense:'pp' },
-  { id:'s9',  text:'A historian studied the Palenque ruins.', tense:'sp' },
-  { id:'s10', text:'Scholars have translated Maya inscriptions.', tense:'pp' },
+  { id:'s1',  text:'The Maya built great temples.',                    tense:'sp' },
+  { id:'s2',  text:'The Ahau ruled his kingdom with divine power.',    tense:'sp' },
+  { id:'s3',  text:'Farmers grew maize to feed the city.',             tense:'sp' },
+  { id:'s4',  text:'Archaeologists discovered ancient writing.',        tense:'sp' },
+  { id:'s5',  text:'A historian studied the Palenque ruins.',          tense:'sp' },
+  { id:'s6',  text:'Historians have found evidence of Maya cities.',   tense:'pp' },
+  { id:'s7',  text:'The Maya have developed a complex calendar.',      tense:'pp' },
+  { id:'s8',  text:'We have learned about Maya hieroglyphs.',          tense:'pp' },
+  { id:'s9',  text:'The Maya have left us a remarkable legacy.',       tense:'pp' },
+  { id:'s10', text:'Scholars have translated Maya inscriptions.',      tense:'pp' },
 ];
 
 // shuffle
@@ -375,7 +386,7 @@ function finish() {
 async function submitResults() {
   const name = document.getElementById('submit-name').value.trim()
               || document.getElementById('pupil-name').value.trim();
-  if (!name) { document.getElementById('submit-name').focus(); document.getElementById('submit-feedback').textContent = 'Please add your names first.'; return; }
+  if (!name) { document.getElementById('submit-name').focus(); document.getElementById('submit-feedback').textContent = 'Please add your name first.'; return; }
 
   const btn = document.getElementById('submit-btn');
   const fb  = document.getElementById('submit-feedback');
@@ -385,13 +396,16 @@ async function submitResults() {
   const results = SENTENCES.map(s =>
     `"${s.text.slice(0,30)}…" → ${sorted[s.id]?.toUpperCase() || '?'} (${sorted[s.id]===s.tense?'✓':'✗'})`
   ).join(' | ');
-  const extension = document.getElementById('extension-answer')?.value.trim() || '—';
+  const extension = document.getElementById('extension-answer').value.trim() || '—';
 
   const payload = { name, score:`${correct}/${SENTENCES.length}`, results, extension, timestamp:new Date().toISOString() };
+
   try {
     await fetch(SHEET_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
     btn.textContent = '✓ Shared!';
     fb.textContent  = 'Sent to your teacher — well done!';
+    // Reveal model answer
+    document.getElementById('model-answer').style.display = 'block';
   } catch {
     btn.disabled = false; btn.textContent = 'Share with teacher ◆';
     fb.textContent = 'Could not share — check your connection.';

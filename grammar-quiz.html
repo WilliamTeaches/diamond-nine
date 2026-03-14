@@ -235,7 +235,7 @@ const QUESTIONS = [
     }
   },
   {
-    q: 'What word class is the underlined word?\n"The Maya built <u>impressive</u> temples."',
+    q: 'What word class is the underlined word?<br>"The Maya built <u style="text-underline-offset:4px">impressive</u> temples."',
     hint: 'Think about what job this word does in the sentence — does it name, describe, or show action?',
     options: ['A noun', 'An adjective', 'A verb'],
     correct: 1,
@@ -363,13 +363,11 @@ async function submitResults() {
   const fb  = document.getElementById('submit-feedback');
   btn.disabled = true; btn.textContent = 'Sharing…';
 
-  const payload = {
-    name,
-    score: `${score} / ${QUESTIONS.length}`,
-    percent: Math.round(score / QUESTIONS.length * 100) + '%',
-    answers: answers.map((a,i) => `Q${i+1}: ${a.correct ? '✓' : '✗'} "${a.chosen}"`).join(' | '),
-    timestamp: new Date().toISOString(),
-  };
+  // Build payload with individual columns per question
+  const payload = { name, score: `${score} / ${QUESTIONS.length}`, timestamp: new Date().toISOString() };
+  answers.forEach((a, i) => {
+    payload[`q${i + 1}`] = `${a.correct ? '✓' : '✗'} ${a.chosen}`;
+  });
 
   try {
     await fetch(SHEET_URL, { method:'POST', mode:'no-cors',
