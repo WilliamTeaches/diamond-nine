@@ -7,6 +7,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
+  /* ── LIQUID GLASS — CLEAN WHITE/GREY ── */
+  --bg:         linear-gradient(160deg,#ffffff 0%,#f2f2f4 60%,#e8e8ec 100%);
+  --surface:    rgba(255,255,255,0.82);
+  --surface2:   rgba(248,248,250,0.9);
+  --border:     rgba(255,255,255,0.95);
+  --border2:    rgba(0,0,0,0.09);
+  --shadow:     0 4px 24px rgba(0,0,0,0.08),0 1px 4px rgba(0,0,0,0.04),inset 0 1px 0 rgba(255,255,255,0.95);
+  --shadow-sm:  0 2px 12px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.9);
+  --blur:       blur(24px) saturate(160%);
+  --blur-hdr:   blur(40px) saturate(180%);
+  --text:       #111111;
+  --text2:      #444444;
+  --text3:      rgba(0,0,0,0.4);
+  --gold:       #b8921e;
+  --gold-lt:    #d4a830;
+  --gold-bg:    rgba(184,146,30,0.1);
+  --btn-bg:     #1c1c1e;
+  --btn-text:   #ffffff;
+  --btn-radius: 10px;
+  --radius:     14px;
+  --radius-sm:  8px;
+  --radius-pill:100px;
+
     --jade:    #2d6a4f;
     --jade-lt: #40916c;
     --gold:    #c9a84c;
@@ -25,19 +48,12 @@
   html, body {
     width: 100%; height: 100%;
     font-family: 'Crimson Pro', Georgia, serif;
-    background: var(--stone);
-    color: var(--cream);
+    background: var(--bg);
+    color:var(--text);
     overflow: hidden;
   }
 
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image:
-      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.06) 2px, rgba(0,0,0,.06) 4px),
-      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px);
-    pointer-events: none; z-index: 0;
-  }
+  body::before{display:none}
 
   /* ── LAYOUT ── */
   .page {
@@ -63,7 +79,7 @@
   .header-left h1 {
     font-family: 'Cinzel', serif;
     font-size: clamp(1rem, 2.5vw, 1.5rem);
-    font-weight: 700; color: var(--gold-lt); letter-spacing: .04em;
+    font-weight: 700; color:var(--gold); letter-spacing: .04em;
     line-height: 1.1;
   }
   .header-right {
@@ -73,13 +89,13 @@
     font-family: 'Cinzel', serif;
     font-size: .7rem; letter-spacing: .1em;
     color: var(--gold);
-    background: rgba(0,0,0,.3);
+    background:rgba(255,255,255,0.88);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
     border: 1px solid rgba(201,168,76,.3);
     border-radius: 20px;
     padding: 4px 14px;
     white-space: nowrap;
   }
-  .score-num { color: var(--gold-lt); font-size: .95rem; font-weight: 700; }
+  .score-num { color:var(--gold); font-size: .95rem; font-weight: 700; }
 
   /* ── SCREENS ── */
   .screen { display: none; }
@@ -94,11 +110,11 @@
   .intro-title {
     font-family: 'Cinzel', serif;
     font-size: clamp(1.1rem, 3vw, 1.8rem);
-    color: var(--gold-lt); font-weight: 700;
+    color:var(--gold); font-weight: 700;
   }
   .intro-body {
     font-size: clamp(.9rem, 2vw, 1.1rem);
-    color: var(--sand); line-height: 1.65;
+    color:var(--text2); line-height: 1.65;
     max-width: 520px;
   }
   .badge-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
@@ -107,7 +123,7 @@
     text-transform: uppercase; padding: 4px 12px; border-radius: 4px;
   }
   .badge.core { background: var(--gold); color: var(--stone); }
-  .badge.ext  { background: var(--terra); color: var(--cream); }
+  .badge.ext  { background: var(--terra); color:var(--text); }
 
   /* ── GAME SCREEN ── */
   #screen-game {
@@ -133,7 +149,7 @@
 
   /* ── QUESTION ITEMS ── */
   .q-item {
-    background: rgba(0,0,0,.3);
+    background:rgba(255,255,255,0.88);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
     border: 1px solid rgba(201,168,76,.25);
     border-radius: 8px;
     padding: 10px 12px;
@@ -142,22 +158,22 @@
     transition: all .2s;
     font-size: clamp(.78rem, 1.6vw, .95rem);
     line-height: 1.4;
-    color: var(--sand);
+    color:var(--text2);
     position: relative;
     user-select: none; -webkit-user-select: none;
     touch-action: manipulation;
   }
   .q-item:hover { border-color: var(--gold); background: rgba(201,168,76,.08); }
   .q-item.selected {
-    border-color: var(--gold-lt);
+    border-color:var(--gold);
     background: rgba(201,168,76,.18);
     box-shadow: 0 0 0 2px rgba(201,168,76,.4);
-    color: var(--cream);
+    color:var(--text);
   }
   .q-item.matched-correct {
     border-color: var(--jade-lt);
     background: rgba(45,106,79,.25);
-    color: var(--cream);
+    color:var(--text);
     cursor: default;
     pointer-events: none;
   }
@@ -174,7 +190,7 @@
 
   /* ── ANSWER ITEMS ── */
   .a-item {
-    background: rgba(0,0,0,.35);
+    background:rgba(255,255,255,0.88);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
     border: 1px solid rgba(201,168,76,.2);
     border-radius: 8px;
     padding: 10px 12px;
@@ -183,22 +199,22 @@
     transition: all .2s;
     font-size: clamp(.78rem, 1.6vw, .95rem);
     line-height: 1.4;
-    color: var(--sand);
+    color:var(--text2);
     user-select: none; -webkit-user-select: none;
     touch-action: manipulation;
     position: relative;
   }
   .a-item:hover { border-color: var(--gold); background: rgba(201,168,76,.08); }
   .a-item.selected {
-    border-color: var(--gold-lt);
+    border-color:var(--gold);
     background: rgba(201,168,76,.18);
     box-shadow: 0 0 0 2px rgba(201,168,76,.4);
-    color: var(--cream);
+    color:var(--text);
   }
   .a-item.matched-correct {
     border-color: var(--jade-lt);
     background: rgba(45,106,79,.25);
-    color: var(--cream);
+    color:var(--text);
     cursor: default;
     pointer-events: none;
   }
@@ -249,13 +265,13 @@
     color: var(--terra); text-transform: uppercase;
   }
   .extend-prompt {
-    font-size: .85rem; font-style: italic; color: var(--sand);
+    font-size: .85rem; font-style: italic; color:var(--text2);
   }
   .extend-input {
-    background: rgba(0,0,0,.35);
+    background:rgba(255,255,255,0.88);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
     border: 1px solid rgba(193,68,14,.4);
     border-radius: 5px;
-    color: var(--cream);
+    color:var(--text);
     font-family: 'Crimson Pro', serif; font-size: .95rem;
     padding: 7px 10px; outline: none;
     transition: border-color .2s;
@@ -279,16 +295,16 @@
   .complete-title {
     font-family: 'Cinzel', serif;
     font-size: clamp(1.2rem,3vw,2rem);
-    color: var(--gold-lt); font-weight: 700;
+    color:var(--gold); font-weight: 700;
   }
   .complete-sub {
     font-size: clamp(.9rem,2vw,1.1rem);
-    color: var(--sand); font-style: italic;
+    color:var(--text2); font-style: italic;
   }
   .final-score {
     font-family: 'Cinzel', serif;
     font-size: clamp(2rem,5vw,3.5rem);
-    font-weight: 700; color: var(--gold-lt);
+    font-weight: 700; color:var(--gold);
     line-height: 1;
   }
   .final-label { font-size: .8rem; color: var(--gold); letter-spacing: .1em; }
@@ -296,7 +312,7 @@
 
   /* ── FOOTER ── */
   footer {
-    background: rgba(0,0,0,.35);
+    background:rgba(255,255,255,0.88);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
     border-top: 1px solid rgba(201,168,76,.2);
     padding: 7px 16px;
     display: flex; align-items: center; justify-content: space-between; gap: 10px;
@@ -315,10 +331,10 @@
   }
   .btn-primary:hover { transform: translateY(-1px); }
   .btn-secondary {
-    background: transparent; color: var(--sand);
+    background: transparent; color:var(--text2);
     border: 1px solid rgba(201,168,76,.35);
   }
-  .btn-secondary:hover { border-color: var(--gold); color: var(--gold-lt); }
+  .btn-secondary:hover { border-color: var(--gold); color:var(--gold); }
 
   /* ── PROGRESS BAR ── */
   .progress-bar {
@@ -360,7 +376,7 @@
     <div class="intro-icon">🗺️</div>
     <div class="intro-title">Match the words to their meanings</div>
     <p class="intro-body">
-      Tap a <strong style="color:var(--gold-lt)">question</strong> on the left, then tap the <strong style="color:var(--gold-lt)">matching definition</strong> on the right.<br><br>
+      Tap a <strong style="color:var(--gold)">question</strong> on the left, then tap the <strong style="color:var(--gold)">matching definition</strong> on the right.<br><br>
       There are five definitions but only four questions — can you work out which one is left over?
     </p>
     <div class="badge-row">

@@ -7,6 +7,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
+  /* ── LIQUID GLASS — CLEAN WHITE/GREY ── */
+  --bg:         linear-gradient(160deg,#ffffff 0%,#f2f2f4 60%,#e8e8ec 100%);
+  --surface:    rgba(255,255,255,0.82);
+  --surface2:   rgba(248,248,250,0.9);
+  --border:     rgba(255,255,255,0.95);
+  --border2:    rgba(0,0,0,0.09);
+  --shadow:     0 4px 24px rgba(0,0,0,0.08),0 1px 4px rgba(0,0,0,0.04),inset 0 1px 0 rgba(255,255,255,0.95);
+  --shadow-sm:  0 2px 12px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.9);
+  --blur:       blur(24px) saturate(160%);
+  --blur-hdr:   blur(40px) saturate(180%);
+  --text:       #111111;
+  --text2:      #444444;
+  --text3:      rgba(0,0,0,0.4);
+  --gold:       #b8921e;
+  --gold-lt:    #d4a830;
+  --gold-bg:    rgba(184,146,30,0.1);
+  --btn-bg:     #1c1c1e;
+  --btn-text:   #ffffff;
+  --btn-radius: 10px;
+  --radius:     14px;
+  --radius-sm:  8px;
+  --radius-pill:100px;
+
     --jade:    #2d6a4f;
     --jade-lt: #40916c;
     --gold:    #c9a84c;
@@ -22,19 +45,12 @@
 
   body {
     font-family: 'Crimson Pro', Georgia, serif;
-    background: var(--stone);
-    color: var(--cream);
+    background: var(--bg);
+    color:#111111;
     min-height: 100vh;
   }
 
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image:
-      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.06) 2px, rgba(0,0,0,.06) 4px),
-      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px);
-    pointer-events: none; z-index: 0;
-  }
+  body::before{display:none}
 
   header {
     position: relative; z-index: 1;
@@ -51,11 +67,11 @@
   h1 {
     font-family: 'Cinzel', serif;
     font-size: clamp(1.6rem, 4vw, 2.6rem);
-    font-weight: 700; color: var(--gold-lt); letter-spacing: .04em; line-height: 1.1;
+    font-weight: 700; color:var(--gold); letter-spacing: .04em; line-height: 1.1;
   }
   .subtitle {
     font-size: 1.05rem; font-style: italic;
-    color: var(--sand); margin-top: 8px;
+    color:#444444; margin-top: 8px;
   }
 
   main {
@@ -82,7 +98,7 @@
   .lesson-title {
     font-family: 'Cinzel', serif;
     font-size: 1rem; font-weight: 600;
-    color: var(--gold-lt);
+    color:var(--gold);
   }
 
   /* ── CARDS ── */
@@ -90,7 +106,7 @@
 
   .card {
     display: flex; align-items: center; gap: 16px;
-    background: rgba(0,0,0,.3);
+    background:rgba(255,255,255,0.88);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
     border: 1px solid rgba(201,168,76,.2);
     border-radius: 10px;
     padding: 14px 18px;
@@ -126,13 +142,13 @@
   .card-title {
     font-family: 'Cinzel', serif;
     font-size: .82rem; font-weight: 600;
-    color: var(--gold-lt); letter-spacing: .04em;
+    color:var(--gold); letter-spacing: .04em;
     margin-bottom: 3px;
   }
   .card.teacher .card-title { color: #74c99a; }
   .card-desc {
     font-size: .85rem; font-style: italic;
-    color: var(--sand); line-height: 1.4;
+    color:#444444; line-height: 1.4;
   }
   .card-badges { display: flex; gap: 6px; margin-top: 5px; flex-wrap: wrap; }
   .pill {
@@ -141,12 +157,12 @@
     text-transform: uppercase; padding: 2px 8px;
     border-radius: 20px;
   }
-  .pill.cat1  { background: rgba(201,168,76,.2);  color: var(--gold-lt); border: 1px solid rgba(201,168,76,.3); }
+  .pill.cat1  { background: rgba(201,168,76,.2);  color:var(--gold); border: 1px solid rgba(201,168,76,.3); }
   .pill.cat2  { background: rgba(74,127,168,.2);  color: #7aaed6;        border: 1px solid rgba(74,127,168,.3); }
   .pill.cat4  { background: rgba(193,68,14,.2);   color: #e07050;        border: 1px solid rgba(193,68,14,.3); }
   .pill.cat5  { background: rgba(64,145,108,.2);  color: #74c99a;        border: 1px solid rgba(64,145,108,.3); }
   .pill.cat6  { background: rgba(122,79,168,.2);  color: #b07ed4;        border: 1px solid rgba(122,79,168,.3); }
-  .pill.touch { background: rgba(255,255,255,.07); color: var(--sand);   border: 1px solid rgba(255,255,255,.15); }
+  .pill.touch { background: rgba(255,255,255,.07); color:#444444;   border: 1px solid rgba(255,255,255,.15); }
   .pill.live  { background: rgba(45,106,79,.25);  color: #74c99a;        border: 1px solid rgba(64,145,108,.4); }
 
   .card-arrow {

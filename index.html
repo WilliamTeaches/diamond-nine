@@ -7,6 +7,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
+  /* ── LIQUID GLASS — CLEAN WHITE/GREY ── */
+  --bg:         linear-gradient(160deg,#ffffff 0%,#f2f2f4 60%,#e8e8ec 100%);
+  --surface:    rgba(255,255,255,0.82);
+  --surface2:   rgba(248,248,250,0.9);
+  --border:     rgba(255,255,255,0.95);
+  --border2:    rgba(0,0,0,0.09);
+  --shadow:     0 4px 24px rgba(0,0,0,0.08),0 1px 4px rgba(0,0,0,0.04),inset 0 1px 0 rgba(255,255,255,0.95);
+  --shadow-sm:  0 2px 12px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.9);
+  --blur:       blur(24px) saturate(160%);
+  --blur-hdr:   blur(40px) saturate(180%);
+  --text:       #111111;
+  --text2:      #444444;
+  --text3:      rgba(0,0,0,0.4);
+  --gold:       #b8921e;
+  --gold-lt:    #d4a830;
+  --gold-bg:    rgba(184,146,30,0.1);
+  --btn-bg:     #1c1c1e;
+  --btn-text:   #ffffff;
+  --btn-radius: 10px;
+  --radius:     14px;
+  --radius-sm:  8px;
+  --radius-pill:100px;
+
     --jade:    #2d6a4f;
     --jade-lt: #40916c;
     --gold:    #c9a84c;
@@ -23,21 +46,14 @@
 
   body {
     font-family: 'Crimson Pro', Georgia, serif;
-    background: var(--stone);
-    color: var(--cream);
+    background: var(--bg);
+    color:var(--text);
     min-height: 100dvh;
     overflow-x: hidden;
     overscroll-behavior: none;
   }
 
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image:
-      repeating-linear-gradient(0deg,  transparent, transparent 2px, rgba(0,0,0,.06) 2px, rgba(0,0,0,.06) 4px),
-      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px);
-    pointer-events: none; z-index: 0;
-  }
+  body::before{display:none}
 
   header {
     position: relative; z-index: 1;
@@ -54,17 +70,17 @@
   h1 {
     font-family: 'Cinzel', serif;
     font-size: clamp(1.4rem, 4vw, 2.2rem);
-    font-weight: 700; color: var(--gold-lt);
+    font-weight: 700; color:var(--gold);
     line-height: 1.15; letter-spacing: .04em;
   }
   .subtitle {
     font-size: 1rem; font-style: italic;
-    color: var(--sand); margin-top: 6px; font-weight: 300;
+    color:var(--text2); margin-top: 6px; font-weight: 300;
   }
 
   .name-bar {
     position: relative; z-index: 1;
-    background: rgba(0,0,0,.3);
+    background:rgba(255,255,255,0.88);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
     border-bottom: 1px solid rgba(201,168,76,.3);
     padding: 10px 20px;
     display: flex; align-items: center; justify-content: center;
@@ -75,31 +91,31 @@
     letter-spacing: .15em; color: var(--gold); text-transform: uppercase; white-space: nowrap;
   }
   .name-bar select {
-    background: rgba(0,0,0,.5);
+    background:rgba(255,255,255,0.5);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
     border: 1px solid rgba(201,168,76,.4); border-radius: 5px;
-    color: var(--cream); font-family: 'Crimson Pro', serif; font-size: 1rem;
+    color:var(--text); font-family: 'Crimson Pro', serif; font-size: 1rem;
     padding: 7px 12px; outline: none; width: min(320px, 100%);
     transition: border-color .2s; cursor: pointer;
     -webkit-appearance: none; appearance: none;
   }
   .name-bar select:focus { border-color: var(--gold); }
-  .name-bar select option { background: #1e0f07; color: var(--cream); }
+  .name-bar select option { background: #1e0f07; color:var(--text); }
   .name-bar .reload-btn {
     font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .1em; text-transform: uppercase;
     padding: 7px 12px; background: transparent; border: 1px solid rgba(201,168,76,.3);
-    color: rgba(232,213,176,.5); border-radius: 5px; cursor: pointer;
+    color:rgba(0,0,0,0.4); border-radius: 5px; cursor: pointer;
     touch-action: manipulation; transition: all .18s; white-space: nowrap;
   }
-  .name-bar .reload-btn:active { border-color: var(--gold); color: var(--gold-lt); }
+  .name-bar .reload-btn:active { border-color: var(--gold); color:var(--gold); }
 
   .instructions {
     position: relative; z-index: 1;
-    background: rgba(201,168,76,.12);
+    background: rgba(201,168,76,0.1);
     border-bottom: 1px solid rgba(201,168,76,.3);
     padding: 10px 20px; font-size: .92rem;
-    color: var(--sand); text-align: center; line-height: 1.5;
+    color:var(--text2); text-align: center; line-height: 1.5;
   }
-  .instructions strong { color: var(--gold-lt); font-family: 'Cinzel', serif; font-size: .82rem; }
+  .instructions strong { color:var(--gold); font-family: 'Cinzel', serif; font-size: .82rem; }
 
   main {
     position: relative; z-index: 1;
@@ -120,7 +136,7 @@
     border: 1px dashed rgba(201,168,76,.3); border-radius: 6px;
     background: rgba(0,0,0,.2); transition: background .2s;
   }
-  #card-bank.drag-over { background: rgba(201,168,76,.12); border-color: var(--gold); }
+  #card-bank.drag-over { background: rgba(201,168,76,0.1); border-color: var(--gold); }
 
   .diamond-wrap { flex: 1 1 500px; }
   .diamond-label {
@@ -155,7 +171,7 @@
   .drop-zone {
     width: 130px; height: 78px;
     border: 2px dashed rgba(201,168,76,.4); border-radius: 8px;
-    background: rgba(0,0,0,.25);
+    background:rgba(248,248,250,0.92);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
     display: flex; align-items: center; justify-content: center;
     transition: all .2s; position: relative;
   }
@@ -186,7 +202,7 @@
   .card-icon { font-size: 1.3rem; line-height: 1; margin-bottom: 3px; }
   .card-name {
     font-family: 'Cinzel', serif; font-size: .65rem; font-weight: 600;
-    letter-spacing: .06em; color: var(--gold-lt); line-height: 1.25;
+    letter-spacing: .06em; color:var(--gold); line-height: 1.25;
   }
   #card-bank .card { width: 100%; height: 58px; flex-direction: row; gap: 8px; padding: 6px 12px; }
   #card-bank .card-icon { font-size: 1.1rem; margin-bottom: 0; }
@@ -204,7 +220,7 @@
   @media (max-width: 640px) { .annotations { grid-template-columns: 1fr; } }
 
   .annotation-box {
-    background: rgba(0,0,0,.3); border-radius: 10px; padding: 16px;
+    background:rgba(255,255,255,0.88);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur); border-radius: 10px; padding: 16px;
     border: 1px solid rgba(201,168,76,.25);
   }
   .annotation-box.top-box { border-color: rgba(201,168,76,.5); }
@@ -214,15 +230,15 @@
     margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
   }
   .ann-title .badge { background: var(--gold); color: var(--stone); border-radius: 3px; padding: 1px 6px; font-size: .6rem; }
-  .ann-title .badge.ext { background: var(--terracotta); color: var(--cream); }
+  .ann-title .badge.ext { background: var(--terracotta); color:var(--text); }
   .ann-hint { font-size: .82rem; font-style: italic; color: rgba(245,237,214,.55); margin-bottom: 8px; }
-  .ann-name { font-family: 'Cinzel', serif; font-size: .72rem; color: var(--gold-lt); margin-bottom: 6px; min-height: 1em; }
+  .ann-name { font-family: 'Cinzel', serif; font-size: .84rem; color:var(--gold); margin-bottom: 6px; min-height: 1em; }
   .ann-name.empty { color: rgba(201,168,76,.3); font-style: italic; }
 
   textarea {
     width: 100%; min-height: 80px;
-    background: rgba(0,0,0,.35); border: 1px solid rgba(201,168,76,.3); border-radius: 5px;
-    color: var(--cream); font-family: 'Crimson Pro', serif; font-size: .9rem;
+    background:rgba(255,255,255,0.88);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur); border: 1px solid rgba(201,168,76,.3); border-radius: 5px;
+    color:var(--text); font-family: 'Crimson Pro', serif; font-size: .9rem;
     padding: 8px 10px; resize: vertical; outline: none; transition: border-color .2s; line-height: 1.5;
   }
   textarea:focus { border-color: var(--gold); }
@@ -243,8 +259,8 @@
   }
   .btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,168,76,.4); }
   .btn-primary:disabled { opacity: .55; cursor: default; }
-  .btn-secondary { background: transparent; color: var(--sand); border: 1px solid rgba(201,168,76,.4); }
-  .btn-secondary:hover { border-color: var(--gold); color: var(--gold-lt); }
+  .btn-secondary { background: transparent; color:var(--text2); border: 1px solid rgba(201,168,76,.4); }
+  .btn-secondary:hover { border-color: var(--gold); color:var(--gold); }
 
   .progress-bar {
     width: 100%; max-width: 480px; height: 4px;
@@ -260,7 +276,7 @@
 
   #toast {
     position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
-    background: var(--jade); color: var(--cream); padding: 12px 24px; border-radius: 8px;
+    background: var(--jade); color:var(--text); padding: 12px 24px; border-radius: 8px;
     font-family: 'Cinzel', serif; font-size: .75rem; letter-spacing: .1em;
     border: 1px solid var(--jade-lt); box-shadow: 0 8px 30px rgba(0,0,0,.5);
     transition: transform .4s cubic-bezier(.34,1.56,.64,1);
@@ -302,7 +318,7 @@
 </div>
 
 <div class="instructions">
-  <strong>How to play:</strong>&ensp;Drag or tap each card into the diamond. Most important at the <strong style="color:var(--gold-lt)">top ◆</strong>, least important at the <strong style="color:#e06030">bottom ◇</strong>. Then write your reasons below.
+  <strong>How to play:</strong>&ensp;Drag or tap each card into the diamond. Most important at the <strong style="color:var(--gold)">top ◆</strong>, least important at the <strong style="color:#e06030">bottom ◇</strong>. Then write your reasons below.
 </div>
 
 <div style="position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:8px 16px 0;">

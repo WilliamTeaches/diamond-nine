@@ -7,6 +7,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
+  /* ── LIQUID GLASS — CLEAN WHITE/GREY ── */
+  --bg:         linear-gradient(160deg,#ffffff 0%,#f2f2f4 60%,#e8e8ec 100%);
+  --surface:    rgba(255,255,255,0.82);
+  --surface2:   rgba(248,248,250,0.9);
+  --border:     rgba(255,255,255,0.95);
+  --border2:    rgba(0,0,0,0.09);
+  --shadow:     0 4px 24px rgba(0,0,0,0.08),0 1px 4px rgba(0,0,0,0.04),inset 0 1px 0 rgba(255,255,255,0.95);
+  --shadow-sm:  0 2px 12px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.9);
+  --blur:       blur(24px) saturate(160%);
+  --blur-hdr:   blur(40px) saturate(180%);
+  --text:       #111111;
+  --text2:      #444444;
+  --text3:      rgba(0,0,0,0.4);
+  --gold:       #b8921e;
+  --gold-lt:    #d4a830;
+  --gold-bg:    rgba(184,146,30,0.1);
+  --btn-bg:     #1c1c1e;
+  --btn-text:   #ffffff;
+  --btn-radius: 10px;
+  --radius:     14px;
+  --radius-sm:  8px;
+  --radius-pill:100px;
+
     --gold:    #c9a84c;
     --gold-lt: #e9c46a;
     --stone:   #3d2b1f;
@@ -26,7 +49,7 @@
   html, body {
     width: 100%; height: 100%; overflow: hidden;
     font-family: 'Crimson Pro', Georgia, serif;
-    background: var(--stone-dk); color: var(--cream);
+    background:var(--bg);color:var(--text);
     user-select: none; -webkit-user-select: none;
   }
 
@@ -47,10 +70,10 @@
   .hdr-left h1 {
     font-family: 'Cinzel', serif;
     font-size: clamp(.9rem, 2.2vw, 1.4rem);
-    font-weight: 700; color: var(--gold-lt); letter-spacing: .04em;
+    font-weight: 700; color:var(--gold); letter-spacing: .04em;
   }
   .legend { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-  .leg-item { display: flex; align-items: center; gap: 5px; font-size: .65rem; font-style: italic; color: var(--sand); white-space: nowrap; }
+  .leg-item { display: flex; align-items: center; gap: 5px; font-size: .65rem; font-style: italic; color:var(--text2); white-space: nowrap; }
   .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   .leg-dot.general { background: var(--jade-lt); }
   .leg-dot.pakal   { background: var(--pakal); box-shadow: 0 0 7px var(--pakal); }
@@ -144,12 +167,12 @@
   .card-img {
     width: 100%; height: 100px; object-fit: cover;
     display: block; border-bottom: 1px solid rgba(201,168,76,.15);
-    background: rgba(0,0,0,.4);
+    background:rgba(255,255,255,0.45);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
   }
   .card-img-placeholder {
     width: 100%; height: 100px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 2rem; background: rgba(0,0,0,.35);
+    font-size: 2rem; background:rgba(255,255,255,0.88);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
     border-bottom: 1px solid rgba(201,168,76,.15);
   }
   .card-body { padding: 9px 11px; }
@@ -164,9 +187,9 @@
   .event.islam   .card-date { color: var(--islam); }
   .card-title {
     font-family: 'Cinzel', serif; font-size: .7rem; font-weight: 600;
-    color: var(--cream); line-height: 1.25;
+    color:var(--text); line-height: 1.25;
   }
-  .event.pakal .card-title { color: var(--gold-lt); }
+  .event.pakal .card-title { color:var(--gold); }
 
   /* ── MODAL ── */
   .modal-overlay {
@@ -197,12 +220,12 @@
   .modal-hero {
     width: 100%; height: 200px; object-fit: cover; display: block;
     border-bottom: 1px solid rgba(201,168,76,.2);
-    background: rgba(0,0,0,.5);
+    background:rgba(255,255,255,0.5);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
   }
   .modal-hero-placeholder {
     width: 100%; height: 200px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 4rem; background: rgba(0,0,0,.4);
+    font-size: 4rem; background:rgba(255,255,255,0.45);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
     border-bottom: 1px solid rgba(201,168,76,.2);
   }
   .modal-content { padding: 22px 26px 26px; }
@@ -215,13 +238,13 @@
   .modal-eyebrow.decline { color: var(--terra); }
   .modal-eyebrow.saxon   { color: var(--saxon); }
   .modal-eyebrow.islam   { color: var(--islam); }
-  .modal-date { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold-lt); margin-bottom: 4px; }
+  .modal-date { font-family: 'Cinzel', serif; font-size: 1rem; color:var(--gold); margin-bottom: 4px; }
   .modal-title {
     font-family: 'Cinzel', serif; font-size: 1.35rem; font-weight: 700;
-    color: var(--cream); line-height: 1.2; margin-bottom: 14px;
+    color:var(--text); line-height: 1.2; margin-bottom: 14px;
   }
-  .modal.pakal-modal .modal-title { color: var(--gold-lt); }
-  .modal-body { font-size: .98rem; line-height: 1.72; color: var(--sand); }
+  .modal.pakal-modal .modal-title { color:var(--gold); }
+  .modal-body { font-size: .98rem; line-height: 1.72; color:var(--text2); }
   .modal-caption {
     margin-top: 10px; font-size: .72rem; font-style: italic;
     color: rgba(232,213,176,.4);
@@ -229,13 +252,13 @@
   .modal-close {
     position: absolute; top: 10px; right: 12px;
     background: rgba(0,0,0,.6); border: 1px solid rgba(201,168,76,.35);
-    color: var(--sand); border-radius: 5px; padding: 8px 14px;
+    color:var(--text2); border-radius: 5px; padding: 8px 14px;
     cursor: pointer; font-family: 'Cinzel', serif; font-size: .6rem;
     letter-spacing: .1em; transition: all .2s; z-index: 10;
     touch-action: manipulation; min-height: 36px;
     -webkit-tap-highlight-color: transparent;
   }
-  .modal-close:active { border-color: var(--gold); color: var(--gold-lt); }
+  .modal-close:active { border-color: var(--gold); color:var(--gold); }
 
   /* curiosity button inside main Maya modal */
   .modal-curiosity-btn {
@@ -243,7 +266,7 @@
     text-transform: uppercase; padding: 11px 24px; border: none; border-radius: 5px;
     cursor: pointer; width: 100%;
     background: linear-gradient(135deg, var(--jade) 0%, var(--jade-lt) 100%);
-    color: var(--cream); box-shadow: 0 3px 12px rgba(45,106,79,.35);
+    color:var(--text); box-shadow: 0 3px 12px rgba(45,106,79,.35);
     transition: all .2s;
   }
   .modal-curiosity-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(45,106,79,.45); }
@@ -270,11 +293,11 @@
     font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .05em;
     text-transform: uppercase; padding: 10px 12px;
     background: rgba(255,255,255,.05); border: 1px solid rgba(201,168,76,.3);
-    color: var(--sand); border-radius: 6px; cursor: pointer; transition: all .15s;
+    color:var(--text2); border-radius: 6px; cursor: pointer; transition: all .15s;
     touch-action: manipulation; min-height: 42px; white-space: nowrap;
     -webkit-tap-highlight-color: transparent;
   }
-  .nav-btn:active { background: rgba(201,168,76,.18); border-color: var(--gold); color: var(--gold-lt); }
+  .nav-btn:active { background: rgba(201,168,76,.18); border-color: var(--gold); color:var(--gold); }
   .zoom-btn { min-width: 42px; padding: 10px; font-size: 1.15rem; font-family: monospace; letter-spacing: 0; }
 
   /* ── CENTURY NOTCHES ── */
@@ -391,13 +414,13 @@
   .cm-close {
     position: absolute; top: 8px; right: 10px;
     background: rgba(0,0,0,.6); border: 1px solid rgba(255,255,255,.2);
-    color: var(--sand); border-radius: 5px; padding: 8px 12px;
+    color:var(--text2); border-radius: 5px; padding: 8px 12px;
     cursor: pointer; font-family: 'Cinzel', serif; font-size: .6rem;
     letter-spacing: .1em; z-index: 10; transition: all .2s;
     touch-action: manipulation; min-height: 36px;
     -webkit-tap-highlight-color: transparent;
   }
-  .cm-close:active { border-color: var(--gold); color: var(--gold-lt); }
+  .cm-close:active { border-color: var(--gold); color:var(--gold); }
   .curiosity-modal.saxon-cm {
     background: linear-gradient(145deg, #0e1e2e 0%, #08121c 100%);
     border-color: var(--saxon);
@@ -409,7 +432,7 @@
   .cm-hero-placeholder {
     width: 100%; height: 140px; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
-    font-size: 3rem; background: rgba(0,0,0,.4);
+    font-size: 3rem; background:rgba(255,255,255,0.45);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
   }
   .cm-eyebrow {
     font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .16em;
@@ -417,12 +440,12 @@
   }
   .cm-eyebrow.saxon { color: var(--saxon); }
   .cm-eyebrow.islam { color: var(--islam); }
-  .cm-date { font-family: 'Cinzel', serif; font-size: .9rem; color: var(--gold-lt); margin-bottom: 3px; }
+  .cm-date { font-family: 'Cinzel', serif; font-size: .9rem; color:var(--gold); margin-bottom: 3px; }
   .cm-title {
     font-family: 'Cinzel', serif; font-size: 1.15rem; font-weight: 700;
-    color: var(--cream); line-height: 1.2; margin-bottom: 10px;
+    color:var(--text); line-height: 1.2; margin-bottom: 10px;
   }
-  .cm-text { font-size: .9rem; line-height: 1.65; color: var(--sand); margin-bottom: 16px; }
+  .cm-text { font-size: .9rem; line-height: 1.65; color:var(--text2); margin-bottom: 16px; }
 
   .cm-divider {
     border: none; border-top: 1px solid rgba(255,255,255,.08); margin-bottom: 14px;
@@ -439,25 +462,25 @@
   }
   .cm-btn.want {
     background: linear-gradient(135deg, var(--jade) 0%, var(--jade-lt) 100%);
-    color: var(--cream); box-shadow: 0 3px 12px rgba(45,106,79,.35);
+    color:var(--text); box-shadow: 0 3px 12px rgba(45,106,79,.35);
   }
   .cm-btn.want:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(45,106,79,.45); }
   .cm-btn.want:disabled { opacity: .5; cursor: default; transform: none; }
   .cm-btn.close-cm {
-    background: transparent; color: var(--sand);
+    background: transparent; color:var(--text2);
     border: 1px solid rgba(201,168,76,.3);
   }
-  .cm-btn.close-cm:hover { border-color: var(--gold); color: var(--gold-lt); }
+  .cm-btn.close-cm:hover { border-color: var(--gold); color:var(--gold); }
   .cm-feedback { font-size: .78rem; font-style: italic; color: var(--jade-lt); margin-top: 8px; min-height: 1.2em; }
   .cm-feedback.err { color: #e07050; }
   .cm-close {
     position: absolute; top: 10px; right: 12px;
-    background: rgba(0,0,0,.5); border: 1px solid rgba(255,255,255,.15);
-    color: var(--sand); border-radius: 4px; padding: 3px 10px;
+    background:rgba(255,255,255,0.5);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur); border: 1px solid rgba(255,255,255,.15);
+    color:var(--text2); border-radius: 4px; padding: 3px 10px;
     cursor: pointer; font-family: 'Cinzel', serif; font-size: .58rem;
     letter-spacing: .1em; z-index: 10; transition: all .2s;
   }
-  .cm-close:hover { border-color: var(--gold); color: var(--gold-lt); }
+  .cm-close:hover { border-color: var(--gold); color:var(--gold); }
 </style>
 </head>
 <body>
