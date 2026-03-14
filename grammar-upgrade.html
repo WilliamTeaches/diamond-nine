@@ -255,20 +255,15 @@ async function submitResults() {
   const fb  = document.getElementById('submit-feedback');
   btn.disabled = true; btn.textContent = 'Sharing…';
 
-  const answers = SENTENCES.map((s,i) => {
-    const val = document.getElementById(`input-${s.id}`)?.value.trim() || '—';
-    return `S${i+1}: ${val}`;
-  }).join(' | ');
+  const payload = { name, timestamp: new Date().toISOString() };
 
-  const extend1 = document.getElementById('extend-1').value.trim() || '—';
-  const extend2 = document.getElementById('extend-2').value.trim() || '—';
+  // Each sentence in its own field
+  SENTENCES.forEach((s, i) => {
+    payload[`s${i + 1}`] = document.getElementById(`input-${s.id}`)?.value.trim() || '—';
+  });
 
-  const payload = {
-    name,
-    answers,
-    extend: `${extend1} / ${extend2}`,
-    timestamp: new Date().toISOString(),
-  };
+  payload.extend1 = document.getElementById('extend-1').value.trim() || '—';
+  payload.extend2 = document.getElementById('extend-2').value.trim() || '—';
 
   try {
     await fetch(SHEET_URL, { method:'POST', mode:'no-cors',
