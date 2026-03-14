@@ -23,64 +23,91 @@
   /* ── SCREEN CHROME ── */
   .screen-header {
     background:linear-gradient(180deg,#0d0604 0%,rgba(13,6,4,.9) 100%);
-    border-bottom:2px solid var(--gold); padding:12px 24px;
+    border-bottom:2px solid var(--gold); padding:10px 20px;
     display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
     position:sticky; top:0; z-index:100;
   }
-  .eyebrow { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.22em; color:var(--gold); text-transform:uppercase; margin-bottom:3px; }
-  .screen-header h1 { font-family:'Cinzel',serif; font-size:clamp(.9rem,2vw,1.3rem); font-weight:700; color:var(--gold-lt); }
-  .hdr-right { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .eyebrow { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; margin-bottom:2px; }
+  .screen-header h1 { font-family:'Cinzel',serif; font-size:clamp(.85rem,1.8vw,1.2rem); font-weight:700; color:var(--gold-lt); }
+  .hdr-right { display:flex; gap:8px; align-items:center; }
   .live-dot { width:8px; height:8px; border-radius:50%; background:var(--jade-lt); animation:pulse 2s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
-  .screen-btn { font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; padding:10px 22px; border:none; border-radius:5px; cursor:pointer; transition:all .2s; }
+  .screen-btn { font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; padding:9px 18px; border:none; border-radius:5px; cursor:pointer; transition:all .2s; }
   .btn-print { background:linear-gradient(135deg,var(--gold) 0%,#a8832a 100%); color:#1e0f07; }
-  .btn-print:hover { transform:translateY(-1px); }
   .btn-refresh { background:transparent; color:var(--sand); border:1px solid rgba(201,168,76,.4); }
-  .btn-refresh:hover { border-color:var(--gold); color:var(--gold-lt); }
-  .screen-main { max-width:900px; margin:24px auto; padding:0 16px 60px; display:flex; flex-direction:column; gap:20px; }
-  .status { text-align:center; padding:60px 20px; font-family:'Cinzel',serif; font-size:.8rem; letter-spacing:.1em; color:rgba(26,26,26,.5); text-transform:uppercase; }
 
-  /* ── A4 SHEET ── */
+  .screen-main { max-width:220mm; margin:20px auto; padding:0 12px 60px; display:flex; flex-direction:column; gap:20px; }
+  .status { text-align:center; padding:60px 20px; font-family:'Cinzel',serif; font-size:.78rem; letter-spacing:.1em; color:rgba(26,26,26,.45); text-transform:uppercase; }
+
+  /* ── A4 SHEET — exact 210×297mm ── */
   .a4-sheet {
-    background:#fff; width:100%; max-width:794px;
-    margin:0 auto; padding:20px 24px;
-    border:1px solid #ccc; box-shadow:0 2px 16px rgba(0,0,0,.12);
-    font-size:10pt; color:#1a1a1a;
+    background:#fff;
+    width:210mm;
+    min-height:297mm;
+    margin:0 auto;
+    padding:12mm 14mm;
+    border:1px solid #bbb;
+    box-shadow:0 3px 20px rgba(0,0,0,.15);
+    display:flex;
+    flex-direction:column;
+    gap:6mm;
     page-break-after:always;
   }
 
-  /* Sheet header */
+  /* ── COMPACT HEADER ── */
   .sheet-header {
-    display:flex; align-items:center; justify-content:space-between;
-    padding-bottom:10px; margin-bottom:16px; gap:10px;
-    border-bottom:2px solid #1a1a2e;
+    display:flex; align-items:center; justify-content:space-between; gap:8mm;
+    padding-bottom:4mm; border-bottom:1.5pt solid #1a1a2e; flex-shrink:0;
   }
-  .sheet-title { font-family:'Cinzel',Georgia,serif; font-size:13pt; font-weight:700; color:#1a1a2e; }
-  .sheet-date  { font-family:'Cinzel',Georgia,serif; font-size:7.5pt; color:#777; text-transform:uppercase; letter-spacing:.08em; margin-top:2px; }
-  .sheet-name-box { border:1.5px solid #1a1a2e; border-radius:4px; padding:6px 16px; text-align:center; min-width:200px; }
-  .sheet-name-label { font-family:'Cinzel',Georgia,serif; font-size:7pt; color:#777; text-transform:uppercase; letter-spacing:.1em; }
-  .sheet-name { font-family:'TwinklCursive','Crimson Pro',Georgia,serif; font-size:13pt; color:#1a1a2e; margin-top:3px; }
+  .sheet-title-block {}
+  .sheet-enquiry {
+    font-family:'Cinzel',Georgia,serif; font-size:7pt; letter-spacing:.06em;
+    text-transform:uppercase; color:#888; margin-bottom:2pt;
+  }
+  .sheet-title {
+    font-family:'Cinzel',Georgia,serif; font-size:11pt; font-weight:700; color:#1a1a2e; line-height:1.2;
+  }
+  .sheet-date { font-family:'Cinzel',Georgia,serif; font-size:6.5pt; color:#aaa; margin-top:1pt; }
+  .sheet-name-box {
+    border:1pt solid #1a1a2e; border-radius:3pt; padding:4pt 10pt; text-align:center; min-width:40mm; flex-shrink:0;
+  }
+  .sheet-name-label { font-family:'Cinzel',Georgia,serif; font-size:6pt; text-transform:uppercase; letter-spacing:.1em; color:#999; }
+  .sheet-name { font-family:'TwinklCursive','Crimson Pro',Georgia,serif; font-size:12pt; color:#1a1a2e; margin-top:2pt; line-height:1.2; }
 
-  /* Two-col layout */
-  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
+  /* ── TWO COL BODY ── */
+  .body-cols {
+    display:grid; grid-template-columns:1fr 1fr; gap:5mm; flex:1;
+  }
 
-  /* ── SECTION WRAPPER ── */
-  .section { border:1px solid #ddd; border-radius:6px; overflow:hidden; }
-  .section-title-bar { padding:5px 10px; border-bottom:1px solid #ddd; }
-  .section-title { font-family:'Cinzel',Georgia,serif; font-size:7.5pt; letter-spacing:.1em; text-transform:uppercase; color:#1a1a2e; }
-  .section-body { padding:10px; }
+  /* ── SECTION ── */
+  .section { border:0.5pt solid #ddd; border-radius:3pt; overflow:hidden; display:flex; flex-direction:column; }
+  .section-title-bar { padding:3pt 8pt; border-bottom:0.5pt solid #ddd; }
+  .section-title { font-family:'Cinzel',Georgia,serif; font-size:7pt; letter-spacing:.08em; text-transform:uppercase; color:#444; }
+  .section-body { padding:6pt 8pt; flex:1; }
 
   /* ── DIAMOND NINE ── */
   .diamond-grid {
     display:grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: repeat(5, auto);
-    gap:4px;
-    margin-bottom:10px;
+    grid-template-columns:1fr 1fr 1fr;
+    grid-template-rows:repeat(5,auto);
+    gap:2.5pt;
+    margin-bottom:5pt;
   }
-  .d-cell { grid-column: 2; /* default: centre */ }
+  .d-card {
+    border:0.5pt solid #ccc; border-radius:3pt; padding:3pt 2pt;
+    text-align:center; background:#fafafa;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    min-height:16mm;
+  }
+  .d-card.top-card { border-color:#c9a84c; background:#fffcf0; }
+  .d-card.bot-card { background:#f6f6f6; }
+  .d-card.empty-card { border-style:dashed; border-color:#e0e0e0; background:#fff; }
+  .d-pos  { font-family:'Cinzel',Georgia,serif; font-size:5pt; color:#bbb; margin-bottom:1pt; }
+  .d-card.top-card .d-pos { color:#c9a84c; }
+  .d-icon { font-size:10pt; line-height:1; margin-bottom:1pt; }
+  .d-name { font-family:'Cinzel',Georgia,serif; font-size:5.5pt; letter-spacing:.03em; text-transform:uppercase; color:#1a1a2e; line-height:1.2; }
 
-  /* Diamond positions */
+  /* positions */
   .pos-1 { grid-column:2; grid-row:1; }
   .pos-2 { grid-column:1; grid-row:2; }
   .pos-3 { grid-column:3; grid-row:2; }
@@ -91,60 +118,41 @@
   .pos-8 { grid-column:3; grid-row:4; }
   .pos-9 { grid-column:2; grid-row:5; }
 
-  .d-card {
-    border:1px solid #ccc; border-radius:5px; padding:5px 4px;
-    text-align:center; background:#fafafa;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    min-height:38px;
-  }
-  .d-card.top-card { border-color:#c9a84c; background:#fffbf0; }
-  .d-card.bot-card { border-color:#b0b0b0; background:#f5f5f5; }
-  .d-icon  { font-size:11pt; line-height:1; margin-bottom:2px; }
-  .d-name  { font-family:'Cinzel',Georgia,serif; font-size:6pt; letter-spacing:.04em; text-transform:uppercase; color:#1a1a2e; line-height:1.2; }
-  .d-pos   { font-family:'Cinzel',Georgia,serif; font-size:5.5pt; color:#aaa; margin-bottom:1px; }
-  .d-card.top-card .d-pos { color:#a8832a; }
-  .d-card.bot-card .d-pos { color:#888; }
-
-  /* Reasons */
-  .reason-box { border:1px solid #e0e0e0; border-radius:5px; padding:7px 9px; margin-top:5px; background:#fafafa; }
-  .reason-label { font-family:'Cinzel',Georgia,serif; font-size:6.5pt; letter-spacing:.08em; text-transform:uppercase; color:#999; margin-bottom:3px; }
+  /* Reason boxes */
+  .reason-box { border:0.5pt solid #e0e0e0; border-radius:3pt; padding:5pt 7pt; margin-bottom:3pt; background:#fafafa; }
+  .reason-box.top-box { border-color:#c9a84c; background:#fffcf0; }
+  .reason-label { font-family:'Cinzel',Georgia,serif; font-size:6pt; text-transform:uppercase; letter-spacing:.07em; color:#aaa; margin-bottom:3pt; }
   .reason-label.top { color:#a8832a; }
-  .reason-text {
-    font-family:'TwinklCursive','Crimson Pro',Georgia,serif;
-    font-size:11pt; line-height:1.6; color:#1a1a2e; min-height:20px;
-  }
-  .reason-text.empty { font-family:'Crimson Pro',Georgia,serif; font-size:8.5pt; color:#bbb; font-style:italic; }
-  .no-data { font-family:'Crimson Pro',Georgia,serif; font-size:8.5pt; color:#aaa; font-style:italic; padding:6px 0; }
+  .reason-text { font-family:'TwinklCursive','Crimson Pro',Georgia,serif; font-size:10.5pt; line-height:1.55; color:#1a1a2e; min-height:14pt; }
+  .reason-text.empty { font-family:'Crimson Pro',Georgia,serif; font-size:8pt; color:#bbb; font-style:italic; }
+  .no-data { font-family:'Crimson Pro',Georgia,serif; font-size:8pt; color:#bbb; font-style:italic; padding:4pt 0; }
 
-  /* ── VENN DIAGRAM ── */
+  /* ── VENN ── */
   .venn-wrap { position:relative; width:100%; }
   .venn-svg  { width:100%; height:auto; display:block; }
-
-  /* Zone text overlays — positioned as % over the SVG */
   .venn-overlay { position:absolute; inset:0; pointer-events:none; }
   .vzone {
     position:absolute;
     display:flex; flex-direction:column; align-items:center;
     font-family:'TwinklCursive','Crimson Pro',Georgia,serif;
-    font-size:7pt; line-height:1.4; text-align:center; color:#1a1a2e;
+    font-size:6.5pt; line-height:1.35; text-align:center; color:#1a1a2e;
     overflow:hidden;
   }
   .vzone-label {
     font-family:'Cinzel',Georgia,serif;
-    font-size:5.5pt; letter-spacing:.07em; text-transform:uppercase;
-    margin-bottom:2px; color:#555;
+    font-size:5pt; letter-spacing:.06em; text-transform:uppercase; color:#777; margin-bottom:1.5pt;
   }
-  .vzone-item { margin-bottom:1px; }
-  .vzone.empty .vzone-item { color:#bbb; font-style:italic; font-family:'Crimson Pro',Georgia,serif; }
+  .vzone-item { margin-bottom:0.5pt; }
 
   /* ── PRINT ── */
   @media print {
-    body { background:#fff; }
-    .screen-header, .screen-main > *:not(.a4-sheet) { display:none !important; }
+    body { background:#fff; margin:0; padding:0; }
+    .screen-header { display:none !important; }
     .screen-main { max-width:none; margin:0; padding:0; gap:0; }
     .a4-sheet {
-      width:210mm; max-width:none; min-height:297mm;
-      margin:0; padding:14mm 16mm; border:none; box-shadow:none;
+      width:210mm; min-height:297mm;
+      margin:0; padding:12mm 14mm;
+      border:none; box-shadow:none;
       page-break-after:always;
     }
   }
@@ -173,15 +181,9 @@ const VENN_CSV    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQNqr1dLDto
 const DIAMOND_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRPRURE9g1iYKrOtQCF3PMwggQDR2qeudR7fzOStsUr_L-ZvNvPRoW2Q0nEFFNsDAFaA7Ow8VuGAVDI/pub?gid=0&single=true&output=csv';
 
 const D9_CARDS = {
-  'The King':          '👑',
-  'Nobles':            '⚔️',
-  'Farmers':           '🌽',
-  'Artisans':          '🏺',
-  'Slaves':            '⛓️',
-  'Animal Companions': '🐆',
-  'Divine Right':      '☀️',
-  'Unpaid Labour':     '🔨',
-  'Ahau Pacal Votan':  '🌟',
+  'The King':'👑','Nobles':'⚔️','Farmers':'🌽','Artisans':'🏺',
+  'Slaves':'⛓️','Animal Companions':'🐆','Divine Right':'☀️',
+  'Unpaid Labour':'🔨','Ahau Pacal Votan':'🌟',
 };
 
 function splitCSV(line) {
@@ -189,7 +191,21 @@ function splitCSV(line) {
   for(const ch of line){if(ch==='"'){q=!q;}else if(ch===','&&!q){r.push(c.trim());c='';}else{c+=ch;}}
   r.push(c.trim()); return r;
 }
-function normName(n) { return (n||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
+
+// Normalise name — just letters and digits, lowercase
+function norm(n) { return (n||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
+
+// Fuzzy match: check if any word in one name appears in the other
+function namesMatch(a, b) {
+  if (!a || !b) return false;
+  const na = norm(a), nb = norm(b);
+  if (na === nb) return true;
+  if (na.includes(nb) || nb.includes(na)) return true;
+  // Split on non-word chars and check word overlap
+  const wordsA = a.toLowerCase().split(/[^a-z]+/).filter(w=>w.length>2);
+  const wordsB = b.toLowerCase().split(/[^a-z]+/).filter(w=>w.length>2);
+  return wordsA.some(w => wordsB.includes(w));
+}
 
 async function fetchCSV(url) {
   const res   = await fetch(url + '&t=' + Date.now());
@@ -205,15 +221,14 @@ async function fetchCSV(url) {
   });
 }
 
-function latestByName(rows, nameField) {
+// Keep the latest row per name
+function latestByName(rows, field) {
   const map = {};
   rows.forEach(r => {
-    const raw = r[nameField] || r['name'] || r['names'] || '';
-    const key = normName(raw);
+    const raw = r[field] || '';
+    const key = norm(raw);
     if (!key) return;
-    if (!map[key] || r.timestamp > map[key].timestamp) {
-      map[key] = { ...r, _displayName: raw };
-    }
+    if (!map[key] || r.timestamp > map[key].timestamp) map[key] = { ...r, _raw: raw };
   });
   return map;
 }
@@ -228,73 +243,94 @@ async function load() {
     ]);
 
     const vennMap = latestByName(vennRows, 'names');
-    const d9Map   = latestByName(d9Rows, 'name');
+    const d9Map   = latestByName(d9Rows,   'name');
 
-    const allKeys = new Set([...Object.keys(vennMap), ...Object.keys(d9Map)]);
-    if (!allKeys.size) {
+    // Build entries from Venn (primary) then add any D9-only entries
+    const entries = [];
+    const matchedD9 = new Set();
+
+    Object.entries(vennMap).forEach(([vKey, vRow]) => {
+      // Find best-matching D9 entry
+      let d9Row = d9Map[vKey] || null; // exact match first
+      if (!d9Row) {
+        // Fuzzy match
+        for (const [dKey, dRow] of Object.entries(d9Map)) {
+          if (namesMatch(vRow._raw, dRow._raw)) { d9Row = dRow; matchedD9.add(dKey); break; }
+        }
+      } else {
+        matchedD9.add(vKey);
+      }
+      entries.push({ displayName: vRow._raw, venn: vRow, d9: d9Row });
+    });
+
+    // D9 entries with no Venn match
+    Object.entries(d9Map).forEach(([dKey, dRow]) => {
+      if (!matchedD9.has(dKey)) {
+        entries.push({ displayName: dRow._raw, venn: null, d9: dRow });
+      }
+    });
+
+    if (!entries.length) {
       main.innerHTML = '<div class="status">No submissions yet.</div>';
       return;
     }
+
+    entries.sort((a,b) => a.displayName.localeCompare(b.displayName));
     main.innerHTML = '';
-
-    const entries = [...allKeys].map(key => ({
-      key,
-      displayName: (vennMap[key] || d9Map[key])?._displayName || key,
-    })).sort((a,b) => a.displayName.localeCompare(b.displayName));
-
-    entries.forEach(({ key, displayName }) => {
-      main.appendChild(buildSheet(displayName, vennMap[key]||null, d9Map[key]||null));
-    });
+    entries.forEach(e => main.appendChild(buildSheet(e.displayName, e.venn, e.d9)));
   } catch(e) {
     main.innerHTML = `<div class="status">Could not load.<br><small>${e.message}</small></div>`;
   }
 }
 
-// ── DIAMOND NINE HTML ─────────────────────────────────────────────────
+// ── DIAMOND NINE ──────────────────────────────────────────────────────
 function buildDiamond(d9) {
   if (!d9) return '<div class="no-data">No Diamond Nine submission recorded.</div>';
 
-  const topCard = d9.topcard || '';
-  const botCard = d9.bottomcard || '';
-  const topReason = d9.topreason || '';
-  const botReason = d9.bottomreason || '';
+  const topCard   = d9.topcard    || d9['top card']    || '';
+  const botCard   = d9.bottomcard || d9['bottom card'] || '';
+  const topReason = d9.topreason  || d9['top reason']  || '';
+  const botReason = d9.bottomreason || d9['bottom reason'] || '';
 
-  // We only have top and bottom reliably — fill placeholders for middle
+  // Middle 7 positions are placeholders (we only receive top and bottom)
+  const midCards = ['Nobles','Farmers','Artisans','Slaves','Animal Companions','Divine Right','Unpaid Labour']
+    .filter(c => c !== topCard && c !== botCard);
+
   const positions = [
-    { pos:1, name: topCard, isTop:true },
-    { pos:2, name:'', isTop:false },
-    { pos:3, name:'', isTop:false },
-    { pos:4, name:'', isTop:false },
-    { pos:5, name:'', isTop:false },
-    { pos:6, name:'', isTop:false },
-    { pos:7, name:'', isTop:false },
-    { pos:8, name:'', isTop:false },
-    { pos:9, name: botCard, isBot:true },
+    { pos:1, name:topCard,      isTop:true },
+    { pos:2, name:midCards[0]||'', },
+    { pos:3, name:midCards[1]||'', },
+    { pos:4, name:midCards[2]||'', },
+    { pos:5, name:midCards[3]||'', },
+    { pos:6, name:midCards[4]||'', },
+    { pos:7, name:midCards[5]||'', },
+    { pos:8, name:midCards[6]||'', },
+    { pos:9, name:botCard,      isBot:true },
   ];
 
   const cells = positions.map(p => {
-    const icon   = D9_CARDS[p.name] || '•';
-    const cls    = p.isTop ? 'top-card' : p.isBot ? 'bot-card' : '';
-    const posLbl = p.isTop ? '★ Most important' : p.isBot ? '◇ Least important' : `Position ${p.pos}`;
+    const icon = D9_CARDS[p.name] || '';
+    const cls  = p.isTop ? 'top-card' : p.isBot ? 'bot-card' : (p.name ? '' : 'empty-card');
+    const posLabel = p.isTop ? '★ Most important' : p.isBot ? '◇ Least important' : `${p.pos}`;
     return `<div class="d-card pos-${p.pos} ${cls}">
-      <div class="d-pos">${posLbl}</div>
+      <div class="d-pos">${posLabel}</div>
       ${p.name ? `<div class="d-icon">${icon}</div><div class="d-name">${p.name}</div>` : ''}
     </div>`;
   }).join('');
 
   return `
     <div class="diamond-grid">${cells}</div>
-    <div class="reason-box">
-      <div class="reason-label top">Why is ${topCard || '—'} most important?</div>
-      <div class="reason-text ${topReason ? '' : 'empty'}">${topReason || 'No reason recorded'}</div>
+    <div class="reason-box top-box">
+      <div class="reason-label top">Why is "${topCard || '—'}" most important?</div>
+      <div class="reason-text ${topReason?'':'empty'}">${topReason || 'No reason recorded'}</div>
     </div>
-    <div class="reason-box" style="margin-top:5px">
-      <div class="reason-label">Why is ${botCard || '—'} least important?</div>
-      <div class="reason-text ${botReason ? '' : 'empty'}">${botReason || 'No reason recorded'}</div>
+    <div class="reason-box">
+      <div class="reason-label">Why is "${botCard || '—'}" least important?</div>
+      <div class="reason-text ${botReason?'':'empty'}">${botReason || 'No reason recorded'}</div>
     </div>`;
 }
 
-// ── VENN HTML (SVG circles + overlay text) ────────────────────────────
+// ── VENN DIAGRAM ──────────────────────────────────────────────────────
 function buildVenn(venn) {
   if (!venn) return '<div class="no-data">No Venn Diagram submission recorded.</div>';
 
@@ -302,100 +338,69 @@ function buildVenn(venn) {
     if (!str || str==='—') return [];
     return str.split('|').map(s=>s.trim()).filter(Boolean);
   }
-
-  // Field name mapping — handle lowercase CSV headers
-  const zones = {
-    'maya-only':  items(venn.mayaonly  || venn['maya only']  || ''),
-    'saxon-only': items(venn.saxononly || venn['saxon only'] || ''),
-    'islam-only': items(venn.islamonly || venn['islam only'] || ''),
-    'ms':         items(venn.mayasaxon || venn['maya saxon'] || venn['mayasaxon'] || ''),
-    'mi':         items(venn.mayaislam || venn['maya islam'] || venn['mayaislam'] || ''),
-    'si':         items(venn.saxonislam|| venn['saxon islam']|| venn['saxonislam']|| ''),
-    'all':        items(venn.allthree  || venn['all three']  || venn['allthree']  || ''),
+  const Z = {
+    mo: items(venn.mayaonly  || ''),
+    so: items(venn.saxononly || ''),
+    io: items(venn.islamonly || ''),
+    ms: items(venn.mayasaxon || ''),
+    mi: items(venn.mayaislam || ''),
+    si: items(venn.saxonislam|| ''),
+    al: items(venn.allthree  || ''),
   };
 
-  function zoneText(list, max=3) {
-    if (!list.length) return `<div class="vzone-item" style="color:#bbb;font-style:italic;font-family:'Crimson Pro'">—</div>`;
-    return list.slice(0, max).map(t =>
-      `<div class="vzone-item">${t.length > 30 ? t.slice(0,28)+'…' : t}</div>`
-    ).join('') + (list.length > max ? `<div class="vzone-item" style="opacity:.55">+${list.length-max} more</div>` : '');
+  function txt(list, max=3) {
+    if (!list.length) return '';
+    return list.slice(0,max).map(t=>`<div class="vzone-item">${t.length>32?t.slice(0,30)+'…':t}</div>`).join('')
+      + (list.length>max ? `<div class="vzone-item" style="opacity:.5;font-family:'Crimson Pro'">+${list.length-max}</div>` : '');
   }
 
-  // SVG viewBox 400×320 — three overlapping circles
-  // Maya: cx=155 cy=125 r=115
-  // Saxon: cx=245 cy=125 r=115
-  // Islam: cx=200 cy=218 r=115
-  // Zone centres (approx):
-  // maya-only: 90,100   saxon-only: 315,100   islam-only: 200,295
-  // ms: 200,95          mi: 135,210            si: 268,210
-  // all: 200,170
-
-  return `
-    <div class="venn-wrap">
-      <svg class="venn-svg" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
-        <!-- Circles -->
-        <circle cx="155" cy="125" r="115" fill="rgba(184,115,58,.1)" stroke="rgba(184,115,58,.7)" stroke-width="1.5"/>
-        <circle cx="245" cy="125" r="115" fill="rgba(74,127,168,.1)"  stroke="rgba(74,127,168,.7)"  stroke-width="1.5"/>
-        <circle cx="200" cy="218" r="115" fill="rgba(122,79,168,.1)"  stroke="rgba(122,79,168,.7)"  stroke-width="1.5"/>
-        <!-- Labels -->
-        <text x="78"  y="42"  font-family="Cinzel,serif" font-size="9"  font-weight="700" fill="#b8733a" text-anchor="middle">🏺 Maya</text>
-        <text x="322" y="42"  font-family="Cinzel,serif" font-size="9"  font-weight="700" fill="#4a7fa8" text-anchor="middle">⚔️ Saxon</text>
-        <text x="200" y="316" font-family="Cinzel,serif" font-size="9"  font-weight="700" fill="#7a4fa8" text-anchor="middle">🌙 Islam</text>
-      </svg>
-
-      <!-- Text overlays positioned over each zone -->
-      <div class="venn-overlay">
-
-        <div class="vzone" style="left:1%;top:22%;width:22%;max-height:22%">
-          <div class="vzone-label">Maya only</div>
-          ${zoneText(zones['maya-only'])}
-        </div>
-
-        <div class="vzone" style="left:39%;top:5%;width:22%;max-height:18%">
-          <div class="vzone-label">Maya + Saxon</div>
-          ${zoneText(zones['ms'],2)}
-        </div>
-
-        <div class="vzone" style="right:1%;top:22%;width:22%;max-height:22%">
-          <div class="vzone-label">Saxon only</div>
-          ${zoneText(zones['saxon-only'])}
-        </div>
-
-        <div class="vzone" style="left:13%;top:55%;width:20%;max-height:22%">
-          <div class="vzone-label">Maya + Islam</div>
-          ${zoneText(zones['mi'],2)}
-        </div>
-
-        <div class="vzone" style="left:36%;top:46%;width:28%;max-height:24%">
-          <div class="vzone-label">All three</div>
-          ${zoneText(zones['all'],3)}
-        </div>
-
-        <div class="vzone" style="right:13%;top:55%;width:20%;max-height:22%">
-          <div class="vzone-label">Saxon + Islam</div>
-          ${zoneText(zones['si'],2)}
-        </div>
-
-        <div class="vzone" style="left:38%;top:78%;width:24%;max-height:18%">
-          <div class="vzone-label">Islam only</div>
-          ${zoneText(zones['islam-only'],2)}
-        </div>
-
+  return `<div class="venn-wrap">
+    <svg class="venn-svg" viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="148" cy="118" r="108" fill="rgba(184,115,58,.1)" stroke="rgba(184,115,58,.75)" stroke-width="1.2"/>
+      <circle cx="232" cy="118" r="108" fill="rgba(74,127,168,.1)"  stroke="rgba(74,127,168,.75)"  stroke-width="1.2"/>
+      <circle cx="190" cy="203" r="108" fill="rgba(122,79,168,.1)"  stroke="rgba(122,79,168,.75)"  stroke-width="1.2"/>
+      <text x="72"  y="36" font-family="Cinzel,serif" font-size="8.5" font-weight="700" fill="#b8733a" text-anchor="middle">🏺 Maya</text>
+      <text x="308" y="36" font-family="Cinzel,serif" font-size="8.5" font-weight="700" fill="#4a7fa8" text-anchor="middle">⚔️ Saxon</text>
+      <text x="190" y="296" font-family="Cinzel,serif" font-size="8.5" font-weight="700" fill="#7a4fa8" text-anchor="middle">🌙 Islam</text>
+    </svg>
+    <div class="venn-overlay">
+      <div class="vzone" style="left:1%;top:20%;width:20%;max-height:22%">
+        <div class="vzone-label">Maya only</div>${txt(Z.mo)}
       </div>
-    </div>`;
+      <div class="vzone" style="left:38%;top:6%;width:24%;max-height:18%">
+        <div class="vzone-label">Maya + Saxon</div>${txt(Z.ms,2)}
+      </div>
+      <div class="vzone" style="right:1%;top:20%;width:20%;max-height:22%">
+        <div class="vzone-label">Saxon only</div>${txt(Z.so)}
+      </div>
+      <div class="vzone" style="left:11%;top:54%;width:20%;max-height:22%">
+        <div class="vzone-label">Maya + Islam</div>${txt(Z.mi,2)}
+      </div>
+      <div class="vzone" style="left:35%;top:44%;width:30%;max-height:24%">
+        <div class="vzone-label">All three</div>${txt(Z.al,3)}
+      </div>
+      <div class="vzone" style="right:11%;top:54%;width:20%;max-height:22%">
+        <div class="vzone-label">Saxon + Islam</div>${txt(Z.si,2)}
+      </div>
+      <div class="vzone" style="left:37%;top:76%;width:26%;max-height:18%">
+        <div class="vzone-label">Islam only</div>${txt(Z.io,2)}
+      </div>
+    </div>
+  </div>`;
 }
 
 // ── BUILD SHEET ───────────────────────────────────────────────────────
 function buildSheet(name, venn, d9) {
   const sheet = document.createElement('div');
   sheet.className = 'a4-sheet';
-  const date = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  const date = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
 
   sheet.innerHTML = `
     <div class="sheet-header">
-      <div>
-        <div class="sheet-title">Lesson 7 — Comparing &amp; Ranking</div>
-        <div class="sheet-date">Maya Enquiry · Year 4 · ${date}</div>
+      <div class="sheet-title-block">
+        <div class="sheet-enquiry">What was the legacy of the Ancient Mayans?</div>
+        <div class="sheet-title">Comparing Civilisations &amp; Ranking Roles and Resources</div>
+        <div class="sheet-date">${date}</div>
       </div>
       <div class="sheet-name-box">
         <div class="sheet-name-label">Trio</div>
@@ -403,22 +408,18 @@ function buildSheet(name, venn, d9) {
       </div>
     </div>
 
-    <div class="two-col">
-      <div>
-        <div class="section">
-          <div class="section-title-bar">
-            <div class="section-title">◆ Diamond Nine — Who Mattered Most?</div>
-          </div>
-          <div class="section-body">${buildDiamond(d9)}</div>
+    <div class="body-cols">
+      <div class="section">
+        <div class="section-title-bar">
+          <div class="section-title">◆ Diamond Nine — Who Mattered Most?</div>
         </div>
+        <div class="section-body">${buildDiamond(d9)}</div>
       </div>
-      <div>
-        <div class="section">
-          <div class="section-title-bar">
-            <div class="section-title">🔵 Venn Diagram — Comparing Hierarchies</div>
-          </div>
-          <div class="section-body">${buildVenn(venn)}</div>
+      <div class="section">
+        <div class="section-title-bar">
+          <div class="section-title">🔵 Venn Diagram — Comparing Hierarchies</div>
         </div>
+        <div class="section-body">${buildVenn(venn)}</div>
       </div>
     </div>`;
 
