@@ -6,6 +6,12 @@
 <title>Grammar Lesson 4 · Print View</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
+  /* ── CURSIVE FONT FOR LEARNER WRITING ── */
+  @font-face {
+    font-family: 'TwinklCursive';
+    src: url('TwinklCursiveLooped-Regular.ttf') format('truetype');
+    font-weight: normal; font-style: normal;
+  }
   /* ── SCREEN CHROME ── */
   :root {
     --gold:#c9a84c; --gold-lt:#e9c46a;
@@ -153,8 +159,21 @@
     font-size:7pt; color:#aaa;
   }
 
-  /* No data box */
-  .no-data { font-size:9pt; color:#aaa; font-style:italic; padding:8px 0; }
+  /* Learner writing — cursive font */
+  .quiz-cell-ans,
+  .sort-result,
+  .extension-box,
+  .upgrade-ans,
+  .extend-line {
+    font-family: 'TwinklCursive', 'Crimson Pro', Georgia, serif;
+    font-size: 11pt;
+    line-height: 1.6;
+  }
+  /* Keep labels/headers in clean font */
+  .quiz-cell-label, .sort-score-badge, .extension-label,
+  .extend-label, .upgrade-orig, .no-data {
+    font-family: 'Crimson Pro', Georgia, serif;
+  }
 
   /* ── PRINT ── */
   @media print {
@@ -190,7 +209,7 @@
 </div>
 
 <script>
-const QUIZ_CSV    = 'YOUR_GRAMMAR_QUIZ_CSV_URL';
+const QUIZ_CSV    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQl2_2weC4QaOEuO6hnIO8A4MM8T-uz87kGlZu3SITRcpm4y9Y79C1F6DUPtYaKT8XL0zNclTmwaBYY/pub?gid=0&single=true&output=csv';
 const SORT_CSV    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSKF-3iCO8Ni6kVvn4Knp2WTwFzDd5-5s1gFW3tYnK6rt6-9SB7pdGCSlhUPh-Rz-acmZaBA9aI7z6_/pub?gid=0&single=true&output=csv';
 const UPGRADE_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQIJf1vMTxymKWR1mv0-pF6Ze66TxBL0zFI0hrRu7Ab6dQpwVHo4g46-vX5jy5xYLv1zjhCO7tEBTlK/pub?gid=0&single=true&output=csv';
 
