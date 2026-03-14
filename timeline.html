@@ -17,6 +17,10 @@
     --jade-lt: #40916c;
     --terra:   #c1440e;
     --pakal:   #e9c46a;
+    --saxon:   #7aaed6;
+    --saxon-dk:#1a3a52;
+    --islam:   #b07ed4;
+    --islam-dk:#2d1445;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -26,7 +30,7 @@
     user-select: none; -webkit-user-select: none;
   }
 
-  .page { display: grid; grid-template-rows: auto 1fr auto; height: 100vh; }
+  .page { display: grid; grid-template-rows: auto 1fr auto auto auto; height: 100vh; }
 
   /* ── HEADER ── */
   header {
@@ -51,6 +55,8 @@
   .leg-dot.general { background: var(--jade-lt); }
   .leg-dot.pakal   { background: var(--pakal); box-shadow: 0 0 7px var(--pakal); }
   .leg-dot.decline { background: var(--terra); }
+  .leg-dot.saxon   { background: var(--saxon); }
+  .leg-dot.islam   { background: var(--islam); }
 
   /* ── VIEWPORT ── */
   .timeline-viewport {
@@ -113,6 +119,8 @@
   .event.general .event-dot { background: var(--jade-lt); }
   .event.pakal   .event-dot { background: var(--pakal); box-shadow: 0 0 10px rgba(233,196,106,.7); }
   .event.decline .event-dot { background: var(--terra); }
+  .event.saxon   .event-dot { background: var(--saxon); box-shadow: 0 0 8px rgba(122,174,214,.5); }
+  .event.islam   .event-dot { background: var(--islam); box-shadow: 0 0 8px rgba(176,126,212,.5); }
 
   /* ── CARD ── */
   .event-card {
@@ -126,7 +134,11 @@
   }
   .event.pakal   .event-card { border-color: rgba(233,196,106,.45); box-shadow: 0 0 16px rgba(233,196,106,.12); }
   .event.decline .event-card { border-color: rgba(193,68,14,.35); }
+  .event.saxon   .event-card { border-color: rgba(122,174,214,.4); background: rgba(10,20,32,.92); }
+  .event.islam   .event-card { border-color: rgba(176,126,212,.4); background: rgba(18,8,28,.92); }
   .event:hover   .event-card { border-color: var(--gold); box-shadow: 0 6px 24px rgba(201,168,76,.22); }
+  .event.saxon:hover .event-card { border-color: var(--saxon); box-shadow: 0 6px 24px rgba(122,174,214,.3); }
+  .event.islam:hover .event-card { border-color: var(--islam); box-shadow: 0 6px 24px rgba(176,126,212,.3); }
   .event.pakal:hover .event-card { box-shadow: 0 6px 28px rgba(233,196,106,.32); }
 
   .card-img {
@@ -148,6 +160,8 @@
   .event.general .card-date { color: var(--jade-lt); }
   .event.pakal   .card-date { color: var(--pakal); }
   .event.decline .card-date { color: var(--terra); }
+  .event.saxon   .card-date { color: var(--saxon); }
+  .event.islam   .card-date { color: var(--islam); }
   .card-title {
     font-family: 'Cinzel', serif; font-size: .7rem; font-weight: 600;
     color: var(--cream); line-height: 1.25;
@@ -175,6 +189,8 @@
   .modal-overlay.open .modal { transform: translateY(0) scale(1); }
   .modal.pakal-modal  { border-color: var(--pakal); box-shadow: 0 24px 70px rgba(0,0,0,.8), 0 0 40px rgba(233,196,106,.18); }
   .modal.decline-modal { border-color: var(--terra); }
+  .modal.saxon-modal  { border-color: var(--saxon); box-shadow: 0 24px 70px rgba(0,0,0,.8), 0 0 30px rgba(122,174,214,.15); background: linear-gradient(145deg, #0e1e2e 0%, #08121c 100%); }
+  .modal.islam-modal  { border-color: var(--islam); box-shadow: 0 24px 70px rgba(0,0,0,.8), 0 0 30px rgba(176,126,212,.15); background: linear-gradient(145deg, #1a0e28 0%, #0f0818 100%); }
 
   .modal-hero {
     width: 100%; height: 200px; object-fit: cover; display: block;
@@ -195,6 +211,8 @@
   .modal-eyebrow.general { color: var(--jade-lt); }
   .modal-eyebrow.pakal   { color: var(--pakal); }
   .modal-eyebrow.decline { color: var(--terra); }
+  .modal-eyebrow.saxon   { color: var(--saxon); }
+  .modal-eyebrow.islam   { color: var(--islam); }
   .modal-date { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold-lt); margin-bottom: 4px; }
   .modal-title {
     font-family: 'Cinzel', serif; font-size: 1.35rem; font-weight: 700;
@@ -215,6 +233,19 @@
     backdrop-filter: blur(4px);
   }
   .modal-close:hover { border-color: var(--gold); color: var(--gold-lt); }
+
+  /* curiosity button inside main Maya modal */
+  .modal-curiosity-btn {
+    font-family: 'Cinzel', serif; font-size: .68rem; letter-spacing: .1em;
+    text-transform: uppercase; padding: 11px 24px; border: none; border-radius: 5px;
+    cursor: pointer; width: 100%;
+    background: linear-gradient(135deg, var(--jade) 0%, var(--jade-lt) 100%);
+    color: var(--cream); box-shadow: 0 3px 12px rgba(45,106,79,.35);
+    transition: all .2s;
+  }
+  .modal-curiosity-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(45,106,79,.45); }
+  .modal-curiosity-btn:disabled { opacity: .5; cursor: default; transform: none; }
+  .modal-curiosity-feedback { font-size: .78rem; font-style: italic; color: var(--jade-lt); margin-top: 8px; min-height: 1.2em; }
 
   /* ── FOOTER ── */
   footer {
@@ -238,6 +269,178 @@
     color: var(--sand); border-radius: 5px; cursor: pointer; transition: all .2s;
   }
   .nav-btn:hover { border-color: var(--gold); color: var(--gold-lt); }
+  .zoom-btn { min-width: 36px; padding: 8px 10px; font-size: 1.1rem; font-family: monospace; letter-spacing: 0; }
+
+  /* ── CENTURY NOTCHES ── */
+  .notch {
+    position: absolute; pointer-events: none;
+    display: flex; flex-direction: column; align-items: center;
+    transform: translateX(-50%);
+  }
+  .notch-line {
+    width: 1px; background: rgba(201,168,76,.35);
+  }
+  .notch-line.major { background: rgba(201,168,76,.55); }
+  .notch-label {
+    font-family: 'Cinzel', serif; font-size: .55rem;
+    letter-spacing: .06em; color: rgba(201,168,76,.55);
+    white-space: nowrap; margin-top: 3px;
+  }
+  .notch-label.major { color: rgba(201,168,76,.8); font-size: .6rem; }
+
+  /* ── CONTEXT RIBBON ── */
+  .ribbon {
+    position: relative; z-index: 9;
+    background: rgba(0,0,0,.55);
+    border-top: 1px solid rgba(255,255,255,.08);
+    overflow: hidden;
+  }
+  .ribbon-row {
+    position: relative;
+    height: 22px;
+    overflow: hidden;
+  }
+  .ribbon-row + .ribbon-row {
+    border-top: 1px solid rgba(255,255,255,.06);
+  }
+  /* inner canvas that moves with timeline scroll */
+  .ribbon-canvas {
+    position: absolute; top: 0; left: 0;
+    height: 100%;
+    pointer-events: none; /* chips handle their own events */
+  }
+  .ribbon-track-label {
+    position: sticky; left: 0; z-index: 3;
+    display: inline-flex; align-items: center;
+    font-family: 'Cinzel', serif; font-size: .48rem; letter-spacing: .12em;
+    text-transform: uppercase; padding: 0 8px;
+    background: rgba(0,0,0,.7);
+    height: 100%;
+    white-space: nowrap; pointer-events: none;
+    border-right: 1px solid rgba(255,255,255,.07);
+  }
+  .ribbon-row.saxon .ribbon-track-label { color: rgba(122,174,214,.65); }
+  .ribbon-row.islam .ribbon-track-label { color: rgba(176,126,212,.65); }
+
+  /* individual chips — positioned absolutely on ribbon-canvas */
+  .ribbon-chip {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 7px;
+    border-radius: 20px; border: 1px solid transparent;
+    cursor: pointer; white-space: nowrap;
+    transition: all .2s; pointer-events: auto;
+    font-family: 'Cinzel', serif;
+  }
+  .ribbon-row.saxon .ribbon-chip {
+    color: var(--saxon); border-color: rgba(122,174,214,.3);
+    background: rgba(122,174,214,.08);
+  }
+  .ribbon-row.islam .ribbon-chip {
+    color: var(--islam); border-color: rgba(176,126,212,.3);
+    background: rgba(176,126,212,.08);
+  }
+  .ribbon-row.saxon .ribbon-chip:hover { background: rgba(122,174,214,.22); border-color: var(--saxon); }
+  .ribbon-row.islam .ribbon-chip:hover { background: rgba(176,126,212,.22); border-color: var(--islam); }
+  .ribbon-chip.expanded {
+    background: rgba(0,0,0,.7) !important;
+    z-index: 5; border-color: currentColor !important;
+  }
+
+  .chip-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .ribbon-row.saxon .chip-dot { background: var(--saxon); }
+  .ribbon-row.islam .chip-dot { background: var(--islam); }
+
+  .chip-date { font-size: .5rem; letter-spacing: .06em; }
+  .chip-title {
+    font-size: .5rem; letter-spacing: .04em;
+    max-width: 0; overflow: hidden;
+    transition: max-width .3s ease, opacity .3s ease, margin .3s ease;
+    opacity: 0; margin-left: 0;
+  }
+  .ribbon-chip.expanded .chip-title {
+    max-width: 200px; opacity: 1; margin-left: 3px;
+  }
+
+  /* ── CURIOSITY MODAL ── */
+  .curiosity-overlay {
+    position: fixed; inset: 0; background: rgba(6,3,1,.75);
+    z-index: 200; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity .22s;
+    backdrop-filter: blur(4px); padding: 20px;
+  }
+  .curiosity-overlay.open { opacity: 1; pointer-events: auto; }
+
+  .curiosity-modal {
+    background: linear-gradient(145deg, #1a1226 0%, #0e0818 100%);
+    border: 1px solid var(--islam); border-radius: 12px;
+    max-width: 480px; width: 100%; position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,.8), 0 0 30px rgba(176,126,212,.12);
+    transform: translateY(20px) scale(.97);
+    transition: transform .25s cubic-bezier(.34,1.4,.64,1);
+    overflow: hidden;
+  }
+  .curiosity-modal.saxon-cm {
+    background: linear-gradient(145deg, #0e1e2e 0%, #08121c 100%);
+    border-color: var(--saxon);
+    box-shadow: 0 20px 60px rgba(0,0,0,.8), 0 0 30px rgba(122,174,214,.12);
+  }
+  .curiosity-overlay.open .curiosity-modal { transform: translateY(0) scale(1); }
+
+  .cm-hero { width: 100%; height: 160px; object-fit: cover; display: block; }
+  .cm-hero-placeholder {
+    width: 100%; height: 160px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem; background: rgba(0,0,0,.4);
+  }
+  .cm-body { padding: 18px 22px 22px; }
+  .cm-eyebrow {
+    font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .16em;
+    text-transform: uppercase; margin-bottom: 4px;
+  }
+  .cm-eyebrow.saxon { color: var(--saxon); }
+  .cm-eyebrow.islam { color: var(--islam); }
+  .cm-date { font-family: 'Cinzel', serif; font-size: .9rem; color: var(--gold-lt); margin-bottom: 3px; }
+  .cm-title {
+    font-family: 'Cinzel', serif; font-size: 1.15rem; font-weight: 700;
+    color: var(--cream); line-height: 1.2; margin-bottom: 10px;
+  }
+  .cm-text { font-size: .9rem; line-height: 1.65; color: var(--sand); margin-bottom: 16px; }
+
+  .cm-divider {
+    border: none; border-top: 1px solid rgba(255,255,255,.08); margin-bottom: 14px;
+  }
+  .cm-cta-label {
+    font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .14em;
+    color: rgba(232,213,176,.45); text-transform: uppercase; margin-bottom: 8px;
+  }
+  .cm-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+  .cm-btn {
+    font-family: 'Cinzel', serif; font-size: .65rem; letter-spacing: .1em;
+    text-transform: uppercase; padding: 10px 20px; border: none;
+    border-radius: 5px; cursor: pointer; transition: all .2s; flex: 1; min-width: 120px;
+  }
+  .cm-btn.want {
+    background: linear-gradient(135deg, var(--jade) 0%, var(--jade-lt) 100%);
+    color: var(--cream); box-shadow: 0 3px 12px rgba(45,106,79,.35);
+  }
+  .cm-btn.want:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(45,106,79,.45); }
+  .cm-btn.want:disabled { opacity: .5; cursor: default; transform: none; }
+  .cm-btn.close-cm {
+    background: transparent; color: var(--sand);
+    border: 1px solid rgba(201,168,76,.3);
+  }
+  .cm-btn.close-cm:hover { border-color: var(--gold); color: var(--gold-lt); }
+  .cm-feedback { font-size: .78rem; font-style: italic; color: var(--jade-lt); margin-top: 8px; min-height: 1.2em; }
+  .cm-feedback.err { color: #e07050; }
+  .cm-close {
+    position: absolute; top: 10px; right: 12px;
+    background: rgba(0,0,0,.5); border: 1px solid rgba(255,255,255,.15);
+    color: var(--sand); border-radius: 4px; padding: 3px 10px;
+    cursor: pointer; font-family: 'Cinzel', serif; font-size: .58rem;
+    letter-spacing: .1em; z-index: 10; transition: all .2s;
+  }
+  .cm-close:hover { border-color: var(--gold); color: var(--gold-lt); }
 </style>
 </head>
 <body>
@@ -251,12 +454,26 @@
     <div class="legend">
       <div class="leg-item"><div class="leg-dot general"></div>Maya events</div>
       <div class="leg-item"><div class="leg-dot pakal"></div>Pakal Votan &amp; Palenque</div>
-      <div class="leg-item"><div class="leg-dot decline"></div>Decline &amp; conquest</div>
+      <div class="leg-item"><div class="leg-dot decline"></div>Maya decline &amp; conquest</div>
+      <div class="leg-item"><div class="leg-dot saxon"></div>Anglo-Saxon &amp; Viking Britain</div>
+      <div class="leg-item"><div class="leg-dot islam"></div>Golden Age of Islam</div>
     </div>
   </header>
 
   <div class="timeline-viewport" id="viewport">
     <div class="timeline-canvas" id="canvas"></div>
+  </div>
+
+  <!-- CONTEXT RIBBON -->
+  <div class="ribbon" id="ribbon">
+    <div class="ribbon-row saxon" id="ribbon-saxon">
+      <span class="ribbon-track-label">⚔ Anglo-Saxon &amp; Viking</span>
+      <div class="ribbon-canvas" id="ribbon-canvas-saxon"></div>
+    </div>
+    <div class="ribbon-row islam" id="ribbon-islam">
+      <span class="ribbon-track-label">🌙 Golden Age of Islam</span>
+      <div class="ribbon-canvas" id="ribbon-canvas-islam"></div>
+    </div>
   </div>
 
   <footer>
@@ -269,12 +486,14 @@
     </div>
     <div class="nav-btns">
       <button class="nav-btn" onclick="scrollBy(-500)">← Earlier</button>
+      <button class="nav-btn zoom-btn" onclick="zoom(-1)" title="Zoom out">−</button>
+      <button class="nav-btn zoom-btn" onclick="zoom(+1)" title="Zoom in">+</button>
       <button class="nav-btn" onclick="scrollBy(500)">Later →</button>
     </div>
   </footer>
 </div>
 
-<!-- MODAL -->
+<!-- MAIN MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="overlayClick(event)">
   <div class="modal" id="modal">
     <button class="modal-close" onclick="closeModal()">✕ Close</button>
@@ -285,6 +504,27 @@
       <div class="modal-title"   id="modal-title"></div>
       <div class="modal-body"    id="modal-body"></div>
       <div class="modal-caption" id="modal-caption"></div>
+      <div id="modal-curiosity-wrap" style="margin-top:16px;display:none">
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,.08);margin-bottom:14px">
+        <button class="modal-curiosity-btn" id="modal-curiosity-btn" onclick="submitModalCuriosity()">
+          ★ I want to learn more about this!
+        </button>
+        <div class="modal-curiosity-feedback" id="modal-curiosity-feedback"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RIBBON EXPANSION (Saxon/Islam info popup — no curiosity button) -->
+<div class="curiosity-overlay" id="curiosity-overlay" onclick="closeCuriosityOverlay(event)">
+  <div class="curiosity-modal" id="curiosity-modal">
+    <button class="cm-close" onclick="closeCuriosity()">✕</button>
+    <div id="cm-hero-wrap"></div>
+    <div class="cm-body">
+      <div class="cm-eyebrow" id="cm-eyebrow"></div>
+      <div class="cm-date"    id="cm-date"></div>
+      <div class="cm-title"   id="cm-title"></div>
+      <div class="cm-text"    id="cm-text"></div>
     </div>
   </div>
 </div>
@@ -493,24 +733,178 @@ const ERAS = [
   { label:'Spanish Contact',  start:1500  },
 ];
 
+// ── ANGLO-SAXON & VIKING EVENTS ───────────────────────────────────────
+const SAXON_EVENTS = [
+  {
+    date:'410 CE', year:410, type:'saxon',
+    title:'Romans Leave Britain',
+    detail:'The Roman army withdraws from Britain, leaving it unguarded and open to invasion. Without Roman protection, the people of Britain are vulnerable to attacks from Scots, Picts and Germanic tribes from across the sea.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Hadrians_Wall_map.jpg/400px-Hadrians_Wall_map.jpg',
+    caption:'Hadrian\'s Wall — built by the Romans to defend Britain\'s northern border.',
+    emoji:'🏛️',
+  },
+  {
+    date:'455–586 CE', year:455, type:'saxon',
+    title:'Saxon Tribes Invade',
+    detail:'Jutes, Angles and Saxons — Germanic tribes from present-day Germany and Denmark — invade Britain and gradually establish seven kingdoms: Kent, Sussex, Wessex, Essex, Northumbria, East Anglia and Mercia. This period is sometimes called the Heptarchy.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Anglo-Saxon_Britain_circa_600.svg/400px-Anglo-Saxon_Britain_circa_600.svg.png',
+    caption:'The seven Anglo-Saxon kingdoms of Britain, established between 455 and 586 CE.',
+    emoji:'⚔️',
+  },
+  {
+    date:'597 CE', year:597, type:'saxon',
+    title:'St. Augustine Brings Christianity',
+    detail:'St. Augustine arrives in England, sent by Pope Gregory I in Rome. He converts King Ethelbert of Kent to Christianity and establishes a church in Canterbury. Over the following century, Anglo-Saxon England gradually converts from paganism to Christianity.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Augustine_Canterbury.jpg/300px-Augustine_Canterbury.jpg',
+    caption:'St. Augustine of Canterbury, who brought Christianity to Anglo-Saxon England.',
+    emoji:'✝️',
+  },
+  {
+    date:'793 CE', year:793, type:'saxon',
+    title:'Viking Raids Begin',
+    detail:'Viking warriors from Scandinavia launch their first major raid on England, attacking the monastery at Lindisfarne off the northeast coast. The raid shocks the Christian world. Over the following decades, Viking raids become increasingly frequent and destructive.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Lindisfarne_Priory.jpg/400px-Lindisfarne_Priory.jpg',
+    caption:'Lindisfarne Priory — the target of the first devastating Viking raid on England in 793.',
+    emoji:'🪓',
+  },
+  {
+    date:'802 CE', year:802, type:'saxon',
+    title:'Egbert — First King of All England',
+    detail:'Egbert of Wessex becomes the first Anglo-Saxon king to rule over all of England, uniting the formerly separate kingdoms under one ruler. Wessex had grown to become the most powerful of the seven Anglo-Saxon kingdoms.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Egbert_of_Wessex.jpg/300px-Egbert_of_Wessex.jpg',
+    caption:'Egbert of Wessex — the first king to unite all Anglo-Saxon England.',
+    emoji:'👑',
+  },
+  {
+    date:'871–899 CE', year:875, type:'saxon',
+    title:'Alfred the Great Rules',
+    detail:'Alfred the Great, King of Wessex, becomes one of the most celebrated rulers in English history. He defeats the Vikings at the Battle of Edington, establishes the Danelaw boundary, promotes education and literacy, and builds a network of fortified towns called burhs to defend England.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Alfred_the_Great_statue.jpg/300px-Alfred_the_Great_statue.jpg',
+    caption:'The statue of Alfred the Great in Winchester — he is celebrated as one of England\'s greatest monarchs.',
+    emoji:'⚔️',
+  },
+  {
+    date:'937 CE', year:937, type:'saxon',
+    title:'Athelstan Unites England',
+    detail:'Athelstan, grandson of Alfred the Great, defeats a combined force of Vikings and Scots at the Battle of Brunanburh. He becomes the first king to be recognised as ruler of all Britain — Vikings and Saxons united as one country.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Athelstan_and_Cuthbert.jpg/300px-Athelstan_and_Cuthbert.jpg',
+    caption:'King Athelstan — the first king of a united England.',
+    emoji:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+  },
+  {
+    date:'1016–1035 CE', year:1025, type:'saxon',
+    title:'Canute the Great Rules',
+    detail:'Canute becomes the first Viking king of England, ruling over a vast North Sea empire that includes England, Denmark and Norway. Despite being a Viking conqueror, he ruled England fairly and was accepted by the Anglo-Saxon nobility.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Cnut_and_Emma.jpg/300px-Cnut_and_Emma.jpg',
+    caption:'King Canute and Queen Emma depicted in a medieval manuscript.',
+    emoji:'🛡️',
+  },
+  {
+    date:'1066 CE', year:1066, type:'saxon',
+    title:'Battle of Hastings',
+    detail:'William of Normandy defeats King Harold at the Battle of Hastings, ending Anglo-Saxon rule of England. Harold is killed — according to legend, by an arrow to the eye. The Norman Conquest transforms England\'s language, culture and ruling class forever.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Bayeux_Tapestry_WillelmDux.jpg/400px-Bayeux_Tapestry_WillelmDux.jpg',
+    caption:'A scene from the Bayeux Tapestry depicting the Norman Conquest of 1066.',
+    emoji:'🏹',
+  },
+];
+
+// ── GOLDEN AGE OF ISLAM EVENTS ────────────────────────────────────────
+const ISLAM_EVENTS = [
+  {
+    date:'570 CE', year:570, type:'islam',
+    title:'Birth of the Prophet Muhammad',
+    detail:'Muhammad is born in Mecca in the Arabian Peninsula. He will go on to found the religion of Islam, which will spread from Arabia across the Middle East, North Africa, Spain and Central Asia — becoming one of the world\'s major religions.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Mecca_view.jpg/400px-Mecca_view.jpg',
+    caption:'The city of Mecca in the Arabian Peninsula — birthplace of the Prophet Muhammad.',
+    emoji:'🌙',
+  },
+  {
+    date:'610 CE', year:610, type:'islam',
+    title:'Islam Begins',
+    detail:'Muhammad receives his first revelations of the Quran — the holy book of Islam — in a cave near Mecca. He begins preaching that there is only one God (Allah). This marks the beginning of the Islamic faith, which will spread rapidly across the world.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Quran_and_Islam.jpg/400px-Quran_and_Islam.jpg',
+    caption:'The Quran — the holy book of Islam, first revealed to Muhammad in 610 CE.',
+    emoji:'📖',
+  },
+  {
+    date:'622 CE', year:622, type:'islam',
+    title:'The Hijrah — Journey to Medina',
+    detail:'Muhammad and his followers flee persecution in Mecca and travel to the city of Medina. This journey — called the Hijrah — is so significant that it marks the beginning of the Islamic calendar. In Medina, Muhammad builds the first Muslim community.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Medina_Mosque.jpg/400px-Medina_Mosque.jpg',
+    caption:'The Prophet\'s Mosque in Medina — built on the site of Muhammad\'s original mosque.',
+    emoji:'🕌',
+  },
+  {
+    date:'630 CE', year:630, type:'islam',
+    title:'Muhammad Takes Mecca',
+    detail:'Muhammad leads his followers back to Mecca and takes control of the city peacefully. Mecca becomes the spiritual centre of the Islamic world — Muslims around the world still pray facing Mecca today, and it is the destination of the annual Hajj pilgrimage.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Kaaba_at_Makkah.jpg/400px-Kaaba_at_Makkah.jpg',
+    caption:'The Kaaba in Mecca — the holiest site in Islam, towards which Muslims pray.',
+    emoji:'🕋',
+  },
+  {
+    date:'634 CE', year:634, type:'islam',
+    title:'Islamic Empire Expands',
+    detail:'Following Muhammad\'s death in 632, his successors — called Caliphs — rapidly expand the Islamic Empire. Within a few decades it stretches from Arabia into Iraq, Syria, Egypt and across North Africa. The Caliphs rule vast territories with remarkable speed.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Muhammad_Chronological_spreading.png/400px-Muhammad_Chronological_spreading.png',
+    caption:'The rapid spread of the Islamic Empire in the first decades after Muhammad\'s death.',
+    emoji:'🗺️',
+  },
+  {
+    date:'711 CE', year:711, type:'islam',
+    title:'Muslims Enter Spain',
+    detail:'Muslim armies cross from North Africa into Spain and quickly conquer most of the Iberian Peninsula. They bring advanced knowledge of mathematics, astronomy, medicine and philosophy. Córdoba becomes one of the greatest cities in Europe, with libraries, universities and street lighting.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Mosque_of_Cordoba_interior.jpg/400px-Mosque_of_Cordoba_interior.jpg',
+    caption:'The Great Mosque of Córdoba — one of the finest examples of Islamic architecture in Spain.',
+    emoji:'🏛️',
+  },
+  {
+    date:'762 CE', year:762, type:'islam',
+    title:'Baghdad is Built',
+    detail:'Caliph al-Mansur founds the magnificent city of Baghdad as the new capital of the Abbasid Empire. Built on a circular plan on the banks of the Tigris river, Baghdad quickly becomes the largest city in the world — a centre of trade, learning and culture.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Tigris_in_Baghdad.jpg/400px-Tigris_in_Baghdad.jpg',
+    caption:'The Tigris river in Baghdad — the city founded in 762 CE as the capital of the Islamic Empire.',
+    emoji:'🌇',
+  },
+  {
+    date:'790–1258 CE', year:820, type:'islam',
+    title:'The Golden Age of Islam',
+    detail:'The Abbasid Caliphate\'s Golden Age sees extraordinary advances in science, mathematics, medicine and the arts. Scholars at the House of Wisdom in Baghdad translate ancient Greek texts and make new discoveries. Al-Khwarizmi invents algebra. Muslim doctors write medical textbooks used for centuries. The arts, architecture and music flourish.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/House_of_Wisdom_Kasimabad.jpg/400px-House_of_Wisdom_Kasimabad.jpg',
+    caption:'A reconstruction of the famous House of Wisdom in Baghdad — the world\'s greatest centre of learning.',
+    emoji:'🔭',
+  },
+  {
+    date:'1099 CE', year:1099, type:'islam',
+    title:'First Crusade — Jerusalem Captured',
+    detail:'Christian armies from Europe, known as Crusaders, capture Jerusalem from Muslim rule. This marks the beginning of nearly two centuries of conflict between Christian and Muslim forces for control of the Holy Land. The Crusades have a profound impact on both Islamic and European history.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Siege_of_Jerusalem_1099.jpg/400px-Siege_of_Jerusalem_1099.jpg',
+    caption:'A medieval illustration of the Crusader siege of Jerusalem in 1099.',
+    emoji:'⚔️',
+  },
+];
+
 // ── CONFIG ────────────────────────────────────────────────────────────
-const PX_PER_YEAR = 0.55;
-const MIN_YEAR    = -2200;
-const MAX_YEAR    = 1900;
-const PAD         = 260;
-const SPINE_FRAC  = 0.5;
-const BASE_LINE   = 90;
+const MIN_YEAR   = -2200;
+const MAX_YEAR   = 1900;
+const PAD        = 260;
+const SPINE_FRAC = 0.5;
+const BASE_LINE  = 90;
 
-const TOTAL_W = PAD * 2 + (MAX_YEAR - MIN_YEAR) * PX_PER_YEAR;
+const ZOOM_LEVELS = [0.18, 0.28, 0.42, 0.55, 0.75, 1.05, 1.4, 1.9];
+let   zoomIdx     = 3; // default: 0.55 px/year
+let   pxPerYear   = ZOOM_LEVELS[zoomIdx];
 
-function yearToX(y) { return PAD + (y - MIN_YEAR) * PX_PER_YEAR; }
+function totalW()     { return PAD * 2 + (MAX_YEAR - MIN_YEAR) * pxPerYear; }
+function yearToX(y)   { return PAD + (y - MIN_YEAR) * pxPerYear; }
 
 // ── BUILD ─────────────────────────────────────────────────────────────
 function build() {
   const vp     = document.getElementById('viewport');
   const canvas = document.getElementById('canvas');
   canvas.innerHTML = '';
-  canvas.style.width = TOTAL_W + 'px';
+  canvas.style.width = totalW() + 'px';
 
   const H      = vp.clientHeight;
   const spineY = H * SPINE_FRAC;
@@ -519,60 +913,73 @@ function build() {
   const spine       = document.createElement('div');
   spine.className   = 'spine';
   spine.style.top   = spineY + 'px';
-  spine.style.width = TOTAL_W + 'px';
+  spine.style.width = totalW() + 'px';
   canvas.appendChild(spine);
 
-  // Era bands
+  // ── CENTURY NOTCHES ──
+  // Show every 100 years; every 500 years is "major"
+  const notchStep  = pxPerYear < 0.3 ? 500 : pxPerYear < 0.6 ? 200 : 100;
+  const notchH     = 14;
+  const notchHMaj  = 22;
+  const firstNotch = Math.ceil(MIN_YEAR / notchStep) * notchStep;
+
+  for (let yr = firstNotch; yr <= MAX_YEAR; yr += notchStep) {
+    const major = yr % 500 === 0;
+    const x     = yearToX(yr);
+    const wrap  = document.createElement('div');
+    wrap.className    = 'notch';
+    wrap.style.left   = x + 'px';
+    // Position so notch straddles the spine
+    wrap.style.top    = (spineY - (major ? notchHMaj : notchH)) + 'px';
+
+    const lh = (major ? notchHMaj : notchH) * 2;
+    const label = yr < 0 ? `${Math.abs(yr)} BCE` : yr === 0 ? '0' : `${yr} CE`;
+
+    wrap.innerHTML = `
+      <div class="notch-line ${major ? 'major' : ''}" style="height:${lh}px"></div>
+      <div class="notch-label ${major ? 'major' : ''}">${label}</div>`;
+    canvas.appendChild(wrap);
+  }
+
+  // ── ERA BANDS ──
   ERAS.forEach((era, i) => {
     const x    = yearToX(era.start);
     const band = document.createElement('div');
-    band.className      = 'era-band';
-    band.style.left     = x + 'px';
-    const nextX = i < ERAS.length - 1 ? yearToX(ERAS[i+1].start) : TOTAL_W;
-    band.style.width    = (nextX - x) + 'px';
-    const lbl           = document.createElement('div');
-    lbl.className       = 'era-label';
-    lbl.textContent     = era.label;
+    band.className   = 'era-band';
+    band.style.left  = x + 'px';
+    const nextX = i < ERAS.length - 1 ? yearToX(ERAS[i+1].start) : totalW();
+    band.style.width = (nextX - x) + 'px';
+    const lbl        = document.createElement('div');
+    lbl.className    = 'era-label';
+    lbl.textContent  = era.label;
     band.appendChild(lbl);
     canvas.appendChild(band);
   });
 
-  // Events
+  // ── EVENTS ──
   EVENTS.forEach((ev, i) => {
-    const x      = yearToX(ev.year);
-    const above  = i % 2 === 0;
-    const lineH  = BASE_LINE + (i % 4) * 20;
+    const x     = yearToX(ev.year);
+    const above = i % 2 === 0;
+    const lineH = BASE_LINE + (i % 4) * 20;
 
     const el         = document.createElement('div');
     el.className     = `event ${ev.type} ${above ? 'above' : 'below'}`;
-    el.style.left    = (x - 100) + 'px'; // 200px card centred
+    el.style.left    = (x - 100) + 'px';
 
-    // Image or emoji fallback
     const imgEl = ev.img
       ? `<img class="card-img" src="${ev.img}" alt="${ev.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
         + `<div class="card-img-placeholder" style="display:none">${ev.emoji}</div>`
       : `<div class="card-img-placeholder">${ev.emoji}</div>`;
 
-    const card = `
-      <div class="event-card">
-        ${imgEl}
-        <div class="card-body">
-          <div class="card-date">${ev.date}</div>
-          <div class="card-title">${ev.title}</div>
-        </div>
-      </div>`;
+    const card = `<div class="event-card">${imgEl}<div class="card-body">
+      <div class="card-date">${ev.date}</div>
+      <div class="card-title">${ev.title}</div></div></div>`;
     const line = `<div class="event-line" style="height:${lineH}px"></div>`;
     const dot  = `<div class="event-dot"></div>`;
 
-    el.innerHTML = above
-      ? card + line + dot
-      : dot + line + card;
-
-    if (above) {
-      el.style.bottom = (H - spineY + 6) + 'px';
-    } else {
-      el.style.top    = (spineY + 6) + 'px';
-    }
+    el.innerHTML = above ? card + line + dot : dot + line + card;
+    if (above) el.style.bottom = (H - spineY + 6) + 'px';
+    else       el.style.top    = (spineY + 6) + 'px';
 
     el.addEventListener('click', () => { if (!didDrag) openModal(ev); });
     canvas.appendChild(el);
@@ -584,29 +991,49 @@ let scrollX = 0, didDrag = false;
 
 function setScroll(x) {
   const vp  = document.getElementById('viewport');
-  const max = TOTAL_W - vp.clientWidth;
+  const max = Math.max(0, totalW() - vp.clientWidth);
   scrollX   = Math.max(0, Math.min(max, x));
   document.getElementById('canvas').style.transform = `translateX(${-scrollX}px)`;
+  syncRibbon();
   updateUI();
 }
 function scrollBy(dx) { setScroll(scrollX + dx); }
 
 function updateUI() {
   const vp    = document.getElementById('viewport');
-  const ratio = vp.clientWidth / TOTAL_W;
+  const ratio = vp.clientWidth / totalW();
   const track = document.getElementById('minimap-track');
   const tw    = track.clientWidth;
   const thumb = document.getElementById('minimap-thumb');
   thumb.style.width = Math.max(14, ratio * tw) + 'px';
-  thumb.style.left  = (scrollX / TOTAL_W * tw) + 'px';
+  thumb.style.left  = (scrollX / totalW() * tw) + 'px';
 
-  const centreYear = MIN_YEAR + (scrollX + vp.clientWidth / 2 - PAD) / PX_PER_YEAR;
+  const centreYear = MIN_YEAR + (scrollX + vp.clientWidth / 2 - PAD) / pxPerYear;
   let label = ERAS[0].label;
   for (const era of ERAS) { if (centreYear >= era.start) label = era.label; }
   document.getElementById('era-now').textContent = label;
 }
 
-// ── DRAG ──────────────────────────────────────────────────────────────
+// ── ZOOM ──────────────────────────────────────────────────────────────
+function zoom(dir, anchorX) {
+  const vp      = document.getElementById('viewport');
+  // Anchor in year-space (default: centre of viewport)
+  const ax      = anchorX !== undefined ? anchorX : scrollX + vp.clientWidth / 2;
+  const anchorYear = MIN_YEAR + (ax - PAD) / pxPerYear;
+
+  const newIdx  = Math.max(0, Math.min(ZOOM_LEVELS.length - 1, zoomIdx + dir));
+  if (newIdx === zoomIdx) return;
+  zoomIdx    = newIdx;
+  pxPerYear  = ZOOM_LEVELS[zoomIdx];
+
+  build();
+  buildRibbon();
+  // Keep the same year centred under the anchor point
+  const newAnchorX = yearToX(anchorYear);
+  setScroll(newAnchorX - (ax - scrollX));
+}
+
+// ── DRAG (mouse) ──────────────────────────────────────────────────────
 let dragging = false, dragX0 = 0, scrollX0 = 0;
 const vp = document.getElementById('viewport');
 
@@ -623,32 +1050,89 @@ window.addEventListener('mousemove', e => {
 });
 window.addEventListener('mouseup', () => { dragging = false; vp.classList.remove('grabbing'); });
 
+// Mouse wheel zoom
+vp.addEventListener('wheel', e => {
+  e.preventDefault();
+  const rect   = vp.getBoundingClientRect();
+  const anchorX = scrollX + (e.clientX - rect.left);
+  zoom(e.deltaY < 0 ? 1 : -1, anchorX);
+}, { passive: false });
+
+// ── TOUCH ─────────────────────────────────────────────────────────────
 let tx0 = 0, sx0 = 0;
-vp.addEventListener('touchstart', e => { tx0 = e.touches[0].clientX; sx0 = scrollX; didDrag = false; }, { passive:true });
-vp.addEventListener('touchmove',  e => {
-  const dx = e.touches[0].clientX - tx0;
-  if (Math.abs(dx) > 8) didDrag = true;
-  setScroll(sx0 - dx);
-}, { passive:true });
+let pinching = false, pinchDist0 = 0, pinchScrollX0 = 0, pinchMidX0 = 0, pinchZoomIdx0 = 0;
+
+function touchDist(t) {
+  const dx = t[0].clientX - t[1].clientX;
+  const dy = t[0].clientY - t[1].clientY;
+  return Math.sqrt(dx*dx + dy*dy);
+}
+function touchMidX(t) { return (t[0].clientX + t[1].clientX) / 2; }
+
+vp.addEventListener('touchstart', e => {
+  if (e.touches.length === 2) {
+    // Pinch start
+    pinching     = true; didDrag = true;
+    pinchDist0   = touchDist(e.touches);
+    pinchMidX0   = touchMidX(e.touches);
+    pinchScrollX0 = scrollX;
+    pinchZoomIdx0 = zoomIdx;
+  } else {
+    pinching = false;
+    tx0 = e.touches[0].clientX; sx0 = scrollX; didDrag = false;
+  }
+}, { passive: true });
+
+vp.addEventListener('touchmove', e => {
+  if (e.touches.length === 2 && pinching) {
+    // Pinch zoom — map distance ratio to zoom level
+    const ratio    = touchDist(e.touches) / pinchDist0;
+    const logRatio = Math.log2(ratio);
+    const newIdx   = Math.max(0, Math.min(ZOOM_LEVELS.length-1,
+                       Math.round(pinchZoomIdx0 + logRatio * 2)));
+    if (newIdx !== zoomIdx) {
+      const rect     = vp.getBoundingClientRect();
+      const anchorX  = pinchScrollX0 + (pinchMidX0 - rect.left);
+      const anchorYr = MIN_YEAR + (anchorX - PAD) / ZOOM_LEVELS[pinchZoomIdx0];
+      zoomIdx   = newIdx;
+      pxPerYear = ZOOM_LEVELS[zoomIdx];
+      build();
+      setScroll(yearToX(anchorYr) - (pinchMidX0 - rect.left));
+    }
+  } else if (!pinching) {
+    const dx = e.touches[0].clientX - tx0;
+    if (Math.abs(dx) > 8) didDrag = true;
+    setScroll(sx0 - dx);
+  }
+}, { passive: true });
+
+vp.addEventListener('touchend', e => {
+  if (e.touches.length < 2) pinching = false;
+}, { passive: true });
 
 window.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') scrollBy(180);
   if (e.key === 'ArrowLeft')  scrollBy(-180);
+  if (e.key === '+' || e.key === '=') zoom(+1);
+  if (e.key === '-')          zoom(-1);
   if (e.key === 'Escape')     closeModal();
 });
 
 document.getElementById('minimap-track').addEventListener('click', e => {
   const r = e.currentTarget.getBoundingClientRect();
-  setScroll((e.clientX - r.left) / r.width * TOTAL_W);
+  setScroll((e.clientX - r.left) / r.width * totalW());
 });
 
 // ── MODAL ─────────────────────────────────────────────────────────────
 function openModal(ev) {
+  currentModalEvent = ev;
   const overlay = document.getElementById('modal-overlay');
   const modal   = document.getElementById('modal');
   modal.className = 'modal';
   if (ev.type === 'pakal')   modal.classList.add('pakal-modal');
   if (ev.type === 'decline') modal.classList.add('decline-modal');
+  if (ev.type === 'saxon')   modal.classList.add('saxon-modal');
+  if (ev.type === 'islam')   modal.classList.add('islam-modal');
 
   // Hero image
   const heroWrap = document.getElementById('modal-hero-wrap');
@@ -663,7 +1147,9 @@ function openModal(ev) {
   const ey = document.getElementById('modal-eyebrow');
   ey.className  = `modal-eyebrow ${ev.type}`;
   ey.textContent = ev.type === 'pakal'   ? '★ Pakal Votan & Palenque'
-                 : ev.type === 'decline' ? '⚠ Decline & Conquest'
+                 : ev.type === 'decline' ? '⚠ Maya Decline & Conquest'
+                 : ev.type === 'saxon'   ? '⚔ Anglo-Saxon & Viking Britain'
+                 : ev.type === 'islam'   ? '🌙 Golden Age of Islam'
                  : '◆ Maya Civilisation';
 
   document.getElementById('modal-date').textContent    = ev.date;
@@ -671,15 +1157,144 @@ function openModal(ev) {
   document.getElementById('modal-body').textContent    = ev.detail;
   document.getElementById('modal-caption').textContent = ev.caption || '';
 
+  // Show curiosity button only for Maya events (general, pakal, decline)
+  const isMaya = ['general','pakal','decline'].includes(ev.type);
+  const wrap = document.getElementById('modal-curiosity-wrap');
+  const btn  = document.getElementById('modal-curiosity-btn');
+  const fb   = document.getElementById('modal-curiosity-feedback');
+  wrap.style.display        = isMaya ? 'block' : 'none';
+  btn.disabled              = false;
+  btn.textContent           = '★ I want to learn more about this!';
+  fb.textContent            = '';
+
   overlay.classList.add('open');
 }
 function closeModal()       { document.getElementById('modal-overlay').classList.remove('open'); }
 function overlayClick(e)    { if (e.target === document.getElementById('modal-overlay')) closeModal(); }
 
+// ── RIBBON ────────────────────────────────────────────────────────────
+function buildRibbon() {
+  const saxonCanvas = document.getElementById('ribbon-canvas-saxon');
+  const islamCanvas = document.getElementById('ribbon-canvas-islam');
+  saxonCanvas.innerHTML = '';
+  islamCanvas.innerHTML = '';
+
+  const w = totalW();
+  saxonCanvas.style.width = w + 'px';
+  islamCanvas.style.width = w + 'px';
+
+  function addChips(canvas, evList) {
+    evList.forEach(ev => {
+      const x    = yearToX(ev.year);
+      const chip = document.createElement('div');
+      chip.className = 'ribbon-chip';
+      chip.style.left = (x - 30) + 'px'; // centre chip on year
+      chip.innerHTML  = `<span class="chip-dot"></span>
+        <span class="chip-date">${ev.date}</span>
+        <span class="chip-title">${ev.title}</span>`;
+
+      chip.addEventListener('click', e => {
+        e.stopPropagation();
+        const isExpanded = chip.classList.contains('expanded');
+        // collapse any other expanded chips
+        canvas.querySelectorAll('.ribbon-chip.expanded').forEach(c => c.classList.remove('expanded'));
+        if (!isExpanded) {
+          chip.classList.add('expanded');
+          // open the full info popup
+          openCuriosity(ev);
+        }
+      });
+      canvas.appendChild(chip);
+    });
+  }
+
+  addChips(saxonCanvas, SAXON_EVENTS);
+  addChips(islamCanvas, ISLAM_EVENTS);
+  syncRibbon();
+}
+
+function syncRibbon() {
+  const saxonCanvas = document.getElementById('ribbon-canvas-saxon');
+  const islamCanvas = document.getElementById('ribbon-canvas-islam');
+  if (saxonCanvas) saxonCanvas.style.transform = `translateX(${-scrollX}px)`;
+  if (islamCanvas) islamCanvas.style.transform = `translateX(${-scrollX}px)`;
+}
+
+// ── CURIOSITY — ribbon tap (Saxon/Islam info only, no vote button) ────
+function openCuriosity(ev) {
+  const overlay = document.getElementById('curiosity-overlay');
+  const modal   = document.getElementById('curiosity-modal');
+  modal.className = `curiosity-modal ${ev.type === 'saxon' ? 'saxon-cm' : ''}`;
+
+  const heroWrap = document.getElementById('cm-hero-wrap');
+  if (ev.img) {
+    heroWrap.innerHTML = `<img class="cm-hero" src="${ev.img}" alt="${ev.title}"
+      onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="cm-hero-placeholder" style="display:none">${ev.emoji}</div>`;
+  } else {
+    heroWrap.innerHTML = `<div class="cm-hero-placeholder">${ev.emoji}</div>`;
+  }
+
+  const ey = document.getElementById('cm-eyebrow');
+  ey.className  = `cm-eyebrow ${ev.type}`;
+  ey.textContent = ev.type === 'saxon' ? '⚔ Anglo-Saxon & Viking Britain' : '🌙 Golden Age of Islam';
+
+  document.getElementById('cm-date').textContent  = ev.date;
+  document.getElementById('cm-title').textContent = ev.title;
+  document.getElementById('cm-text').textContent  = ev.detail;
+
+  overlay.classList.add('open');
+}
+
+function closeCuriosity() {
+  document.getElementById('curiosity-overlay').classList.remove('open');
+  // collapse expanded ribbon chips
+  document.querySelectorAll('.ribbon-chip.expanded').forEach(c => c.classList.remove('expanded'));
+}
+function closeCuriosityOverlay(e) {
+  if (e.target === document.getElementById('curiosity-overlay')) closeCuriosity();
+}
+
+// ── CURIOSITY — Maya modal vote button ────────────────────────────────
+const CURIOSITY_URL = 'https://script.google.com/macros/s/AKfycbwUzI5IITpYeJa_A4-mEgEAXmNktQCvz44s8S1LWyQcrtgBrICDXMyl5wLRuLEYMUIz/exec';
+let currentModalEvent = null;
+
+async function submitModalCuriosity() {
+  if (!currentModalEvent) return;
+  const ev  = currentModalEvent;
+  const btn = document.getElementById('modal-curiosity-btn');
+  const fb  = document.getElementById('modal-curiosity-feedback');
+
+  btn.disabled    = true;
+  btn.textContent = 'Sending…';
+
+  const payload = {
+    topic:    ev.title,
+    period:   'Maya Civilisation',
+    date:     ev.date,
+    timestamp: new Date().toISOString(),
+  };
+
+  try {
+    await fetch(CURIOSITY_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    btn.textContent = '✓ Recorded — thank you!';
+    fb.textContent  = 'Your teacher can see which topics the class most want to explore.';
+  } catch {
+    btn.disabled    = false;
+    btn.textContent = '★ I want to learn more about this!';
+    fb.textContent  = 'Could not save — check your connection.';
+  }
+}
+
 // ── INIT ──────────────────────────────────────────────────────────────
 build();
+buildRibbon();
 setScroll(yearToX(-700) - document.getElementById('viewport').clientWidth * 0.15);
-window.addEventListener('resize', () => { build(); setScroll(scrollX); });
+window.addEventListener('resize', () => { build(); buildRibbon(); setScroll(scrollX); });
 </script>
 </body>
 </html>
