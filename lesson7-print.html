@@ -95,29 +95,23 @@
 
   .diamond-grid {
     display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    grid-template-rows:repeat(5,1fr);
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: repeat(5, 1fr);
     gap:2.5pt;
     flex:0 0 auto;
     height:86mm;
   }
 
-  /* Positions */
-  .pos-1 { grid-column:2; grid-row:1; }
-  .pos-2 { grid-column:1; grid-row:2; }
-  .pos-3 { grid-column:3; grid-row:2; }
-  .pos-4 { grid-column:1; grid-row:3; }
-  .pos-5 { grid-column:2; grid-row:3; }
-  .pos-6 { grid-column:3; grid-row:3; }
-  .pos-7 { grid-column:1; grid-row:4; }
-  .pos-8 { grid-column:3; grid-row:4; }
-  .pos-9 { grid-column:2; grid-row:5; }
-  /* Invisible spacers — no border, no background */
-  .row-spacer-2l { grid-column:1; grid-row:1; background:transparent; border:none; }
-  .row-spacer-2r { grid-column:3; grid-row:1; background:transparent; border:none; }
-  .row-spacer-4m { grid-column:2; grid-row:4; background:transparent; border:none; }
-  .row-spacer-5l { grid-column:1; grid-row:5; background:transparent; border:none; }
-  .row-spacer-5r { grid-column:3; grid-row:5; background:transparent; border:none; }
+  /* Diamond positions — 5-col grid for proper spacing */
+  .pos-1 { grid-column:3;   grid-row:1; }   /* top centre */
+  .pos-2 { grid-column:2;   grid-row:2; }   /* upper-left */
+  .pos-3 { grid-column:4;   grid-row:2; }   /* upper-right */
+  .pos-4 { grid-column:1;   grid-row:3; }   /* mid-left */
+  .pos-5 { grid-column:3;   grid-row:3; }   /* mid-centre */
+  .pos-6 { grid-column:5;   grid-row:3; }   /* mid-right */
+  .pos-7 { grid-column:2;   grid-row:4; }   /* lower-left */
+  .pos-8 { grid-column:4;   grid-row:4; }   /* lower-right */
+  .pos-9 { grid-column:3;   grid-row:5; }   /* bottom centre */
 
   .d-card {
     border:0.5pt solid #ccc; border-radius:3pt; padding:3pt 2pt;
@@ -149,9 +143,9 @@
   .venn-overlay { position:absolute; inset:0; pointer-events:none; }
   .vzone {
     position:absolute;
-    display:flex; flex-direction:column; align-items:center;
+    display:flex; flex-direction:column; align-items:flex-start;
     font-family:'TwinklCursive','Crimson Pro',Georgia,serif;
-    font-size:7pt; line-height:1.35; text-align:center; color:#1a1a2e;
+    font-size:7pt; line-height:1.35; text-align:left; color:#1a1a2e;
     overflow:hidden;
   }
   .vzone-label {
@@ -304,13 +298,17 @@ function buildDiamond(d9) {
   const topCard   = positions[0];
   const botCard   = positions[8];
 
-  // Diamond shape: row1=[–,1,–] row2=[2,–,3] row3=[4,5,6] row4=[7,–,8] row5=[–,9,–]
+  // Diamond shape: 5-col grid — empty cells auto-fill the gaps
   const grid = [
-    { cls:'row-spacer-2l' }, { pos:0, cls:'pos-1 top-card' }, { cls:'row-spacer-2r' },
-    { pos:1, cls:'pos-2 mid-card' }, null, { pos:2, cls:'pos-3 mid-card' },
-    { pos:3, cls:'pos-4 mid-card' }, { pos:4, cls:'pos-5 mid-card' }, { pos:5, cls:'pos-6 mid-card' },
-    { pos:6, cls:'pos-7 mid-card' }, { cls:'row-spacer-4m' }, { pos:7, cls:'pos-8 mid-card' },
-    { cls:'row-spacer-5l' }, { pos:8, cls:'pos-9 bot-card' }, { cls:'row-spacer-5r' },
+    { pos:0, cls:'pos-1 top-card' },
+    { pos:1, cls:'pos-2 mid-card' },
+    { pos:2, cls:'pos-3 mid-card' },
+    { pos:3, cls:'pos-4 mid-card' },
+    { pos:4, cls:'pos-5 mid-card' },
+    { pos:5, cls:'pos-6 mid-card' },
+    { pos:6, cls:'pos-7 mid-card' },
+    { pos:7, cls:'pos-8 mid-card' },
+    { pos:8, cls:'pos-9 bot-card' },
   ];
 
   const cells = grid.map(g => {
