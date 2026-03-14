@@ -11,14 +11,13 @@
     src:url('TwinklCursiveLooped-Regular.ttf') format('truetype');
     font-weight:normal; font-style:normal;
   }
-
   :root {
     --gold:#c9a84c; --gold-lt:#e9c46a;
     --stone-dk:#140a04; --cream:#f5edd6; --sand:#e8d5b0;
     --jade:#2d6a4f; --jade-lt:#40916c;
   }
   *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:'Crimson Pro',Georgia,serif; background:#e8e4dc; color:#1a1a1a; min-height:100vh; }
+  body { font-family:'Crimson Pro',Georgia,serif; background:#d8d4cc; color:#1a1a1a; }
 
   /* ── SCREEN CHROME ── */
   .screen-header {
@@ -35,79 +34,76 @@
   .screen-btn { font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; padding:9px 18px; border:none; border-radius:5px; cursor:pointer; transition:all .2s; }
   .btn-print { background:linear-gradient(135deg,var(--gold) 0%,#a8832a 100%); color:#1e0f07; }
   .btn-refresh { background:transparent; color:var(--sand); border:1px solid rgba(201,168,76,.4); }
+  .screen-main { max-width:320mm; margin:20px auto; padding:0 12px 60px; display:flex; flex-direction:column; gap:20px; }
+  .status { text-align:center; padding:60px 20px; font-family:'Cinzel',serif; font-size:.78rem; letter-spacing:.1em; color:rgba(26,26,26,.4); text-transform:uppercase; }
 
-  .screen-main { max-width:220mm; margin:20px auto; padding:0 12px 60px; display:flex; flex-direction:column; gap:20px; }
-  .status { text-align:center; padding:60px 20px; font-family:'Cinzel',serif; font-size:.78rem; letter-spacing:.1em; color:rgba(26,26,26,.45); text-transform:uppercase; }
-
-  /* ── A4 SHEET — exact 210×297mm ── */
+  /* ── A4 LANDSCAPE SHEET: 297mm × 210mm ── */
   .a4-sheet {
     background:#fff;
-    width:210mm;
-    min-height:297mm;
+    width:297mm;
+    height:210mm;
     margin:0 auto;
-    padding:12mm 14mm;
-    border:1px solid #bbb;
-    box-shadow:0 3px 20px rgba(0,0,0,.15);
+    padding:8mm 10mm 8mm 10mm;
+    border:1px solid #aaa;
+    box-shadow:0 3px 24px rgba(0,0,0,.18);
     display:flex;
     flex-direction:column;
-    gap:6mm;
+    gap:4mm;
+    overflow:hidden;
     page-break-after:always;
   }
 
-  /* ── COMPACT HEADER ── */
+  /* ── COMPACT HEADER (~16mm tall) ── */
   .sheet-header {
-    display:flex; align-items:center; justify-content:space-between; gap:8mm;
-    padding-bottom:4mm; border-bottom:1.5pt solid #1a1a2e; flex-shrink:0;
+    display:flex; align-items:center; justify-content:space-between; gap:6mm;
+    padding-bottom:3mm; border-bottom:1pt solid #1a1a2e; flex-shrink:0;
+    height:16mm;
   }
-  .sheet-title-block {}
+  .sheet-title-block { display:flex; flex-direction:column; justify-content:center; }
   .sheet-enquiry {
-    font-family:'Cinzel',Georgia,serif; font-size:7pt; letter-spacing:.06em;
-    text-transform:uppercase; color:#888; margin-bottom:2pt;
+    font-family:'Cinzel',Georgia,serif; font-size:5.5pt; letter-spacing:.06em;
+    text-transform:uppercase; color:#999; margin-bottom:1.5pt; line-height:1;
   }
   .sheet-title {
-    font-family:'Cinzel',Georgia,serif; font-size:11pt; font-weight:700; color:#1a1a2e; line-height:1.2;
+    font-family:'Cinzel',Georgia,serif; font-size:9pt; font-weight:700; color:#1a1a2e; line-height:1.2;
   }
-  .sheet-date { font-family:'Cinzel',Georgia,serif; font-size:6.5pt; color:#aaa; margin-top:1pt; }
-  .sheet-name-box {
-    border:1pt solid #1a1a2e; border-radius:3pt; padding:4pt 10pt; text-align:center; min-width:40mm; flex-shrink:0;
-  }
-  .sheet-name-label { font-family:'Cinzel',Georgia,serif; font-size:6pt; text-transform:uppercase; letter-spacing:.1em; color:#999; }
-  .sheet-name { font-family:'TwinklCursive','Crimson Pro',Georgia,serif; font-size:12pt; color:#1a1a2e; margin-top:2pt; line-height:1.2; }
+  .sheet-date { font-family:'Cinzel',Georgia,serif; font-size:5.5pt; color:#bbb; margin-top:1.5pt; line-height:1; }
 
-  /* ── TWO COL BODY ── */
+  /* Name box — half height, small text */
+  .sheet-name-box {
+    border:1pt solid #1a1a2e; border-radius:2pt; padding:2pt 8pt;
+    text-align:center; min-width:35mm; flex-shrink:0;
+    display:flex; flex-direction:column; justify-content:center;
+    height:13mm;
+  }
+  .sheet-name-label { font-family:'Cinzel',Georgia,serif; font-size:5pt; text-transform:uppercase; letter-spacing:.1em; color:#aaa; line-height:1; }
+  .sheet-name { font-family:'TwinklCursive','Crimson Pro',Georgia,serif; font-size:9pt; color:#1a1a2e; margin-top:1.5pt; line-height:1.2; }
+
+  /* ── BODY: two equal columns ── */
   .body-cols {
-    display:grid; grid-template-columns:1fr 1fr; gap:5mm; flex:1;
+    display:grid; grid-template-columns:1fr 1fr; gap:5mm; flex:1; min-height:0;
   }
 
   /* ── SECTION ── */
-  .section { border:0.5pt solid #ddd; border-radius:3pt; overflow:hidden; display:flex; flex-direction:column; }
-  .section-title-bar { padding:3pt 8pt; border-bottom:0.5pt solid #ddd; }
-  .section-title { font-family:'Cinzel',Georgia,serif; font-size:7pt; letter-spacing:.08em; text-transform:uppercase; color:#444; }
-  .section-body { padding:6pt 8pt; flex:1; }
+  .section { border:0.5pt solid #ddd; border-radius:2pt; display:flex; flex-direction:column; min-height:0; overflow:hidden; }
+  .section-title-bar { padding:2pt 6pt; border-bottom:0.5pt solid #ddd; flex-shrink:0; }
+  .section-title { font-family:'Cinzel',Georgia,serif; font-size:6pt; letter-spacing:.08em; text-transform:uppercase; color:#555; }
+  .section-body { padding:4pt 6pt; flex:1; min-height:0; overflow:hidden; }
 
   /* ── DIAMOND NINE ── */
+  .d9-wrap { display:flex; flex-direction:column; height:100%; gap:3pt; }
+
   .diamond-grid {
     display:grid;
     grid-template-columns:1fr 1fr 1fr;
-    grid-template-rows:repeat(5,auto);
-    gap:2.5pt;
-    margin-bottom:5pt;
+    grid-template-rows:repeat(5,1fr);
+    gap:2pt;
+    flex:0 0 auto;
+    /* Fixed height so it doesn't overflow */
+    height:82mm;
   }
-  .d-card {
-    border:0.5pt solid #ccc; border-radius:3pt; padding:3pt 2pt;
-    text-align:center; background:#fafafa;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    min-height:16mm;
-  }
-  .d-card.top-card { border-color:#c9a84c; background:#fffcf0; }
-  .d-card.bot-card { background:#f6f6f6; }
-  .d-card.empty-card { border-style:dashed; border-color:#e0e0e0; background:#fff; }
-  .d-pos  { font-family:'Cinzel',Georgia,serif; font-size:5pt; color:#bbb; margin-bottom:1pt; }
-  .d-card.top-card .d-pos { color:#c9a84c; }
-  .d-icon { font-size:10pt; line-height:1; margin-bottom:1pt; }
-  .d-name { font-family:'Cinzel',Georgia,serif; font-size:5.5pt; letter-spacing:.03em; text-transform:uppercase; color:#1a1a2e; line-height:1.2; }
 
-  /* positions */
+  /* Positions */
   .pos-1 { grid-column:2; grid-row:1; }
   .pos-2 { grid-column:1; grid-row:2; }
   .pos-3 { grid-column:3; grid-row:2; }
@@ -117,41 +113,63 @@
   .pos-7 { grid-column:1; grid-row:4; }
   .pos-8 { grid-column:3; grid-row:4; }
   .pos-9 { grid-column:2; grid-row:5; }
+  /* Row spacers to keep diamond shape */
+  .row-spacer-2l { grid-column:1; grid-row:1; }
+  .row-spacer-2r { grid-column:3; grid-row:1; }
+  .row-spacer-4m { grid-column:2; grid-row:4; }
+  .row-spacer-5l { grid-column:1; grid-row:5; }
+  .row-spacer-5r { grid-column:3; grid-row:5; }
 
-  /* Reason boxes */
-  .reason-box { border:0.5pt solid #e0e0e0; border-radius:3pt; padding:5pt 7pt; margin-bottom:3pt; background:#fafafa; }
+  .d-card {
+    border:0.5pt solid #ccc; border-radius:2pt; padding:2pt;
+    text-align:center; background:#fafafa;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+  }
+  .d-card.top-card  { border-color:#c9a84c; background:#fffcf0; border-width:1pt; }
+  .d-card.bot-card  { background:#f5f5f5; }
+  .d-card.mid-card  { background:#f9f9f9; }
+  .d-pos  { font-family:'Cinzel',Georgia,serif; font-size:4.5pt; color:#ccc; line-height:1; margin-bottom:1pt; }
+  .d-card.top-card .d-pos { color:#c9a84c; }
+  .d-icon { font-size:8pt; line-height:1; margin-bottom:1pt; }
+  .d-name { font-family:'Cinzel',Georgia,serif; font-size:5pt; letter-spacing:.02em; text-transform:uppercase; color:#1a1a2e; line-height:1.15; }
+
+  /* Reason rows */
+  .reasons-row { display:grid; grid-template-columns:1fr 1fr; gap:3pt; flex-shrink:0; }
+  .reason-box { border:0.5pt solid #e0e0e0; border-radius:2pt; padding:3pt 5pt; background:#fafafa; }
   .reason-box.top-box { border-color:#c9a84c; background:#fffcf0; }
-  .reason-label { font-family:'Cinzel',Georgia,serif; font-size:6pt; text-transform:uppercase; letter-spacing:.07em; color:#aaa; margin-bottom:3pt; }
-  .reason-label.top { color:#a8832a; }
-  .reason-text { font-family:'TwinklCursive','Crimson Pro',Georgia,serif; font-size:10.5pt; line-height:1.55; color:#1a1a2e; min-height:14pt; }
-  .reason-text.empty { font-family:'Crimson Pro',Georgia,serif; font-size:8pt; color:#bbb; font-style:italic; }
-  .no-data { font-family:'Crimson Pro',Georgia,serif; font-size:8pt; color:#bbb; font-style:italic; padding:4pt 0; }
+  .reason-label { font-family:'Cinzel',Georgia,serif; font-size:5pt; text-transform:uppercase; letter-spacing:.06em; color:#bbb; margin-bottom:2pt; line-height:1; }
+  .reason-label.gold { color:#a8832a; }
+  .reason-text { font-family:'TwinklCursive','Crimson Pro',Georgia,serif; font-size:9pt; line-height:1.45; color:#1a1a2e; }
+  .reason-text.empty { font-family:'Crimson Pro',Georgia,serif; font-size:7pt; color:#ccc; font-style:italic; }
+
+  .no-data { font-family:'Crimson Pro',Georgia,serif; font-size:7.5pt; color:#ccc; font-style:italic; padding:4pt 0; }
 
   /* ── VENN ── */
-  .venn-wrap { position:relative; width:100%; }
-  .venn-svg  { width:100%; height:auto; display:block; }
+  .venn-wrap { position:relative; width:100%; height:100%; }
+  .venn-svg  { width:100%; height:100%; display:block; }
   .venn-overlay { position:absolute; inset:0; pointer-events:none; }
   .vzone {
     position:absolute;
     display:flex; flex-direction:column; align-items:center;
     font-family:'TwinklCursive','Crimson Pro',Georgia,serif;
-    font-size:6.5pt; line-height:1.35; text-align:center; color:#1a1a2e;
+    font-size:5.5pt; line-height:1.3; text-align:center; color:#1a1a2e;
     overflow:hidden;
   }
   .vzone-label {
     font-family:'Cinzel',Georgia,serif;
-    font-size:5pt; letter-spacing:.06em; text-transform:uppercase; color:#777; margin-bottom:1.5pt;
+    font-size:4.5pt; letter-spacing:.05em; text-transform:uppercase; color:#888; margin-bottom:1pt;
   }
   .vzone-item { margin-bottom:0.5pt; }
 
   /* ── PRINT ── */
   @media print {
+    @page { size:297mm 210mm landscape; margin:0; }
     body { background:#fff; margin:0; padding:0; }
     .screen-header { display:none !important; }
     .screen-main { max-width:none; margin:0; padding:0; gap:0; }
     .a4-sheet {
-      width:210mm; min-height:297mm;
-      margin:0; padding:12mm 14mm;
+      width:297mm; height:210mm;
+      margin:0; padding:8mm 10mm;
       border:none; box-shadow:none;
       page-break-after:always;
     }
@@ -180,7 +198,7 @@
 const VENN_CSV    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQNqr1dLDto9DsqIrTYAmK4aay6J6d9AHv0QHmJazO-I42Mx1uDhzKtb0YFvivALTnnfp74fE3hnJVc/pub?gid=0&single=true&output=csv';
 const DIAMOND_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRPRURE9g1iYKrOtQCF3PMwggQDR2qeudR7fzOStsUr_L-ZvNvPRoW2Q0nEFFNsDAFaA7Ow8VuGAVDI/pub?gid=0&single=true&output=csv';
 
-const D9_CARDS = {
+const D9_ICONS = {
   'The King':'👑','Nobles':'⚔️','Farmers':'🌽','Artisans':'🏺',
   'Slaves':'⛓️','Animal Companions':'🐆','Divine Right':'☀️',
   'Unpaid Labour':'🔨','Ahau Pacal Votan':'🌟',
@@ -191,215 +209,189 @@ function splitCSV(line) {
   for(const ch of line){if(ch==='"'){q=!q;}else if(ch===','&&!q){r.push(c.trim());c='';}else{c+=ch;}}
   r.push(c.trim()); return r;
 }
-
-// Normalise name — just letters and digits, lowercase
 function norm(n) { return (n||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
-
-// Fuzzy match: check if any word in one name appears in the other
-function namesMatch(a, b) {
-  if (!a || !b) return false;
-  const na = norm(a), nb = norm(b);
-  if (na === nb) return true;
-  if (na.includes(nb) || nb.includes(na)) return true;
-  // Split on non-word chars and check word overlap
-  const wordsA = a.toLowerCase().split(/[^a-z]+/).filter(w=>w.length>2);
-  const wordsB = b.toLowerCase().split(/[^a-z]+/).filter(w=>w.length>2);
-  return wordsA.some(w => wordsB.includes(w));
+function namesMatch(a,b) {
+  if (!a||!b) return false;
+  const na=norm(a), nb=norm(b);
+  if (na===nb||na.includes(nb)||nb.includes(na)) return true;
+  const wa=a.toLowerCase().split(/[^a-z]+/).filter(w=>w.length>2);
+  const wb=b.toLowerCase().split(/[^a-z]+/).filter(w=>w.length>2);
+  return wa.some(w=>wb.includes(w));
 }
 
 async function fetchCSV(url) {
-  const res   = await fetch(url + '&t=' + Date.now());
-  const text  = await res.text();
-  const lines = text.trim().split('\n').filter(l=>l.trim());
-  if (lines.length < 2) return [];
+  const res = await fetch(url+'&t='+Date.now());
+  const txt = await res.text();
+  const lines = txt.trim().split('\n').filter(l=>l.trim());
+  if (lines.length<2) return [];
   const headers = splitCSV(lines[0]).map(h=>h.trim().toLowerCase());
-  return lines.slice(1).map(l => {
-    const cols = splitCSV(l);
-    const obj  = {};
-    headers.forEach((h,i) => obj[h] = cols[i]||'');
+  return lines.slice(1).map(l=>{
+    const cols=splitCSV(l); const obj={};
+    headers.forEach((h,i)=>obj[h]=cols[i]||'');
     return obj;
   });
 }
 
-// Keep the latest row per name
 function latestByName(rows, field) {
-  const map = {};
-  rows.forEach(r => {
-    const raw = r[field] || '';
-    const key = norm(raw);
+  const map={};
+  rows.forEach(r=>{
+    const raw=r[field]||''; const key=norm(raw);
     if (!key) return;
-    if (!map[key] || r.timestamp > map[key].timestamp) map[key] = { ...r, _raw: raw };
+    if (!map[key]||r.timestamp>map[key].timestamp) map[key]={...r,_raw:raw};
   });
   return map;
 }
 
 async function load() {
-  const main = document.getElementById('main');
-  main.innerHTML = '<div class="status">Loading…</div>';
+  const main=document.getElementById('main');
+  main.innerHTML='<div class="status">Loading…</div>';
   try {
-    const [vennRows, d9Rows] = await Promise.all([
+    const [vennRows,d9Rows]=await Promise.all([
       fetchCSV(VENN_CSV).catch(()=>[]),
       fetchCSV(DIAMOND_CSV).catch(()=>[]),
     ]);
 
-    const vennMap = latestByName(vennRows, 'names');
-    const d9Map   = latestByName(d9Rows,   'name');
+    const vennMap=latestByName(vennRows,'names');
+    const d9Map  =latestByName(d9Rows,  'name');
 
-    // Build entries from Venn (primary) then add any D9-only entries
-    const entries = [];
-    const matchedD9 = new Set();
-
-    Object.entries(vennMap).forEach(([vKey, vRow]) => {
-      // Find best-matching D9 entry
-      let d9Row = d9Map[vKey] || null; // exact match first
+    const entries=[]; const matchedD9=new Set();
+    Object.entries(vennMap).forEach(([vKey,vRow])=>{
+      let d9Row=d9Map[vKey]||null;
       if (!d9Row) {
-        // Fuzzy match
-        for (const [dKey, dRow] of Object.entries(d9Map)) {
-          if (namesMatch(vRow._raw, dRow._raw)) { d9Row = dRow; matchedD9.add(dKey); break; }
+        for (const [dKey,dRow] of Object.entries(d9Map)) {
+          if (namesMatch(vRow._raw,dRow._raw)){d9Row=dRow;matchedD9.add(dKey);break;}
         }
-      } else {
-        matchedD9.add(vKey);
-      }
-      entries.push({ displayName: vRow._raw, venn: vRow, d9: d9Row });
+      } else { matchedD9.add(vKey); }
+      entries.push({displayName:vRow._raw,venn:vRow,d9:d9Row});
+    });
+    Object.entries(d9Map).forEach(([dKey,dRow])=>{
+      if (!matchedD9.has(dKey)) entries.push({displayName:dRow._raw,venn:null,d9:dRow});
     });
 
-    // D9 entries with no Venn match
-    Object.entries(d9Map).forEach(([dKey, dRow]) => {
-      if (!matchedD9.has(dKey)) {
-        entries.push({ displayName: dRow._raw, venn: null, d9: dRow });
-      }
-    });
-
-    if (!entries.length) {
-      main.innerHTML = '<div class="status">No submissions yet.</div>';
-      return;
-    }
-
-    entries.sort((a,b) => a.displayName.localeCompare(b.displayName));
-    main.innerHTML = '';
-    entries.forEach(e => main.appendChild(buildSheet(e.displayName, e.venn, e.d9)));
+    if (!entries.length){main.innerHTML='<div class="status">No submissions yet.</div>';return;}
+    entries.sort((a,b)=>a.displayName.localeCompare(b.displayName));
+    main.innerHTML='';
+    entries.forEach(e=>main.appendChild(buildSheet(e.displayName,e.venn,e.d9)));
   } catch(e) {
-    main.innerHTML = `<div class="status">Could not load.<br><small>${e.message}</small></div>`;
+    main.innerHTML=`<div class="status">Could not load.<br><small>${e.message}</small></div>`;
   }
 }
 
 // ── DIAMOND NINE ──────────────────────────────────────────────────────
 function buildDiamond(d9) {
-  if (!d9) return '<div class="no-data">No Diamond Nine submission recorded.</div>';
+  if (!d9) return '<div class="no-data">No Diamond Nine submission recorded for this trio.</div>';
 
-  const topCard   = d9.topcard    || d9['top card']    || '';
-  const botCard   = d9.bottomcard || d9['bottom card'] || '';
-  const topReason = d9.topreason  || d9['top reason']  || '';
-  const botReason = d9.bottomreason || d9['bottom reason'] || '';
+  // Read positions — new submissions have pos1–pos9; old ones only have topcard/bottomcard
+  const positions = [];
+  let hasFullLayout = false;
+  for (let p=1;p<=9;p++) {
+    const name = d9[`pos${p}`]||'';
+    if (name) hasFullLayout=true;
+    positions.push(name);
+  }
+  // Fall back for old submissions: put topcard at 1, bottomcard at 9, fill rest with remaining
+  if (!hasFullLayout) {
+    const top = d9.topcard||d9['top card']||'';
+    const bot = d9.bottomcard||d9['bottom card']||'';
+    const ALL = ['The King','Nobles','Farmers','Artisans','Slaves','Animal Companions','Divine Right','Unpaid Labour','Ahau Pacal Votan'];
+    const mid = ALL.filter(c=>c!==top&&c!==bot);
+    positions[0]=top;
+    for(let i=1;i<=7;i++) positions[i]=mid[i-1]||'';
+    positions[8]=bot;
+  }
 
-  // Middle 7 positions are placeholders (we only receive top and bottom)
-  const midCards = ['Nobles','Farmers','Artisans','Slaves','Animal Companions','Divine Right','Unpaid Labour']
-    .filter(c => c !== topCard && c !== botCard);
+  const topReason = d9.topreason  ||d9['top reason']   ||'';
+  const botReason = d9.bottomreason||d9['bottom reason']||'';
+  const topCard   = positions[0];
+  const botCard   = positions[8];
 
-  const positions = [
-    { pos:1, name:topCard,      isTop:true },
-    { pos:2, name:midCards[0]||'', },
-    { pos:3, name:midCards[1]||'', },
-    { pos:4, name:midCards[2]||'', },
-    { pos:5, name:midCards[3]||'', },
-    { pos:6, name:midCards[4]||'', },
-    { pos:7, name:midCards[5]||'', },
-    { pos:8, name:midCards[6]||'', },
-    { pos:9, name:botCard,      isBot:true },
+  // Diamond shape: row1=[–,1,–] row2=[2,–,3] row3=[4,5,6] row4=[7,–,8] row5=[–,9,–]
+  const grid = [
+    { cls:'row-spacer-2l' }, { pos:0, cls:'pos-1 top-card' }, { cls:'row-spacer-2r' },
+    { pos:1, cls:'pos-2 mid-card' }, null, { pos:2, cls:'pos-3 mid-card' },
+    { pos:3, cls:'pos-4 mid-card' }, { pos:4, cls:'pos-5 mid-card' }, { pos:5, cls:'pos-6 mid-card' },
+    { pos:6, cls:'pos-7 mid-card' }, { cls:'row-spacer-4m' }, { pos:7, cls:'pos-8 mid-card' },
+    { cls:'row-spacer-5l' }, { pos:8, cls:'pos-9 bot-card' }, { cls:'row-spacer-5r' },
   ];
 
-  const cells = positions.map(p => {
-    const icon = D9_CARDS[p.name] || '';
-    const cls  = p.isTop ? 'top-card' : p.isBot ? 'bot-card' : (p.name ? '' : 'empty-card');
-    const posLabel = p.isTop ? '★ Most important' : p.isBot ? '◇ Least important' : `${p.pos}`;
-    return `<div class="d-card pos-${p.pos} ${cls}">
+  const cells = grid.map(g => {
+    if (!g) return ''; // null = spacer (handled by grid placement)
+    if (g.pos === undefined) return `<div class="${g.cls}"></div>`;
+    const name = positions[g.pos]||'';
+    const icon = D9_ICONS[name]||'•';
+    const posNum = g.pos+1;
+    const posLabel = g.pos===0 ? '★ Most important' : g.pos===8 ? '◇ Least important' : `${posNum}`;
+    return `<div class="d-card ${g.cls}">
       <div class="d-pos">${posLabel}</div>
-      ${p.name ? `<div class="d-icon">${icon}</div><div class="d-name">${p.name}</div>` : ''}
+      ${name ? `<div class="d-icon">${icon}</div><div class="d-name">${name}</div>` : '<div class="d-name" style="color:#ddd">—</div>'}
     </div>`;
   }).join('');
 
-  return `
+  return `<div class="d9-wrap">
     <div class="diamond-grid">${cells}</div>
-    <div class="reason-box top-box">
-      <div class="reason-label top">Why is "${topCard || '—'}" most important?</div>
-      <div class="reason-text ${topReason?'':'empty'}">${topReason || 'No reason recorded'}</div>
+    <div class="reasons-row">
+      <div class="reason-box top-box">
+        <div class="reason-label gold">Why "${topCard||'—'}" is most important:</div>
+        <div class="reason-text ${topReason?'':'empty'}">${topReason||'No reason recorded'}</div>
+      </div>
+      <div class="reason-box">
+        <div class="reason-label">Why "${botCard||'—'}" is least important:</div>
+        <div class="reason-text ${botReason?'':'empty'}">${botReason||'No reason recorded'}</div>
+      </div>
     </div>
-    <div class="reason-box">
-      <div class="reason-label">Why is "${botCard || '—'}" least important?</div>
-      <div class="reason-text ${botReason?'':'empty'}">${botReason || 'No reason recorded'}</div>
-    </div>`;
+  </div>`;
 }
 
 // ── VENN DIAGRAM ──────────────────────────────────────────────────────
 function buildVenn(venn) {
-  if (!venn) return '<div class="no-data">No Venn Diagram submission recorded.</div>';
-
+  if (!venn) return '<div class="no-data">No Venn Diagram submission recorded for this trio.</div>';
   function items(str) {
-    if (!str || str==='—') return [];
+    if (!str||str==='—') return [];
     return str.split('|').map(s=>s.trim()).filter(Boolean);
   }
-  const Z = {
-    mo: items(venn.mayaonly  || ''),
-    so: items(venn.saxononly || ''),
-    io: items(venn.islamonly || ''),
-    ms: items(venn.mayasaxon || ''),
-    mi: items(venn.mayaislam || ''),
-    si: items(venn.saxonislam|| ''),
-    al: items(venn.allthree  || ''),
+  const Z={
+    mo:items(venn.mayaonly  ||''), so:items(venn.saxononly||''),
+    io:items(venn.islamonly ||''), ms:items(venn.mayasaxon||''),
+    mi:items(venn.mayaislam||''), si:items(venn.saxonislam||''),
+    al:items(venn.allthree  ||''),
   };
-
-  function txt(list, max=3) {
+  function txt(list,max=3) {
     if (!list.length) return '';
-    return list.slice(0,max).map(t=>`<div class="vzone-item">${t.length>32?t.slice(0,30)+'…':t}</div>`).join('')
-      + (list.length>max ? `<div class="vzone-item" style="opacity:.5;font-family:'Crimson Pro'">+${list.length-max}</div>` : '');
+    return list.slice(0,max).map(t=>`<div class="vzone-item">${t.length>30?t.slice(0,28)+'…':t}</div>`).join('')
+      +(list.length>max?`<div class="vzone-item" style="opacity:.45;font-family:'Crimson Pro'">+${list.length-max}</div>`:'');
   }
 
   return `<div class="venn-wrap">
-    <svg class="venn-svg" viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="148" cy="118" r="108" fill="rgba(184,115,58,.1)" stroke="rgba(184,115,58,.75)" stroke-width="1.2"/>
-      <circle cx="232" cy="118" r="108" fill="rgba(74,127,168,.1)"  stroke="rgba(74,127,168,.75)"  stroke-width="1.2"/>
-      <circle cx="190" cy="203" r="108" fill="rgba(122,79,168,.1)"  stroke="rgba(122,79,168,.75)"  stroke-width="1.2"/>
-      <text x="72"  y="36" font-family="Cinzel,serif" font-size="8.5" font-weight="700" fill="#b8733a" text-anchor="middle">🏺 Maya</text>
-      <text x="308" y="36" font-family="Cinzel,serif" font-size="8.5" font-weight="700" fill="#4a7fa8" text-anchor="middle">⚔️ Saxon</text>
-      <text x="190" y="296" font-family="Cinzel,serif" font-size="8.5" font-weight="700" fill="#7a4fa8" text-anchor="middle">🌙 Islam</text>
+    <svg class="venn-svg" viewBox="0 0 360 175" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <circle cx="138" cy="80" r="82" fill="rgba(184,115,58,.1)" stroke="rgba(184,115,58,.75)" stroke-width="1"/>
+      <circle cx="222" cy="80" r="82" fill="rgba(74,127,168,.1)"  stroke="rgba(74,127,168,.75)"  stroke-width="1"/>
+      <circle cx="180" cy="148" r="82" fill="rgba(122,79,168,.1)"  stroke="rgba(122,79,168,.75)"  stroke-width="1"/>
+      <text x="68"  y="18" font-family="Cinzel,serif" font-size="7" font-weight="700" fill="#b8733a" text-anchor="middle">🏺 Maya</text>
+      <text x="292" y="18" font-family="Cinzel,serif" font-size="7" font-weight="700" fill="#4a7fa8" text-anchor="middle">⚔️ Saxon</text>
+      <text x="180" y="172" font-family="Cinzel,serif" font-size="7" font-weight="700" fill="#7a4fa8" text-anchor="middle">🌙 Islam</text>
     </svg>
     <div class="venn-overlay">
-      <div class="vzone" style="left:1%;top:20%;width:20%;max-height:22%">
-        <div class="vzone-label">Maya only</div>${txt(Z.mo)}
-      </div>
-      <div class="vzone" style="left:38%;top:6%;width:24%;max-height:18%">
-        <div class="vzone-label">Maya + Saxon</div>${txt(Z.ms,2)}
-      </div>
-      <div class="vzone" style="right:1%;top:20%;width:20%;max-height:22%">
-        <div class="vzone-label">Saxon only</div>${txt(Z.so)}
-      </div>
-      <div class="vzone" style="left:11%;top:54%;width:20%;max-height:22%">
-        <div class="vzone-label">Maya + Islam</div>${txt(Z.mi,2)}
-      </div>
-      <div class="vzone" style="left:35%;top:44%;width:30%;max-height:24%">
-        <div class="vzone-label">All three</div>${txt(Z.al,3)}
-      </div>
-      <div class="vzone" style="right:11%;top:54%;width:20%;max-height:22%">
-        <div class="vzone-label">Saxon + Islam</div>${txt(Z.si,2)}
-      </div>
-      <div class="vzone" style="left:37%;top:76%;width:26%;max-height:18%">
-        <div class="vzone-label">Islam only</div>${txt(Z.io,2)}
-      </div>
+      <div class="vzone" style="left:1%;top:20%;width:20%;max-height:35%"><div class="vzone-label">Maya only</div>${txt(Z.mo)}</div>
+      <div class="vzone" style="left:38%;top:4%;width:24%;max-height:22%"><div class="vzone-label">Maya+Saxon</div>${txt(Z.ms,2)}</div>
+      <div class="vzone" style="right:1%;top:20%;width:20%;max-height:35%"><div class="vzone-label">Saxon only</div>${txt(Z.so)}</div>
+      <div class="vzone" style="left:9%;top:52%;width:22%;max-height:28%"><div class="vzone-label">Maya+Islam</div>${txt(Z.mi,2)}</div>
+      <div class="vzone" style="left:34%;top:40%;width:32%;max-height:30%"><div class="vzone-label">All three</div>${txt(Z.al,3)}</div>
+      <div class="vzone" style="right:9%;top:52%;width:22%;max-height:28%"><div class="vzone-label">Saxon+Islam</div>${txt(Z.si,2)}</div>
+      <div class="vzone" style="left:36%;top:74%;width:28%;max-height:22%"><div class="vzone-label">Islam only</div>${txt(Z.io,2)}</div>
     </div>
   </div>`;
 }
 
 // ── BUILD SHEET ───────────────────────────────────────────────────────
 function buildSheet(name, venn, d9) {
-  const sheet = document.createElement('div');
-  sheet.className = 'a4-sheet';
-  const date = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
-
-  sheet.innerHTML = `
+  const sheet=document.createElement('div');
+  sheet.className='a4-sheet';
+  const date=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+  sheet.innerHTML=`
     <div class="sheet-header">
       <div class="sheet-title-block">
         <div class="sheet-enquiry">What was the legacy of the Ancient Mayans?</div>
-        <div class="sheet-title">Comparing Civilisations &amp; Ranking Roles and Resources</div>
+        <div class="sheet-title">Comparing Civilisations and Importance of aspects of Mayan life</div>
         <div class="sheet-date">${date}</div>
       </div>
       <div class="sheet-name-box">
@@ -407,22 +399,16 @@ function buildSheet(name, venn, d9) {
         <div class="sheet-name">${name}</div>
       </div>
     </div>
-
     <div class="body-cols">
       <div class="section">
-        <div class="section-title-bar">
-          <div class="section-title">◆ Diamond Nine — Who Mattered Most?</div>
-        </div>
+        <div class="section-title-bar"><div class="section-title">◆ Diamond Nine — Who mattered most?</div></div>
         <div class="section-body">${buildDiamond(d9)}</div>
       </div>
       <div class="section">
-        <div class="section-title-bar">
-          <div class="section-title">🔵 Venn Diagram — Comparing Hierarchies</div>
-        </div>
+        <div class="section-title-bar"><div class="section-title">🔵 Three-Way Venn Diagram — Comparing hierarchies</div></div>
         <div class="section-body">${buildVenn(venn)}</div>
       </div>
     </div>`;
-
   return sheet;
 }
 

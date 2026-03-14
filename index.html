@@ -584,15 +584,21 @@ async function submitDiamond() {
   btn.disabled = true; btn.textContent = 'Sending…';
 
   try {
+    // Build all 9 positions
+    const allPositions = {};
+    for (let p = 1; p <= 9; p++) {
+      allPositions[`pos${p}`] = slots[p] ? CARDS.find(c=>c.id===slots[p])?.name || '' : '';
+    }
     await fetch(SHEET_URL, {
       method: 'POST', mode: 'no-cors',
       headers: { 'Content-Type':'application/json' },
       body: JSON.stringify({
         name,
-        TopCard:      CARDS.find(c=>c.id===slots[1]).name,
+        TopCard:      allPositions.pos1,
         TopReason:    topReason,
-        BottomCard:   CARDS.find(c=>c.id===slots[9]).name,
+        BottomCard:   allPositions.pos9,
         BottomReason: document.getElementById('bot-reason').value.trim(),
+        ...allPositions,
       }),
     });
     showToast('✓ Submitted — well done!', false);
