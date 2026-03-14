@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Venn Results · Lesson 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold:    #c9a84c; --gold-lt: #e9c46a;
+    --stone-dk:#140a04; --cream:   #f5edd6; --sand:#e8d5b0;
+    --jade-lt: #40916c;
+    --maya-lt: #e09050; --saxon-lt:#7aaed6; --islam-lt:#b07ed4;
+    --ms-c:    #e07ab0; --mi-c:    #e0a040; --si-c:    #90a8e0; --all-c:   #c4c450;
+  }
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Crimson Pro',Georgia,serif; background:var(--stone-dk); color:var(--cream); min-height:100vh; }
+  body::before { content:''; position:fixed; inset:0; pointer-events:none;
+    background-image:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.05) 2px,rgba(0,0,0,.05) 4px),
+    repeating-linear-gradient(90deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px); }
+  header { position:relative; z-index:1; background:linear-gradient(180deg,#0d0604 0%,rgba(13,6,4,.8) 100%);
+    border-bottom:2px solid var(--gold); padding:14px 24px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .eyebrow { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.22em; color:var(--gold); text-transform:uppercase; margin-bottom:3px; }
+  h1 { font-family:'Cinzel',serif; font-size:clamp(1rem,2.5vw,1.5rem); font-weight:700; color:var(--gold-lt); }
+  .live-dot { width:8px; height:8px; border-radius:50%; background:var(--jade-lt); animation:pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
+  main { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:24px 20px 60px; display:flex; flex-direction:column; gap:28px; }
+
+  .stat-row { display:flex; gap:12px; flex-wrap:wrap; }
+  .stat-card { background:rgba(0,0,0,.3); border:1px solid rgba(201,168,76,.3); border-radius:10px; padding:14px 20px; flex:1 1 120px; text-align:center; }
+  .stat-n { font-family:'Cinzel',serif; font-size:2rem; font-weight:700; color:var(--gold-lt); line-height:1; }
+  .stat-l { font-size:.75rem; font-style:italic; color:var(--sand); margin-top:4px; }
+
+  .section-title { font-family:'Cinzel',serif; font-size:.7rem; letter-spacing:.18em; color:var(--gold); text-transform:uppercase; padding-bottom:7px; border-bottom:1px solid rgba(201,168,76,.3); margin-bottom:20px; }
+
+  /* ── SVG VENN ── */
+  .venn-container {
+    background:rgba(0,0,0,.25); border:1px solid rgba(201,168,76,.2);
+    border-radius:14px; padding:16px; position:relative;
+  }
+  .venn-svg-wrap { position:relative; width:100%; }
+  .venn-svg-wrap svg { display:block; width:100%; height:auto; }
+
+  /* Floating label panels that sit alongside the SVG */
+  .venn-labels {
+    display:grid; grid-template-columns:1fr 1fr 1fr;
+    gap:8px; margin-top:12px;
+  }
+  .venn-panel {
+    border-radius:8px; padding:9px 11px;
+    display:flex; flex-direction:column; gap:5px;
+  }
+  .vp-maya   { background:rgba(184,115,58,.15); border:1px solid rgba(224,144,80,.35); }
+  .vp-saxon  { background:rgba(74,127,168,.15);  border:1px solid rgba(122,174,214,.35); }
+  .vp-islam  { background:rgba(122,79,168,.15);  border:1px solid rgba(176,126,212,.35); }
+  .vp-ms     { background:rgba(196,90,144,.12);  border:1px solid rgba(196,90,144,.35); }
+  .vp-mi     { background:rgba(196,120,32,.12);  border:1px solid rgba(196,120,32,.35); }
+  .vp-si     { background:rgba(90,110,168,.12);  border:1px solid rgba(90,110,168,.35); }
+  .vp-all    { background:rgba(138,138,42,.18);  border:2px solid rgba(196,196,80,.5); }
+
+  .vp-title { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.08em; text-transform:uppercase; margin-bottom:5px; }
+  .vp-maya  .vp-title { color:var(--maya-lt); }
+  .vp-saxon .vp-title { color:var(--saxon-lt); }
+  .vp-islam .vp-title { color:var(--islam-lt); }
+  .vp-ms    .vp-title { color:var(--ms-c); }
+  .vp-mi    .vp-title { color:var(--mi-c); }
+  .vp-si    .vp-title { color:var(--si-c); }
+  .vp-all   .vp-title { color:var(--all-c); }
+
+  .vp-item { font-size:.78rem; color:var(--sand); padding:4px 8px; border-radius:4px; line-height:1.3; }
+  .vp-maya  .vp-item { background:rgba(184,115,58,.2); }
+  .vp-saxon .vp-item { background:rgba(74,127,168,.2); }
+  .vp-islam .vp-item { background:rgba(122,79,168,.2); }
+  .vp-ms    .vp-item { background:rgba(196,90,144,.2); }
+  .vp-mi    .vp-item { background:rgba(196,120,32,.2); }
+  .vp-si    .vp-item { background:rgba(90,110,168,.2); }
+  .vp-all   .vp-item { background:rgba(138,138,42,.2); }
+  .vote-badge { font-family:'Cinzel',serif; font-size:.48rem; padding:1px 5px; border-radius:10px; margin-left:4px; vertical-align:middle; }
+  .vp-maya  .vote-badge { background:rgba(224,144,80,.3);  color:var(--maya-lt); }
+  .vp-saxon .vote-badge { background:rgba(122,174,214,.3); color:var(--saxon-lt); }
+  .vp-islam .vote-badge { background:rgba(176,126,212,.3); color:var(--islam-lt); }
+  .vp-ms    .vote-badge { background:rgba(196,90,144,.3);  color:var(--ms-c); }
+  .vp-mi    .vote-badge { background:rgba(196,120,32,.3);  color:var(--mi-c); }
+  .vp-si    .vote-badge { background:rgba(90,110,168,.3);  color:var(--si-c); }
+  .vp-all   .vote-badge { background:rgba(196,196,80,.3);  color:var(--all-c); }
+  .empty-note { font-size:.72rem; font-style:italic; color:rgba(232,213,176,.28); }
+
+  /* ── SUBMISSIONS ── */
+  .submissions-grid { display:flex; flex-direction:column; gap:12px; }
+  .submission-card { background:rgba(0,0,0,.3); border:1px solid rgba(201,168,76,.18); border-radius:10px; overflow:hidden; }
+  .sub-header { padding:8px 14px; background:rgba(201,168,76,.08); border-bottom:1px solid rgba(201,168,76,.12);
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; }
+  .sub-names { font-family:'Cinzel',serif; font-size:.68rem; color:var(--gold-lt); }
+  .sub-time  { font-size:.65rem; font-style:italic; color:rgba(232,213,176,.4); }
+  .sub-body  { display:grid; grid-template-columns:repeat(7,1fr); }
+  .sub-col   { padding:7px 9px; font-size:.72rem; border-left:1px solid rgba(255,255,255,.06); }
+  .sub-col:first-child { border-left:none; }
+  .sub-col-label { font-family:'Cinzel',serif; font-size:.5rem; letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px; }
+  .sub-col.maya  .sub-col-label { color:var(--maya-lt); }
+  .sub-col.saxon .sub-col-label { color:var(--saxon-lt); }
+  .sub-col.islam .sub-col-label { color:var(--islam-lt); }
+  .sub-col.ms    .sub-col-label { color:var(--ms-c); }
+  .sub-col.mi    .sub-col-label { color:var(--mi-c); }
+  .sub-col.si    .sub-col-label { color:var(--si-c); }
+  .sub-col.all   .sub-col-label { color:var(--all-c); }
+  .sub-col-item { color:var(--sand); line-height:1.3; padding:2px 0; }
+  .sub-col-empty { color:rgba(232,213,176,.25); font-style:italic; font-size:.65rem; }
+
+  .status { text-align:center; padding:50px 20px; font-size:1rem; font-style:italic; color:var(--sand); }
+  .actions { display:flex; gap:12px; justify-content:center; }
+  button { font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; padding:12px 28px; border:none; border-radius:5px; cursor:pointer; transition:all .2s; }
+  .btn-secondary { background:transparent; color:var(--sand); border:1px solid rgba(201,168,76,.35); }
+  .btn-secondary:hover { border-color:var(--gold); color:var(--gold-lt); }
+
+  @media(max-width:700px) {
+    .venn-labels { grid-template-columns:1fr 1fr; }
+    .sub-body { grid-template-columns:1fr 1fr; }
+  }
+  @media(max-width:480px) {
+    .venn-labels { grid-template-columns:1fr; }
+    .sub-body { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="eyebrow">Teacher View · Lesson 7 · Maya Enquiry</div>
+    <h1>Three-Way Venn — Class Results</h1>
+  </div>
+  <div class="live-dot"></div>
+</header>
+
+<main id="main">
+  <div class="status" id="status">Loading…</div>
+</main>
+
+<script>
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQNqr1dLDto9DsqIrTYAmK4aay6J6d9AHv0QHmJazO-I42Mx1uDhzKtb0YFvivALTnnfp74fE3hnJVc/pub?gid=0&single=true&output=csv';
+
+function splitCSV(line) {
+  const r=[]; let c='',q=false;
+  for(const ch of line){ if(ch==='"'){q=!q;}else if(ch===','&&!q){r.push(c.trim());c='';}else{c+=ch;} }
+  r.push(c.trim()); return r;
+}
+function normalise(s) { return s.toLowerCase().replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ').trim(); }
+function tally(rows, field) {
+  const c={};
+  rows.forEach(r => {
+    (r[field]||'').split('|').map(s=>s.trim()).filter(Boolean).forEach(item => {
+      const k=normalise(item);
+      if(!c[k]) c[k]={display:item,count:0};
+      c[k].count++;
+    });
+  });
+  return Object.values(c).sort((a,b)=>b.count-a.count);
+}
+
+async function load() {
+  try {
+    const res = await fetch(CSV_URL + '&t=' + Date.now());
+    const txt = await res.text();
+    const lines = txt.trim().split('\n').filter(l=>l.trim());
+    if (lines.length < 2) { render([]); return; }
+    const rows = lines.slice(1).map(l => {
+      const c = splitCSV(l);
+      // Columns: Timestamp, Names, MayaOnly, SaxonOnly, IslamOnly, MayaSaxon, MayaIslam, SaxonIslam, AllThree
+      return { timestamp:c[0]||'', names:c[1]||'', mayaOnly:c[2]||'', saxonOnly:c[3]||'', islamOnly:c[4]||'', mayaSaxon:c[5]||'', mayaIslam:c[6]||'', saxonIslam:c[7]||'', allThree:c[8]||'' };
+    }).filter(r=>r.names);
+    render(rows);
+    document.getElementById('status')?.remove();
+  } catch(e) {
+    const s=document.getElementById('status');
+    if(s) s.textContent='Could not load — check the sheet is published as CSV.';
+  }
+}
+
+function itemsHTML(list, cls, max=5) {
+  if (!list.length) return `<span class="empty-note">—</span>`;
+  return list.slice(0, max).map(({display,count}) =>
+    `<div class="vp-item">${display}${count>1?`<span class="vote-badge">${count}</span>`:''}</div>`
+  ).join('');
+}
+
+function render(rows) {
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+  if (!rows.length) { main.innerHTML='<div class="status">No submissions yet.</div>'; return; }
+
+  const T = {
+    maya:  tally(rows,'mayaOnly'),
+    saxon: tally(rows,'saxonOnly'),
+    islam: tally(rows,'islamOnly'),
+    ms:    tally(rows,'mayaSaxon'),
+    mi:    tally(rows,'mayaIslam'),
+    si:    tally(rows,'saxonIslam'),
+    all:   tally(rows,'allThree'),
+  };
+
+  // STATS
+  const stats = document.createElement('div');
+  stats.className = 'stat-row';
+  const totalUnique = Object.values(T).reduce((a,t)=>a+t.length,0);
+  stats.innerHTML = `
+    <div class="stat-card"><div class="stat-n">${rows.length}</div><div class="stat-l">groups submitted</div></div>
+    <div class="stat-card"><div class="stat-n">${T.all.length}</div><div class="stat-l">shared by all three</div></div>
+    <div class="stat-card"><div class="stat-n">${totalUnique}</div><div class="stat-l">unique ideas total</div></div>`;
+  main.appendChild(stats);
+
+  // VENN SECTION
+  const vennSection = document.createElement('div');
+  vennSection.innerHTML = '<p class="section-title">◆ Class Consensus — Three-Way Venn Diagram</p>';
+
+  const container = document.createElement('div');
+  container.className = 'venn-container';
+
+  // SVG Venn circles
+  container.innerHTML = `
+    <div class="venn-svg-wrap">
+      <svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <clipPath id="cp-maya"><circle cx="220" cy="160" r="155"/></clipPath>
+          <clipPath id="cp-saxon"><circle cx="380" cy="160" r="155"/></clipPath>
+          <clipPath id="cp-islam"><circle cx="300" cy="295" r="155"/></clipPath>
+        </defs>
+        <!-- Three base circles -->
+        <circle cx="220" cy="160" r="155" fill="rgba(184,115,58,.18)" stroke="rgba(224,144,80,.5)" stroke-width="1.5"/>
+        <circle cx="380" cy="160" r="155" fill="rgba(74,127,168,.18)"  stroke="rgba(122,174,214,.5)" stroke-width="1.5"/>
+        <circle cx="300" cy="295" r="155" fill="rgba(122,79,168,.18)"  stroke="rgba(176,126,212,.5)" stroke-width="1.5"/>
+
+        <!-- Overlap hints -->
+        <circle cx="220" cy="160" r="155" fill="rgba(196,90,144,.07)"  clip-path="url(#cp-saxon)"/>
+        <circle cx="220" cy="160" r="155" fill="rgba(196,120,32,.07)"  clip-path="url(#cp-islam)"/>
+        <circle cx="380" cy="160" r="155" fill="rgba(90,110,168,.07)"  clip-path="url(#cp-islam)"/>
+
+        <!-- Circle labels -->
+        <text x="120" y="92"  font-family="Cinzel,serif" font-size="13" font-weight="700" fill="rgba(224,144,80,.9)"  text-anchor="middle">🏺 Maya</text>
+        <text x="480" y="92"  font-family="Cinzel,serif" font-size="13" font-weight="700" fill="rgba(122,174,214,.9)" text-anchor="middle">⚔️ Saxon</text>
+        <text x="300" y="410" font-family="Cinzel,serif" font-size="13" font-weight="700" fill="rgba(176,126,212,.9)" text-anchor="middle">🌙 Islam</text>
+
+        <!-- Zone labels inside circles -->
+        <text x="148" y="170" font-family="Crimson Pro,serif" font-size="10" fill="rgba(224,144,80,.55)" text-anchor="middle" font-style="italic">Maya only</text>
+        <text x="452" y="170" font-family="Crimson Pro,serif" font-size="10" fill="rgba(122,174,214,.55)" text-anchor="middle" font-style="italic">Saxon only</text>
+        <text x="300" y="370" font-family="Crimson Pro,serif" font-size="10" fill="rgba(176,126,212,.55)" text-anchor="middle" font-style="italic">Islam only</text>
+        <text x="300" y="148" font-family="Crimson Pro,serif" font-size="10" fill="rgba(220,120,176,.65)" text-anchor="middle" font-style="italic">Maya+Saxon</text>
+        <text x="210" y="282" font-family="Crimson Pro,serif" font-size="10" fill="rgba(196,160,60,.65)"  text-anchor="middle" font-style="italic">Maya+Islam</text>
+        <text x="390" y="282" font-family="Crimson Pro,serif" font-size="10" fill="rgba(130,150,220,.65)" text-anchor="middle" font-style="italic">Saxon+Islam</text>
+        <text x="300" y="222" font-family="Crimson Pro,serif" font-size="11" fill="rgba(196,196,80,.85)"  text-anchor="middle" font-weight="700">ALL THREE</text>
+
+        <!-- Count badges in each zone -->
+        ${T.maya.length  ? `<text x="148" y="188" font-family="Cinzel,serif" font-size="18" font-weight="700" fill="rgba(224,144,80,.8)" text-anchor="middle">${T.maya.length}</text>` : ''}
+        ${T.saxon.length ? `<text x="452" y="188" font-family="Cinzel,serif" font-size="18" font-weight="700" fill="rgba(122,174,214,.8)" text-anchor="middle">${T.saxon.length}</text>` : ''}
+        ${T.islam.length ? `<text x="300" y="388" font-family="Cinzel,serif" font-size="18" font-weight="700" fill="rgba(176,126,212,.8)" text-anchor="middle">${T.islam.length}</text>` : ''}
+        ${T.ms.length    ? `<text x="300" y="168" font-family="Cinzel,serif" font-size="16" font-weight="700" fill="rgba(220,120,176,.85)" text-anchor="middle">${T.ms.length}</text>` : ''}
+        ${T.mi.length    ? `<text x="210" y="300" font-family="Cinzel,serif" font-size="16" font-weight="700" fill="rgba(196,160,60,.85)"  text-anchor="middle">${T.mi.length}</text>` : ''}
+        ${T.si.length    ? `<text x="390" y="300" font-family="Cinzel,serif" font-size="16" font-weight="700" fill="rgba(130,150,220,.85)" text-anchor="middle">${T.si.length}</text>` : ''}
+        ${T.all.length   ? `<text x="300" y="242" font-family="Cinzel,serif" font-size="20" font-weight="700" fill="rgba(196,196,80,.95)"  text-anchor="middle">${T.all.length}</text>` : ''}
+      </svg>
+    </div>
+
+    <!-- Detailed panels for each zone -->
+    <div class="venn-labels">
+      <div class="venn-panel vp-maya"><div class="vp-title">🏺 Maya Only</div>${itemsHTML(T.maya,'vp-maya')}</div>
+      <div class="venn-panel vp-all" style="grid-row:span 1"><div class="vp-title">★ All Three</div>${itemsHTML(T.all,'vp-all')}</div>
+      <div class="venn-panel vp-saxon"><div class="vp-title">⚔️ Saxon Only</div>${itemsHTML(T.saxon,'vp-saxon')}</div>
+      <div class="venn-panel vp-ms"><div class="vp-title">Maya &amp; Saxon</div>${itemsHTML(T.ms,'vp-ms')}</div>
+      <div class="venn-panel vp-mi"><div class="vp-title">Maya &amp; Islam</div>${itemsHTML(T.mi,'vp-mi')}</div>
+      <div class="venn-panel vp-si"><div class="vp-title">Saxon &amp; Islam</div>${itemsHTML(T.si,'vp-si')}</div>
+      <div class="venn-panel vp-islam" style="grid-column:2"><div class="vp-title">🌙 Islam Only</div>${itemsHTML(T.islam,'vp-islam')}</div>
+    </div>`;
+
+  vennSection.appendChild(container);
+  main.appendChild(vennSection);
+
+  // SUBMISSIONS TABLE
+  const section = document.createElement('div');
+  section.innerHTML = '<p class="section-title">◆ All Group Submissions</p>';
+  const grid = document.createElement('div');
+  grid.className = 'submissions-grid';
+
+  const parse = str => str ? str.split('|').map(s=>s.trim()).filter(Boolean) : [];
+  const colItems = (items, cls) => items.length
+    ? items.map(i=>`<div class="sub-col-item">${i}</div>`).join('')
+    : '<div class="sub-col-empty">—</div>';
+
+  [...rows].reverse().forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'submission-card';
+    const time = r.timestamp ? new Date(r.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : '—';
+    card.innerHTML = `
+      <div class="sub-header"><span class="sub-names">${r.names}</span><span class="sub-time">${time}</span></div>
+      <div class="sub-body">
+        <div class="sub-col maya"><div class="sub-col-label">🏺 Maya</div>${colItems(parse(r.mayaOnly))}</div>
+        <div class="sub-col saxon"><div class="sub-col-label">⚔️ Saxon</div>${colItems(parse(r.saxonOnly))}</div>
+        <div class="sub-col islam"><div class="sub-col-label">🌙 Islam</div>${colItems(parse(r.islamOnly))}</div>
+        <div class="sub-col ms"><div class="sub-col-label">M+S</div>${colItems(parse(r.mayaSaxon))}</div>
+        <div class="sub-col mi"><div class="sub-col-label">M+I</div>${colItems(parse(r.mayaIslam))}</div>
+        <div class="sub-col si"><div class="sub-col-label">S+I</div>${colItems(parse(r.saxonIslam))}</div>
+        <div class="sub-col all"><div class="sub-col-label">★ All</div>${colItems(parse(r.allThree))}</div>
+      </div>`;
+    grid.appendChild(card);
+  });
+  section.appendChild(grid);
+  main.appendChild(section);
+
+  const actions = document.createElement('div');
+  actions.className = 'actions';
+  actions.innerHTML = `<button class="btn-secondary" onclick="load()">↺ Refresh</button>`;
+  main.appendChild(actions);
+}
+
+load();
+setInterval(load, 30000);
+</script>
+</body>
+</html>

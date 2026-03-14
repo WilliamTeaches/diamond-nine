@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Venn Diagram · Hierarchy · Lesson 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold:    #c9a84c; --gold-lt: #e9c46a;
+    --stone:   #3d2b1f; --stone-dk:#140a04;
+    --cream:   #f5edd6; --sand:    #e8d5b0;
+    --jade:    #2d6a4f; --jade-lt: #40916c;
+    --terra:   #c1440e;
+    --maya:    #b8733a; --maya-lt: #e09050;
+    --saxon:   #4a7fa8; --saxon-lt:#7aaed6;
+    --islam:   #7a4fa8; --islam-lt:#b07ed4;
+    --all-lt:  #c4c450;
+  }
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  html, body {
+    width:100%; height:100%;
+    font-family:'Crimson Pro',Georgia,serif;
+    background:var(--stone-dk); color:var(--cream);
+    overflow:hidden; user-select:none; -webkit-user-select:none;
+    overscroll-behavior:none; /* prevent iOS rubber-banding */
+  }
+  body::before { content:''; position:fixed; inset:0; pointer-events:none;
+    background-image:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.05) 2px,rgba(0,0,0,.05) 4px),
+    repeating-linear-gradient(90deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px); }
+
+  .page { display:grid; grid-template-rows:auto 1fr auto; height:100vh; position:relative; z-index:1; }
+
+  /* ── HEADER ── */
+  header {
+    background:linear-gradient(180deg,#0d0604 0%,rgba(13,6,4,.85) 100%);
+    border-bottom:2px solid var(--gold); padding:9px 16px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; flex-shrink:0;
+  }
+  .hdr-left .eyebrow { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.18em; color:var(--gold); text-transform:uppercase; }
+  .hdr-left h1 { font-family:'Cinzel',serif; font-size:clamp(.85rem,2vw,1.15rem); font-weight:700; color:var(--gold-lt); }
+  .name-bar { display:flex; align-items:center; gap:7px; }
+  .name-bar label { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.12em; color:var(--gold); text-transform:uppercase; white-space:nowrap; }
+  .name-bar input { background:rgba(0,0,0,.4); border:1px solid rgba(201,168,76,.4); border-radius:4px;
+    color:var(--cream); font-family:'Crimson Pro',serif;
+    font-size:16px; /* must be 16px+ to prevent iOS auto-zoom */
+    padding:5px 9px; outline:none; width:170px; }
+  .name-bar input:focus { border-color:var(--gold); }
+  .name-bar input::placeholder { color:rgba(245,237,214,.3); font-style:italic; }
+
+  /* ── MAIN SPLIT ── */
+  .split { display:grid; grid-template-columns:1fr 1fr; gap:0; min-height:0; overflow:hidden; }
+
+  /* ── LEFT — ONE STATEMENT ── */
+  .statement-panel {
+    display:flex; flex-direction:column;
+    border-right:1px solid rgba(255,255,255,.08);
+    overflow:hidden;
+  }
+  .panel-label {
+    font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.16em; color:var(--gold); text-transform:uppercase;
+    padding:8px 14px; background:rgba(0,0,0,.35); border-bottom:1px solid rgba(201,168,76,.2); flex-shrink:0;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .progress-pill {
+    font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.05em;
+    color:rgba(232,213,176,.5); background:rgba(0,0,0,.3);
+    padding:2px 10px; border-radius:20px; border:1px solid rgba(255,255,255,.1);
+    white-space:nowrap;
+  }
+  .progress-pill.done { color:var(--jade-lt); border-color:rgba(64,145,108,.4); }
+
+  /* Progress bar */
+  .prog-bar { height:3px; background:rgba(201,168,76,.12); flex-shrink:0; }
+  .prog-fill { height:100%; background:linear-gradient(90deg,var(--jade-lt),var(--gold)); border-radius:0; transition:width .4s ease; }
+
+  /* Statement display area */
+  .stmt-area {
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:20px 24px; gap:24px;
+  }
+
+  /* Number badge */
+  .stmt-num {
+    font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.16em; color:rgba(201,168,76,.5);
+    text-transform:uppercase;
+  }
+
+  /* The statement itself */
+  .stmt-text {
+    font-size:clamp(1rem,2.2vw,1.3rem); line-height:1.55; color:var(--cream);
+    text-align:center; max-width:420px;
+    transition:opacity .25s;
+  }
+  .stmt-text.fade { opacity:0; }
+
+  /* Tick buttons — large for iPad */
+  .tick-row { display:flex; gap:10px; width:100%; max-width:420px; }
+  .tick-btn {
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:7px; padding:16px 8px; border-radius:12px; cursor:pointer;
+    border:2px solid transparent; transition:all .2s;
+    font-family:'Cinzel',serif; font-size:clamp(.65rem,1.3vw,.78rem); letter-spacing:.06em;
+    touch-action:manipulation; -webkit-tap-highlight-color:transparent;
+    background:rgba(255,255,255,.04); min-height:82px; /* good tap target */
+  }
+  .tick-icon { font-size:1.6rem; line-height:1; }
+  .tick-check {
+    font-size:1.3rem; opacity:0; transition:opacity .18s, transform .18s;
+    transform:scale(.6); position:absolute;
+  }
+  .tick-btn { position:relative; }
+  .tick-btn.active .tick-check { opacity:1; transform:scale(1); }
+
+  .tick-btn.maya  { border-color:rgba(224,144,80,.25); color:rgba(224,144,80,.65); }
+  .tick-btn.saxon { border-color:rgba(122,174,214,.25); color:rgba(122,174,214,.65); }
+  .tick-btn.islam { border-color:rgba(176,126,212,.25); color:rgba(176,126,212,.65); }
+
+  .tick-btn.maya.active  { border-color:var(--maya-lt);  background:rgba(184,115,58,.28); color:var(--maya-lt); }
+  .tick-btn.saxon.active { border-color:var(--saxon-lt); background:rgba(74,127,168,.28); color:var(--saxon-lt); }
+  .tick-btn.islam.active { border-color:var(--islam-lt); background:rgba(122,79,168,.28); color:var(--islam-lt); }
+
+  /* Nav row */
+  .nav-row {
+    display:flex; align-items:center; justify-content:center; gap:12px;
+    padding:12px 16px; flex-shrink:0; background:rgba(0,0,0,.2);
+    border-top:1px solid rgba(255,255,255,.06);
+  }
+  .nav-btn {
+    font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.1em; text-transform:uppercase;
+    padding:12px 26px; border:1px solid rgba(201,168,76,.3); border-radius:6px;
+    background:transparent; color:var(--sand); cursor:pointer; transition:all .18s;
+    touch-action:manipulation; -webkit-tap-highlight-color:transparent;
+    min-height:44px; /* Apple minimum tap target */
+  }
+  .nav-btn:active { border-color:var(--gold); color:var(--gold-lt); background:rgba(201,168,76,.08); }
+  .nav-btn.next { border-color:rgba(201,168,76,.5); color:var(--gold-lt); background:rgba(201,168,76,.07); }
+  .nav-btn.next:active { background:rgba(201,168,76,.18); }
+  .nav-btn:disabled { opacity:.25; cursor:default; }
+
+  /* Skip — deliberately small visually but has an adequate tap area */
+  .skip-btn {
+    font-family:'Cinzel',serif; font-size:.46rem; letter-spacing:.08em; text-transform:uppercase;
+    padding:12px 16px; /* generous tap area, tiny visual text */
+    border:none; background:transparent;
+    color:rgba(232,213,176,.2); cursor:pointer; touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent; transition:color .18s;
+    min-height:44px; display:flex; align-items:center;
+  }
+  .skip-btn:active { color:rgba(232,213,176,.5); }
+
+  /* ── RIGHT — VENN ── */
+  .venn-panel { display:flex; flex-direction:column; overflow:hidden; }
+  .venn-canvas { flex:1; position:relative; overflow:hidden; }
+  .venn-canvas svg { position:absolute; inset:0; width:100%; height:100%; }
+  .zone-list {
+    position:absolute; display:flex; flex-direction:column; gap:3px;
+    pointer-events:none; overflow:hidden; max-height:80px;
+  }
+  .zone-tag {
+    font-size:clamp(.48rem,.85vw,.6rem); line-height:1.25;
+    padding:2px 5px; border-radius:4px; white-space:normal; word-break:break-word;
+    animation:popIn .22s ease; text-align:center;
+  }
+  @keyframes popIn { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+  .zone-tag.maya-only  { background:rgba(184,115,58,.35); color:var(--maya-lt);  border:1px solid rgba(224,144,80,.3); }
+  .zone-tag.saxon-only { background:rgba(74,127,168,.35);  color:var(--saxon-lt); border:1px solid rgba(122,174,214,.3); }
+  .zone-tag.islam-only { background:rgba(122,79,168,.35);  color:var(--islam-lt); border:1px solid rgba(176,126,212,.3); }
+  .zone-tag.ms         { background:rgba(196,90,144,.3);   color:#e07ab0;        border:1px solid rgba(196,90,144,.3); }
+  .zone-tag.mi         { background:rgba(196,120,32,.3);   color:#e0a040;        border:1px solid rgba(196,120,32,.3); }
+  .zone-tag.si         { background:rgba(90,110,168,.3);   color:#90a8e0;        border:1px solid rgba(90,110,168,.3); }
+  .zone-tag.all        { background:rgba(138,138,42,.35);  color:var(--all-lt);  border:1px solid rgba(196,196,80,.4); }
+  .venn-hint { text-align:center; font-size:.6rem; font-style:italic; color:rgba(232,213,176,.25); padding:5px; flex-shrink:0; }
+
+  /* ── FOOTER ── */
+  footer {
+    background:rgba(0,0,0,.5); border-top:1px solid rgba(201,168,76,.2);
+    padding:7px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; flex-shrink:0;
+  }
+  .foot-btns { display:flex; gap:7px; }
+  .btn { font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:.08em; text-transform:uppercase;
+    padding:10px 18px; border:none; border-radius:5px; cursor:pointer; transition:all .2s; touch-action:manipulation; }
+  .btn-secondary { background:transparent; color:var(--sand); border:1px solid rgba(201,168,76,.3); }
+  .btn-secondary:active { border-color:var(--gold); }
+  .btn-primary { background:linear-gradient(135deg,var(--gold) 0%,#a8832a 100%); color:var(--stone); }
+  .btn-primary:disabled { opacity:.4; cursor:default; }
+
+  /* Completion screen */
+  .complete-overlay {
+    position:absolute; inset:0; background:rgba(20,10,4,.92); z-index:10;
+    display:none; flex-direction:column; align-items:center; justify-content:center;
+    gap:14px; text-align:center; padding:20px;
+  }
+  .complete-overlay.show { display:flex; }
+  .complete-icon { font-size:3rem; }
+  .complete-title { font-family:'Cinzel',serif; font-size:1.3rem; font-weight:700; color:var(--gold-lt); }
+  .complete-sub { font-size:.95rem; font-style:italic; color:var(--sand); }
+
+  #toast { position:fixed; bottom:16px; left:50%; transform:translateX(-50%) translateY(60px);
+    background:var(--jade); color:var(--cream); padding:10px 20px; border-radius:7px;
+    font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:.1em;
+    border:1px solid var(--jade-lt); box-shadow:0 8px 24px rgba(0,0,0,.6);
+    transition:transform .3s cubic-bezier(.34,1.56,.64,1); z-index:999; pointer-events:none; max-width:88vw; text-align:center; }
+  #toast.show { transform:translateX(-50%) translateY(0); }
+  #toast.error { background:var(--terra); border-color:#e06030; }
+
+  /* ── PORTRAIT / SMALL IPAD ── */
+  @media (max-width:700px), (orientation:portrait) and (max-width:1024px) {
+    .split { grid-template-columns:1fr; grid-template-rows:1fr auto; }
+    /* On portrait, statement takes top half, venn takes bottom */
+    .statement-panel { border-right:none; border-bottom:1px solid rgba(255,255,255,.08); }
+    .venn-panel { max-height:260px; }
+    .stmt-area { padding:14px 16px; gap:16px; }
+    .stmt-text { font-size:clamp(.95rem,3vw,1.15rem); }
+    .tick-btn { min-height:68px; padding:12px 6px; }
+    .tick-icon { font-size:1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="hdr-left">
+      <div class="eyebrow">Lesson 7 · Cat. 4 Application · Maya Enquiry</div>
+      <h1>Which civilisations does this describe?</h1>
+    </div>
+    <div class="name-bar">
+      <label for="pupil-name">Names:</label>
+      <input type="text" id="pupil-name" placeholder="Your names…" autocomplete="off">
+    </div>
+  </header>
+
+  <div class="split">
+
+    <!-- LEFT: ONE STATEMENT AT A TIME -->
+    <div class="statement-panel">
+      <div class="panel-label">
+        <span>◆ Tick all that apply</span>
+        <span class="progress-pill" id="prog-pill">1 of 18</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+
+      <div class="stmt-area">
+        <div class="stmt-num" id="stmt-num">Statement 1 of 18</div>
+        <div class="stmt-text" id="stmt-text"></div>
+
+        <div class="tick-row">
+          <button class="tick-btn maya"  id="tb-maya"  onclick="tickCiv('maya')">
+            <span class="tick-check">✓</span>
+            <span class="tick-icon">🏺</span>
+            Maya
+          </button>
+          <button class="tick-btn saxon" id="tb-saxon" onclick="tickCiv('saxon')">
+            <span class="tick-check">✓</span>
+            <span class="tick-icon">⚔️</span>
+            Anglo-Saxon
+          </button>
+          <button class="tick-btn islam" id="tb-islam" onclick="tickCiv('islam')">
+            <span class="tick-check">✓</span>
+            <span class="tick-icon">🌙</span>
+            Islam
+          </button>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="nav-btn" id="btn-prev" onclick="go(-1)" disabled>← Back</button>
+        <button class="skip-btn" onclick="skip()">skip</button>
+        <button class="nav-btn next" id="btn-next" onclick="go(1)">Next →</button>
+      </div>
+
+      <!-- Completion message inside left panel -->
+      <div class="complete-overlay" id="complete-overlay">
+        <div class="complete-icon">🏺</div>
+        <div class="complete-title">All done!</div>
+        <div class="complete-sub">Your Venn diagram is complete.<br>Check it on the right, then share with your class.</div>
+        <button class="nav-btn" onclick="reviewAll()">← Review answers</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: LIVE VENN -->
+    <div class="venn-panel">
+      <div class="panel-label">◆ Your Venn — updates as you go</div>
+      <div class="venn-canvas" id="venn-canvas">
+        <svg viewBox="0 0 400 340" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <circle cx="160" cy="130" r="120" fill="rgba(184,115,58,.12)" stroke="rgba(224,144,80,.5)"  stroke-width="1.5"/>
+          <circle cx="240" cy="130" r="120" fill="rgba(74,127,168,.12)"  stroke="rgba(122,174,214,.5)" stroke-width="1.5"/>
+          <circle cx="200" cy="218" r="120" fill="rgba(122,79,168,.12)"  stroke="rgba(176,126,212,.5)" stroke-width="1.5"/>
+          <text x="80"  y="55"  font-family="Cinzel,serif" font-size="11" font-weight="700" fill="rgba(224,144,80,.9)"  text-anchor="middle">🏺 Maya</text>
+          <text x="320" y="55"  font-family="Cinzel,serif" font-size="11" font-weight="700" fill="rgba(122,174,214,.9)" text-anchor="middle">⚔️ Saxon</text>
+          <text x="200" y="334" font-family="Cinzel,serif" font-size="11" font-weight="700" fill="rgba(176,126,212,.9)" text-anchor="middle">🌙 Islam</text>
+        </svg>
+        <div class="zone-list" id="zl-maya-only"  style="width:90px;left:3%;top:22%"></div>
+        <div class="zone-list" id="zl-saxon-only" style="width:90px;left:61%;top:22%"></div>
+        <div class="zone-list" id="zl-islam-only" style="width:90px;left:37%;top:72%"></div>
+        <div class="zone-list" id="zl-ms"         style="width:78px;left:31%;top:16%"></div>
+        <div class="zone-list" id="zl-mi"         style="width:78px;left:9%;top:52%"></div>
+        <div class="zone-list" id="zl-si"         style="width:78px;left:59%;top:52%"></div>
+        <div class="zone-list" id="zl-all"        style="width:78px;left:34%;top:43%"></div>
+      </div>
+      <div class="venn-hint">Statements appear here as you tick them</div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span style="font-size:.6rem;font-style:italic;color:rgba(232,213,176,.3)">Some statements may fit more than one civilisation</span>
+    <div class="foot-btns">
+      <button class="btn btn-secondary" onclick="resetAll()">↺ Reset</button>
+      <button class="btn btn-primary" id="submit-btn" onclick="submitVenn()" disabled>Share with class ◆</button>
+    </div>
+  </footer>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxWBxP4yFmbjHIPkrzo7hDlOyUVBYjAAVjwj0vrITiTRSdg6I26Jr6jQaiZBLEmR6U9/exec';
+
+const STATEMENTS = [
+  { id:'s1',  text:'Society was led by a powerful king or ruler.' },
+  { id:'s2',  text:'Nobles and lords owned land and had power over ordinary people.' },
+  { id:'s3',  text:'Farmers and workers made up the majority of the population.' },
+  { id:'s4',  text:'Religion shaped who had power and how society was organised.' },
+  { id:'s5',  text:'The ruler claimed their power came from God or the gods.' },
+  { id:'s6',  text:'Slaves were at the very bottom of society.' },
+  { id:'s7',  text:'The king was known as the Ahau and had a jaguar as an animal companion.' },
+  { id:'s8',  text:'Human sacrifice took place at temples to honour the gods.' },
+  { id:'s9',  text:'Priests were very powerful because they could read the stars and the calendar.' },
+  { id:'s10', text:'The country was divided into seven separate kingdoms ruled by tribal kings.' },
+  { id:'s11', text:'Lords called thanes owned land in exchange for fighting for the king.' },
+  { id:'s12', text:'Free peasants called ceorls could own land but owed service to the lord above them.' },
+  { id:'s13', text:'The ruler was called a Caliph and led a vast empire across many countries.' },
+  { id:'s14', text:'Scholars and doctors were highly respected and had high social status.' },
+  { id:'s15', text:'Christianity or Islam shaped laws, education and daily life.' },
+  { id:'s16', text:'Advanced knowledge of astronomy and mathematics was developed.' },
+  { id:'s17', text:'Merchants and traders were important and helped the civilisation grow wealthy.' },
+  { id:'s18', text:'Artisans and skilled workers created buildings, art and tools.' },
+];
+
+// State
+const ticks = {};
+STATEMENTS.forEach(s => { ticks[s.id] = { maya:false, saxon:false, islam:false }; });
+const skipped = new Set();
+let current = 0;
+
+// ── RENDER CURRENT STATEMENT ──────────────────────────────────────────
+function showStatement(idx) {
+  current = Math.max(0, Math.min(STATEMENTS.length - 1, idx));
+  const s = STATEMENTS[current];
+
+  document.getElementById('stmt-num').textContent  = `Statement ${current + 1} of ${STATEMENTS.length}`;
+  document.getElementById('stmt-text').textContent = s.text;
+
+  // Restore tick state
+  ['maya','saxon','islam'].forEach(c => {
+    const btn = document.getElementById(`tb-${c}`);
+    btn.classList.toggle('active', ticks[s.id][c]);
+  });
+
+  // Nav buttons
+  document.getElementById('btn-prev').disabled = current === 0;
+  document.getElementById('btn-next').textContent = current === STATEMENTS.length - 1 ? 'Finish ✓' : 'Next →';
+  document.getElementById('btn-next').classList.toggle('next', true);
+
+  // Progress
+  const pct = Math.round(current / STATEMENTS.length * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  const answered = STATEMENTS.filter(s => Object.values(ticks[s.id]).some(Boolean) || skipped.has(s.id)).length;
+  const pill = document.getElementById('prog-pill');
+  pill.textContent = `${answered} of ${STATEMENTS.length}`;
+  pill.classList.toggle('done', answered === STATEMENTS.length);
+
+  // Hide completion if navigating back
+  document.getElementById('complete-overlay').classList.remove('show');
+}
+
+function go(dir) {
+  if (current === STATEMENTS.length - 1 && dir === 1) {
+    finish(); return;
+  }
+  showStatement(current + dir);
+}
+
+function skip() {
+  skipped.add(STATEMENTS[current].id);
+  if (current < STATEMENTS.length - 1) showStatement(current + 1);
+  else finish();
+}
+
+function tickCiv(civ) {
+  const id = STATEMENTS[current].id;
+  ticks[id][civ] = !ticks[id][civ];
+  document.getElementById(`tb-${civ}`).classList.toggle('active', ticks[id][civ]);
+  skipped.delete(id); // no longer skipped if they've ticked
+  updateVenn();
+  updateSubmitBtn();
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = STATEMENTS.filter(s => Object.values(ticks[s.id]).some(Boolean)).length;
+  const pill = document.getElementById('prog-pill');
+  pill.textContent = `${answered} of ${STATEMENTS.length}`;
+  pill.classList.toggle('done', answered === STATEMENTS.length);
+  const pct = Math.round(current / STATEMENTS.length * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+}
+
+function finish() {
+  document.getElementById('complete-overlay').classList.add('show');
+  const answered = STATEMENTS.filter(s => Object.values(ticks[s.id]).some(Boolean)).length;
+  updateSubmitBtn();
+}
+
+function reviewAll() {
+  document.getElementById('complete-overlay').classList.remove('show');
+  showStatement(0);
+}
+
+function updateSubmitBtn() {
+  const answered = STATEMENTS.filter(s => Object.values(ticks[s.id]).some(Boolean)).length;
+  document.getElementById('submit-btn').disabled = answered < 4;
+}
+
+// ── VENN ──────────────────────────────────────────────────────────────
+function zoneFor(t) {
+  const m=t.maya, s=t.saxon, i=t.islam;
+  if (m&&s&&i)  return 'all';
+  if (m&&s)     return 'ms';
+  if (m&&i)     return 'mi';
+  if (s&&i)     return 'si';
+  if (m)        return 'maya-only';
+  if (s)        return 'saxon-only';
+  if (i)        return 'islam-only';
+  return 'none';
+}
+
+// Short label for Venn (truncated)
+function shortLabel(text) {
+  const words = text.replace(/[.!?]$/,'').split(' ');
+  if (words.length <= 6) return text.replace(/[.!?]$/,'');
+  return words.slice(0,5).join(' ') + '…';
+}
+
+function updateVenn() {
+  const zones = { 'maya-only':[], 'saxon-only':[], 'islam-only':[], ms:[], mi:[], si:[], all:[] };
+  STATEMENTS.forEach(s => {
+    const z = zoneFor(ticks[s.id]);
+    if (z !== 'none') zones[z].push(shortLabel(s.text));
+  });
+  Object.keys(zones).forEach(zone => {
+    const el = document.getElementById(`zl-${zone}`);
+    el.innerHTML = '';
+    zones[zone].slice(0, 4).forEach(text => {
+      const tag = document.createElement('div');
+      tag.className = `zone-tag ${zone}`;
+      tag.textContent = text;
+      el.appendChild(tag);
+    });
+    // Show count if more than 4
+    if (zones[zone].length > 4) {
+      const more = document.createElement('div');
+      more.className = `zone-tag ${zone}`;
+      more.style.opacity = '.6';
+      more.textContent = `+${zones[zone].length - 4} more`;
+      el.appendChild(more);
+    }
+  });
+}
+
+// ── RESET ─────────────────────────────────────────────────────────────
+function resetAll() {
+  STATEMENTS.forEach(s => { ticks[s.id] = { maya:false, saxon:false, islam:false }; });
+  skipped.clear();
+  showStatement(0);
+  updateVenn();
+  updateSubmitBtn();
+}
+
+// ── SUBMIT ────────────────────────────────────────────────────────────
+async function submitVenn() {
+  const name = document.getElementById('pupil-name').value.trim();
+  if (!name) { showToast('Please add your names first', true); return; }
+
+  const zones = { 'maya-only':[], 'saxon-only':[], 'islam-only':[], ms:[], mi:[], si:[], all:[] };
+  STATEMENTS.forEach(s => {
+    const z = zoneFor(ticks[s.id]);
+    if (z !== 'none') zones[z].push(s.text);
+  });
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true; btn.textContent = 'Sharing…';
+
+  const payload = {
+    names:      name,
+    mayaOnly:   zones['maya-only'].join(' | '),
+    saxonOnly:  zones['saxon-only'].join(' | '),
+    islamOnly:  zones['islam-only'].join(' | '),
+    mayaSaxon:  zones.ms.join(' | '),
+    mayaIslam:  zones.mi.join(' | '),
+    saxonIslam: zones.si.join(' | '),
+    allThree:   zones.all.join(' | '),
+    timestamp:  new Date().toISOString(),
+  };
+
+  try {
+    await fetch(SHEET_URL, { method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    showToast('✓ Shared with your class!', false);
+    btn.textContent = '✓ Shared';
+  } catch {
+    showToast('Could not share — check connection', true);
+    btn.disabled = false; btn.textContent = 'Share with class ◆';
+  }
+}
+
+function showToast(msg, err) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = err ? 'error' : '';
+  t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────
+showStatement(0);
+updateVenn();
+</script>
+</body>
+</html>
