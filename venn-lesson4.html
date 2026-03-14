@@ -187,14 +187,43 @@
 
   /* Completion screen */
   .complete-overlay {
-    position:absolute; inset:0; background:rgba(20,10,4,.92); z-index:10;
+    position:absolute; inset:0; background:rgba(20,10,4,.96); z-index:10;
     display:none; flex-direction:column; align-items:center; justify-content:center;
-    gap:14px; text-align:center; padding:20px;
+    gap:18px; text-align:center; padding:28px 24px;
   }
   .complete-overlay.show { display:flex; }
   .complete-icon { font-size:3rem; }
   .complete-title { font-family:'Cinzel',serif; font-size:1.3rem; font-weight:700; color:var(--gold-lt); }
-  .complete-sub { font-size:.95rem; font-style:italic; color:var(--sand); }
+  .complete-sub { font-size:.95rem; font-style:italic; color:var(--sand); line-height:1.6; }
+
+  /* Name input on submit screen — large and clear */
+  .submit-name-wrap {
+    display:flex; flex-direction:column; align-items:center; gap:8px; width:100%; max-width:340px;
+  }
+  .submit-name-label {
+    font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.14em;
+    color:var(--gold); text-transform:uppercase;
+  }
+  .submit-name-input {
+    width:100%; background:rgba(0,0,0,.5); border:1.5px solid rgba(201,168,76,.5);
+    border-radius:8px; color:var(--cream);
+    font-family:'Crimson Pro',serif; font-size:16px; /* 16px prevents iOS zoom */
+    padding:12px 16px; outline:none; text-align:center;
+    transition:border-color .2s;
+  }
+  .submit-name-input:focus { border-color:var(--gold-lt); }
+  .submit-name-input::placeholder { color:rgba(245,237,214,.3); font-style:italic; }
+
+  .submit-btn-big {
+    font-family:'Cinzel',serif; font-size:.75rem; letter-spacing:.12em; text-transform:uppercase;
+    padding:15px 36px; border:none; border-radius:8px; cursor:pointer; transition:all .2s;
+    background:linear-gradient(135deg,var(--gold) 0%,#a8832a 100%);
+    color:var(--stone); box-shadow:0 4px 16px rgba(201,168,76,.35);
+    touch-action:manipulation; min-height:52px; width:100%; max-width:340px;
+  }
+  .submit-btn-big:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 6px 22px rgba(201,168,76,.45); }
+  .submit-btn-big:disabled { opacity:.4; cursor:default; transform:none; }
+  .submit-feedback { font-size:.82rem; font-style:italic; color:var(--jade-lt); min-height:1.2em; }
 
   #toast { position:fixed; bottom:16px; left:50%; transform:translateX(-50%) translateY(60px);
     background:var(--jade); color:var(--cream); padding:10px 20px; border-radius:7px;
@@ -224,10 +253,6 @@
     <div class="hdr-left">
       <div class="eyebrow">Lesson 7 · Cat. 4 Application · Maya Enquiry</div>
       <h1>Which civilisations does this describe?</h1>
-    </div>
-    <div class="name-bar">
-      <label for="pupil-name">Names:</label>
-      <input type="text" id="pupil-name" placeholder="Your names…" autocomplete="off">
     </div>
   </header>
 
@@ -270,12 +295,17 @@
         <button class="nav-btn next" id="btn-next" onclick="go(1)">Next →</button>
       </div>
 
-      <!-- Completion message inside left panel -->
+      <!-- Completion: name input and submit -->
       <div class="complete-overlay" id="complete-overlay">
         <div class="complete-icon">🏺</div>
         <div class="complete-title">All done!</div>
-        <div class="complete-sub">Your Venn diagram is complete.<br>Check it on the right, then share with your class.</div>
-        <button class="nav-btn" onclick="reviewAll()">← Review answers</button>
+        <div class="complete-sub">Your Venn diagram is complete.<br>Add your names and share it with the class.</div>
+        <div class="submit-name-wrap">
+          <label class="submit-name-label" for="pupil-name">Your names</label>
+          <input class="submit-name-input" type="text" id="pupil-name" placeholder="e.g. Amara &amp; Theo" autocomplete="off">
+        </div>
+        <button class="submit-btn-big" id="submit-btn-big" onclick="submitVenn()">Share with class ◆</button>
+        <div class="submit-feedback" id="submit-feedback"></div>
       </div>
     </div>
 
@@ -306,10 +336,7 @@
 
   <footer>
     <span style="font-size:.6rem;font-style:italic;color:rgba(232,213,176,.3)">Some statements may fit more than one civilisation</span>
-    <div class="foot-btns">
-      <button class="btn btn-secondary" onclick="resetAll()">↺ Reset</button>
-      <button class="btn btn-primary" id="submit-btn" onclick="submitVenn()" disabled>Share with class ◆</button>
-    </div>
+    <button class="btn btn-secondary" onclick="resetAll()">↺ Reset</button>
   </footer>
 </div>
 
@@ -393,9 +420,8 @@ function tickCiv(civ) {
   const id = STATEMENTS[current].id;
   ticks[id][civ] = !ticks[id][civ];
   document.getElementById(`tb-${civ}`).classList.toggle('active', ticks[id][civ]);
-  skipped.delete(id); // no longer skipped if they've ticked
+  skipped.delete(id);
   updateVenn();
-  updateSubmitBtn();
   updateProgress();
 }
 
@@ -410,19 +436,10 @@ function updateProgress() {
 
 function finish() {
   document.getElementById('complete-overlay').classList.add('show');
-  const answered = STATEMENTS.filter(s => Object.values(ticks[s.id]).some(Boolean)).length;
-  updateSubmitBtn();
+  document.getElementById('pupil-name').focus();
 }
 
-function reviewAll() {
-  document.getElementById('complete-overlay').classList.remove('show');
-  showStatement(0);
-}
-
-function updateSubmitBtn() {
-  const answered = STATEMENTS.filter(s => Object.values(ticks[s.id]).some(Boolean)).length;
-  document.getElementById('submit-btn').disabled = answered < 4;
-}
+function updateSubmitBtn() { /* no-op — button now on submit screen */ }
 
 // ── VENN ──────────────────────────────────────────────────────────────
 function zoneFor(t) {
@@ -482,16 +499,22 @@ function resetAll() {
 // ── SUBMIT ────────────────────────────────────────────────────────────
 async function submitVenn() {
   const name = document.getElementById('pupil-name').value.trim();
-  if (!name) { showToast('Please add your names first', true); return; }
+  if (!name) {
+    document.getElementById('pupil-name').focus();
+    document.getElementById('submit-feedback').textContent = 'Please add your names first.';
+    return;
+  }
+
+  const btn = document.getElementById('submit-btn-big');
+  const fb  = document.getElementById('submit-feedback');
+  btn.disabled = true; btn.textContent = 'Sharing…';
+  fb.textContent = '';
 
   const zones = { 'maya-only':[], 'saxon-only':[], 'islam-only':[], ms:[], mi:[], si:[], all:[] };
   STATEMENTS.forEach(s => {
     const z = zoneFor(ticks[s.id]);
     if (z !== 'none') zones[z].push(s.text);
   });
-
-  const btn = document.getElementById('submit-btn');
-  btn.disabled = true; btn.textContent = 'Sharing…';
 
   const payload = {
     names:      name,
@@ -508,11 +531,11 @@ async function submitVenn() {
   try {
     await fetch(SHEET_URL, { method:'POST', mode:'no-cors',
       headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
-    showToast('✓ Shared with your class!', false);
-    btn.textContent = '✓ Shared';
+    btn.textContent = '✓ Shared!';
+    fb.textContent  = 'Your answers have been saved — well done!';
   } catch {
-    showToast('Could not share — check connection', true);
     btn.disabled = false; btn.textContent = 'Share with class ◆';
+    fb.textContent = 'Could not share — check your connection.';
   }
 }
 
