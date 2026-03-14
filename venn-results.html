@@ -160,6 +160,40 @@
     font-size:.78rem; font-style:italic; color:rgba(232,213,176,.5);
   }
 
+  /* ── CORRECT / INCORRECT INDICATORS ── */
+  .cm-verdict {
+    display:flex; align-items:flex-start; gap:10px;
+    padding:11px 14px; border-radius:8px; margin-bottom:12px;
+    font-size:.88rem; line-height:1.45;
+  }
+  .cm-verdict.correct {
+    background:rgba(45,106,79,.25); border:1px solid rgba(64,145,108,.45);
+    color:#74c99a;
+  }
+  .cm-verdict.incorrect {
+    background:rgba(193,68,14,.22); border:1px solid rgba(193,68,14,.45);
+    color:#f09070;
+  }
+  .cm-verdict.ambiguous {
+    background:rgba(201,168,76,.15); border:1px solid rgba(201,168,76,.4);
+    color:var(--gold-lt);
+  }
+  .cm-verdict-icon { font-size:1.15rem; flex-shrink:0; line-height:1.3; }
+  .cm-verdict-text { flex:1; }
+  .cm-correct-zone {
+    display:flex; align-items:center; gap:7px; margin-top:8px; flex-wrap:wrap;
+  }
+  .cm-correct-zone-label {
+    font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.1em;
+    color:rgba(232,213,176,.45); text-transform:uppercase;
+  }
+  .cm-correct-zone-pill {
+    font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.06em;
+    padding:3px 10px; border-radius:20px;
+    background:rgba(201,168,76,.18); border:1px solid rgba(201,168,76,.4);
+    color:var(--gold-lt);
+  }
+
   /* ── SUBMISSIONS ── */
   .submissions-grid { display:flex; flex-direction:column; gap:12px; }
   .submission-card { background:rgba(0,0,0,.3); border:1px solid rgba(201,168,76,.18); border-radius:10px; overflow:hidden; }
@@ -217,6 +251,27 @@ function splitCSV(line) {
   r.push(c.trim()); return r;
 }
 function normalise(s) { return s.toLowerCase().replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ').trim(); }
+
+// ── LOOKUP TABLES — top-level so openChipModal can access them ─────────
+const ZONE_LABELS = {
+  'maya-only':  '🏺 Maya Only',
+  'saxon-only': '⚔️ Anglo-Saxon Only',
+  'islam-only': '🌙 Islam Only',
+  'ms':         '🏺 Maya + ⚔️ Anglo-Saxon',
+  'mi':         '🏺 Maya + 🌙 Islam',
+  'si':         '⚔️ Anglo-Saxon + 🌙 Islam',
+  'all':        '★ All Three Civilisations',
+};
+const ZONE_CIVS = {
+  'maya-only':  ['maya'],
+  'saxon-only': ['saxon'],
+  'islam-only': ['islam'],
+  'ms':         ['maya','saxon'],
+  'mi':         ['maya','islam'],
+  'si':         ['saxon','islam'],
+  'all':        ['maya','saxon','islam'],
+};
+const CIV_LABELS = { maya:'🏺 Maya', saxon:'⚔️ Anglo-Saxon', islam:'🌙 Islam' };
 function tally(rows, field) {
   const c={};
   rows.forEach(r => {
@@ -281,26 +336,6 @@ function render(rows) {
   container.className = 'venn-container';
 
   // Helper — build overlay chips for a zone
-  const ZONE_LABELS = {
-    'maya-only':  '🏺 Maya Only',
-    'saxon-only': '⚔️ Anglo-Saxon Only',
-    'islam-only': '🌙 Islam Only',
-    'ms':         '🏺 Maya + ⚔️ Anglo-Saxon',
-    'mi':         '🏺 Maya + 🌙 Islam',
-    'si':         '⚔️ Anglo-Saxon + 🌙 Islam',
-    'all':        '★ All Three Civilisations',
-  };
-  const ZONE_CIVS = {
-    'maya-only':  ['maya'],
-    'saxon-only': ['saxon'],
-    'islam-only': ['islam'],
-    'ms':         ['maya','saxon'],
-    'mi':         ['maya','islam'],
-    'si':         ['saxon','islam'],
-    'all':        ['maya','saxon','islam'],
-  };
-  const CIV_LABELS = { maya:'🏺 Maya', saxon:'⚔️ Anglo-Saxon', islam:'🌙 Islam' };
-
   function overlayHTML(list, zone, max) {
     if (!list.length) return '';
     const chips = list.slice(0, max).map(({display, count}) => {
@@ -395,19 +430,59 @@ function render(rows) {
 load();
 setInterval(load, 30000);
 
+// ── ANSWER KEY ─────────────────────────────────────────────────────────
+// Keys are normalised statement text; values: correct zone + explanation
+const ANSWER_KEY = {
+  'society was led by a powerful king or ruler':
+    { zone:'all', explanation:'Every civilisation had a powerful ruler at the top — the Maya Ahau, Anglo-Saxon kings, and the Islamic Caliph.' },
+  'nobles and lords owned land and had power over ordinary people':
+    { zone:'all', explanation:'All three had a noble class beneath the ruler — Maya nobles, Saxon thanes, and Islamic emirs and governors.' },
+  'farmers and workers made up the majority of the population':
+    { zone:'all', explanation:'In all three civilisations, most people were farmers or labourers at the base of the social pyramid.' },
+  'religion shaped who had power and how society was organised':
+    { zone:'all', explanation:'Maya polytheism, Anglo-Saxon Christianity, and Islam all deeply shaped laws, power and daily life.' },
+  'the ruler claimed their power came from god or the gods':
+    { zone:'all', explanation:'The Maya Ahau claimed divine descent, Anglo-Saxon kings claimed Christian sanction, and the Caliph was God\'s deputy on Earth.' },
+  'slaves were at the very bottom of society':
+    { zone:'all', explanation:'Slavery existed in all three — Maya slaves, Anglo-Saxon thralls, and enslaved people in the Islamic Empire.' },
+  'the king was known as the ahau and had a jaguar as an animal companion':
+    { zone:'maya-only', explanation:'The title Ahau and the jaguar companion were unique to Maya kingship — no equivalent exists in Saxon or Islamic society.' },
+  'human sacrifice took place at temples to honour the gods':
+    { zone:'maya-only', explanation:'Ritual human sacrifice was a distinctive feature of Maya religion and not practised in Anglo-Saxon Christianity or Islam.' },
+  'priests were very powerful because they could read the stars and the calendar':
+    { zone:'maya-only', explanation:'Maya priests controlled the sacred calendar and astronomical knowledge, giving them unique political power not found in the same form in Saxon or Islamic society.' },
+  'the country was divided into seven separate kingdoms ruled by tribal kings':
+    { zone:'saxon-only', explanation:'The Anglo-Saxon Heptarchy (seven kingdoms) was unique to early medieval Britain — the Maya had city-states, and Islam united under a single Caliphate.' },
+  'lords called thanes owned land in exchange for fighting for the king':
+    { zone:'saxon-only', explanation:'The thane system of land-for-military-service was a distinctly Anglo-Saxon arrangement — not found in Maya or Islamic hierarchies.' },
+  'free peasants called ceorls could own land but owed service to the lord above them':
+    { zone:'saxon-only', explanation:'The ceorl was a specifically Anglo-Saxon social rank with no direct equivalent in Maya or Islamic society.' },
+  'the ruler was called a caliph and led a vast empire across many countries':
+    { zone:'islam-only', explanation:'Caliph is a title specific to Islamic leadership — meaning "successor" to the Prophet Muhammad — with no equivalent in Maya or Anglo-Saxon society.' },
+  'scholars and doctors were highly respected and had high social status':
+    { zone:'mi', explanation:'Both Maya and Islamic civilisations placed great value on scholars and priests with specialist knowledge, but Anglo-Saxon society was less focused on scholarly status.' },
+  'christianity or islam shaped laws education and daily life':
+    { zone:'si', explanation:'Both Anglo-Saxon Britain (Christian) and the Islamic Empire (Islam) were shaped by monotheistic religion. Maya society was shaped by polytheistic religion, so this doesn\'t apply in the same way.' },
+  'advanced knowledge of astronomy and mathematics was developed':
+    { zone:'mi', explanation:'Both the Maya (their extraordinary calendar) and the Golden Age of Islam (algebra, astronomy) were famous for scientific advances. Anglo-Saxon Britain was not known for this in the same way.' },
+  'merchants and traders were important and helped the civilisation grow wealthy':
+    { zone:'ms', explanation:'Trade was important to both Maya city-states and Anglo-Saxon kingdoms, but the Islamic Caliphate\'s wealth was even more defined by it — so this is debatable, but ms is the best fit.' },
+  'artisans and skilled workers created buildings art and tools':
+    { zone:'all', explanation:'All three civilisations had artisans — Maya temple-builders, Saxon craftspeople, and Islamic architects and scholars all produced remarkable work.' },
+};
+
 // ── CHIP MODAL ─────────────────────────────────────────────────────────
 function openChipModal(el) {
   const zone  = el.dataset.zone;
   const full  = el.dataset.full;
   const count = parseInt(el.dataset.count) || 1;
-  const total = document.querySelectorAll('.submission-card').length || 1;
 
   const modal   = document.getElementById('chip-modal');
   const overlay = document.getElementById('chip-overlay');
 
   modal.className = `chip-modal ${zone}`;
-  document.getElementById('cm-zone-label').textContent  = ZONE_LABELS[zone] || zone;
-  document.getElementById('cm-statement').textContent   = full;
+  document.getElementById('cm-zone-label').textContent = ZONE_LABELS[zone] || zone;
+  document.getElementById('cm-statement').textContent  = full;
 
   // Civilisation pills
   const civs = ZONE_CIVS[zone] || [];
@@ -417,11 +492,32 @@ function openChipModal(el) {
 
   // Count line
   const countEl = document.getElementById('cm-count');
-  if (count > 1) {
-    countEl.textContent = `${count} group${count!==1?'s':''} placed this here`;
-    countEl.style.display = 'block';
+  countEl.textContent = count > 1 ? `${count} groups placed this here` : '';
+  countEl.style.display = count > 1 ? 'block' : 'none';
+
+  // ── VERDICT ──────────────────────────────────────────────────────────
+  const verdictEl = document.getElementById('cm-verdict');
+  const key = normalise(full);
+  const answer = ANSWER_KEY[key];
+
+  if (!answer) {
+    // Statement not in key — might be a class-generated one
+    verdictEl.className = 'cm-verdict ambiguous';
+    verdictEl.innerHTML = `<span class="cm-verdict-icon">💬</span>
+      <span class="cm-verdict-text">This statement was written by the class — discuss whether you agree with where it's been placed.</span>`;
+  } else if (answer.zone === zone) {
+    verdictEl.className = 'cm-verdict correct';
+    verdictEl.innerHTML = `<span class="cm-verdict-icon">✓</span>
+      <span class="cm-verdict-text"><strong>Correct zone!</strong> ${answer.explanation}</span>`;
   } else {
-    countEl.style.display = 'none';
+    verdictEl.className = 'cm-verdict incorrect';
+    verdictEl.innerHTML = `<span class="cm-verdict-icon">✗</span>
+      <span class="cm-verdict-text"><strong>Not quite right.</strong> ${answer.explanation}
+        <div class="cm-correct-zone">
+          <span class="cm-correct-zone-label">Should be in:</span>
+          <span class="cm-correct-zone-pill">${ZONE_LABELS[answer.zone]}</span>
+        </div>
+      </span>`;
   }
 
   overlay.classList.add('open');
@@ -447,6 +543,7 @@ document.addEventListener('keydown', e => {
       <div class="cm-zone-label" id="cm-zone-label"></div>
       <div class="cm-statement"  id="cm-statement"></div>
       <hr class="cm-divider">
+      <div class="cm-verdict" id="cm-verdict"></div>
       <div class="cm-overlap-label">This applies to:</div>
       <div class="cm-civs" id="cm-civs"></div>
       <div class="cm-count" id="cm-count"></div>
