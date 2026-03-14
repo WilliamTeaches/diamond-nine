@@ -97,10 +97,9 @@
     display:grid;
     grid-template-columns:1fr 1fr 1fr;
     grid-template-rows:repeat(5,1fr);
-    gap:2pt;
+    gap:2.5pt;
     flex:0 0 auto;
-    /* Fixed height so it doesn't overflow */
-    height:82mm;
+    height:86mm;
   }
 
   /* Positions */
@@ -113,33 +112,33 @@
   .pos-7 { grid-column:1; grid-row:4; }
   .pos-8 { grid-column:3; grid-row:4; }
   .pos-9 { grid-column:2; grid-row:5; }
-  /* Row spacers to keep diamond shape */
-  .row-spacer-2l { grid-column:1; grid-row:1; }
-  .row-spacer-2r { grid-column:3; grid-row:1; }
-  .row-spacer-4m { grid-column:2; grid-row:4; }
-  .row-spacer-5l { grid-column:1; grid-row:5; }
-  .row-spacer-5r { grid-column:3; grid-row:5; }
+  /* Invisible spacers — no border, no background */
+  .row-spacer-2l { grid-column:1; grid-row:1; background:transparent; border:none; }
+  .row-spacer-2r { grid-column:3; grid-row:1; background:transparent; border:none; }
+  .row-spacer-4m { grid-column:2; grid-row:4; background:transparent; border:none; }
+  .row-spacer-5l { grid-column:1; grid-row:5; background:transparent; border:none; }
+  .row-spacer-5r { grid-column:3; grid-row:5; background:transparent; border:none; }
 
   .d-card {
-    border:0.5pt solid #ccc; border-radius:2pt; padding:2pt;
+    border:0.5pt solid #ccc; border-radius:3pt; padding:3pt 2pt;
     text-align:center; background:#fafafa;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
   }
   .d-card.top-card  { border-color:#c9a84c; background:#fffcf0; border-width:1pt; }
-  .d-card.bot-card  { background:#f5f5f5; }
+  .d-card.bot-card  { background:#f3f3f3; }
   .d-card.mid-card  { background:#f9f9f9; }
-  .d-pos  { font-family:'Cinzel',Georgia,serif; font-size:4.5pt; color:#ccc; line-height:1; margin-bottom:1pt; }
+  .d-pos  { font-family:'Cinzel',Georgia,serif; font-size:5pt; color:#ccc; line-height:1; margin-bottom:1.5pt; }
   .d-card.top-card .d-pos { color:#c9a84c; }
-  .d-icon { font-size:8pt; line-height:1; margin-bottom:1pt; }
-  .d-name { font-family:'Cinzel',Georgia,serif; font-size:5pt; letter-spacing:.02em; text-transform:uppercase; color:#1a1a2e; line-height:1.15; }
+  .d-icon { font-size:10pt; line-height:1; margin-bottom:1.5pt; }
+  .d-name { font-family:'Cinzel',Georgia,serif; font-size:6pt; letter-spacing:.02em; text-transform:uppercase; color:#1a1a2e; line-height:1.2; }
 
   /* Reason rows */
   .reasons-row { display:grid; grid-template-columns:1fr 1fr; gap:3pt; flex-shrink:0; }
-  .reason-box { border:0.5pt solid #e0e0e0; border-radius:2pt; padding:3pt 5pt; background:#fafafa; }
+  .reason-box { border:0.5pt solid #e0e0e0; border-radius:2pt; padding:4pt 6pt; background:#fafafa; }
   .reason-box.top-box { border-color:#c9a84c; background:#fffcf0; }
-  .reason-label { font-family:'Cinzel',Georgia,serif; font-size:5pt; text-transform:uppercase; letter-spacing:.06em; color:#bbb; margin-bottom:2pt; line-height:1; }
+  .reason-label { font-family:'Cinzel',Georgia,serif; font-size:5.5pt; text-transform:uppercase; letter-spacing:.06em; color:#bbb; margin-bottom:2pt; line-height:1; }
   .reason-label.gold { color:#a8832a; }
-  .reason-text { font-family:'TwinklCursive','Crimson Pro',Georgia,serif; font-size:9pt; line-height:1.45; color:#1a1a2e; }
+  .reason-text { font-family:'TwinklCursive','Crimson Pro',Georgia,serif; font-size:10pt; line-height:1.5; color:#1a1a2e; }
   .reason-text.empty { font-family:'Crimson Pro',Georgia,serif; font-size:7pt; color:#ccc; font-style:italic; }
 
   .no-data { font-family:'Crimson Pro',Georgia,serif; font-size:7.5pt; color:#ccc; font-style:italic; padding:4pt 0; }
@@ -152,14 +151,14 @@
     position:absolute;
     display:flex; flex-direction:column; align-items:center;
     font-family:'TwinklCursive','Crimson Pro',Georgia,serif;
-    font-size:5.5pt; line-height:1.3; text-align:center; color:#1a1a2e;
+    font-size:7pt; line-height:1.35; text-align:center; color:#1a1a2e;
     overflow:hidden;
   }
   .vzone-label {
     font-family:'Cinzel',Georgia,serif;
-    font-size:4.5pt; letter-spacing:.05em; text-transform:uppercase; color:#888; margin-bottom:1pt;
+    font-size:5pt; letter-spacing:.05em; text-transform:uppercase; color:#888; margin-bottom:1.5pt;
   }
-  .vzone-item { margin-bottom:0.5pt; }
+  .vzone-item { margin-bottom:1pt; }
 
   /* ── PRINT ── */
   @media print {
@@ -315,8 +314,9 @@ function buildDiamond(d9) {
   ];
 
   const cells = grid.map(g => {
-    if (!g) return ''; // null = spacer (handled by grid placement)
-    if (g.pos === undefined) return `<div class="${g.cls}"></div>`;
+    if (!g) return '';
+    // Spacers — plain invisible div, no card styling
+    if (g.pos === undefined) return `<div class="${g.cls}" style="background:transparent;border:none"></div>`;
     const name = positions[g.pos]||'';
     const icon = D9_ICONS[name]||'•';
     const posNum = g.pos+1;
@@ -355,10 +355,10 @@ function buildVenn(venn) {
     mi:items(venn.mayaislam||''), si:items(venn.saxonislam||''),
     al:items(venn.allthree  ||''),
   };
-  function txt(list,max=3) {
+  function txt(list) {
     if (!list.length) return '';
-    return list.slice(0,max).map(t=>`<div class="vzone-item">${t.length>30?t.slice(0,28)+'…':t}</div>`).join('')
-      +(list.length>max?`<div class="vzone-item" style="opacity:.45;font-family:'Crimson Pro'">+${list.length-max}</div>`:'');
+    // Show every item — no truncation, no "+N more"
+    return list.map(t=>`<div class="vzone-item">${t}</div>`).join('');
   }
 
   return `<div class="venn-wrap">
@@ -371,13 +371,13 @@ function buildVenn(venn) {
       <text x="180" y="172" font-family="Cinzel,serif" font-size="7" font-weight="700" fill="#7a4fa8" text-anchor="middle">🌙 Islam</text>
     </svg>
     <div class="venn-overlay">
-      <div class="vzone" style="left:1%;top:20%;width:20%;max-height:35%"><div class="vzone-label">Maya only</div>${txt(Z.mo)}</div>
-      <div class="vzone" style="left:38%;top:4%;width:24%;max-height:22%"><div class="vzone-label">Maya+Saxon</div>${txt(Z.ms,2)}</div>
-      <div class="vzone" style="right:1%;top:20%;width:20%;max-height:35%"><div class="vzone-label">Saxon only</div>${txt(Z.so)}</div>
-      <div class="vzone" style="left:9%;top:52%;width:22%;max-height:28%"><div class="vzone-label">Maya+Islam</div>${txt(Z.mi,2)}</div>
-      <div class="vzone" style="left:34%;top:40%;width:32%;max-height:30%"><div class="vzone-label">All three</div>${txt(Z.al,3)}</div>
-      <div class="vzone" style="right:9%;top:52%;width:22%;max-height:28%"><div class="vzone-label">Saxon+Islam</div>${txt(Z.si,2)}</div>
-      <div class="vzone" style="left:36%;top:74%;width:28%;max-height:22%"><div class="vzone-label">Islam only</div>${txt(Z.io,2)}</div>
+      <div class="vzone" style="left:1%;top:20%;width:20%"><div class="vzone-label">Maya only</div>${txt(Z.mo)}</div>
+      <div class="vzone" style="left:38%;top:4%;width:24%"><div class="vzone-label">Maya+Saxon</div>${txt(Z.ms)}</div>
+      <div class="vzone" style="right:1%;top:20%;width:20%"><div class="vzone-label">Saxon only</div>${txt(Z.so)}</div>
+      <div class="vzone" style="left:9%;top:52%;width:22%"><div class="vzone-label">Maya+Islam</div>${txt(Z.mi)}</div>
+      <div class="vzone" style="left:34%;top:40%;width:32%"><div class="vzone-label">All three</div>${txt(Z.al)}</div>
+      <div class="vzone" style="right:9%;top:52%;width:22%"><div class="vzone-label">Saxon+Islam</div>${txt(Z.si)}</div>
+      <div class="vzone" style="left:36%;top:74%;width:28%"><div class="vzone-label">Islam only</div>${txt(Z.io)}</div>
     </div>
   </div>`;
 }
