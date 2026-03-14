@@ -82,8 +82,8 @@
   .zone-chip.mi         { background:rgba(180,110,20,.45);  color:#f0c060; border:1px solid rgba(196,140,40,.4); }
   .zone-chip.si         { background:rgba(70,100,160,.45);  color:#90b8f0; border:1px solid rgba(90,120,190,.4); }
   .zone-chip.all        { background:rgba(120,120,30,.5);   color:#d8d860; border:1px solid rgba(180,180,60,.5); }
-  .zone-chip.more       { opacity:.6; font-style:italic; font-size:clamp(.45rem,.8vw,.6rem); cursor:default; }
-  .zone-chip.more:hover { transform:none; box-shadow:none; }
+  .zone-chip.more { opacity:.7; font-style:italic; font-size:clamp(.45rem,.8vw,.6rem); cursor:pointer; }
+  .zone-chip.more:hover { transform:scale(1.06); box-shadow:0 2px 10px rgba(0,0,0,.5); opacity:1; }
 
   /* ── CHIP DETAIL MODAL ── */
   .chip-overlay {
@@ -242,6 +242,22 @@
   <div class="status" id="status">Loading…</div>
 </main>
 
+<!-- CHIP DETAIL MODAL — must be in DOM before the script runs -->
+<div class="chip-overlay" id="chip-overlay">
+  <div class="chip-modal" id="chip-modal">
+    <button class="cm-close" onclick="closeChipModal()">✕ Close</button>
+    <div class="cm-body">
+      <div class="cm-zone-label" id="cm-zone-label"></div>
+      <div class="cm-statement"  id="cm-statement"></div>
+      <hr class="cm-divider">
+      <div class="cm-verdict" id="cm-verdict"></div>
+      <div class="cm-overlap-label">This applies to:</div>
+      <div class="cm-civs" id="cm-civs"></div>
+      <div class="cm-count" id="cm-count"></div>
+    </div>
+  </div>
+</div>
+
 <script>
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQNqr1dLDto9DsqIrTYAmK4aay6J6d9AHv0QHmJazO-I42Mx1uDhzKtb0YFvivALTnnfp74fE3hnJVc/pub?gid=0&single=true&output=csv';
 
@@ -339,15 +355,18 @@ function render(rows) {
   function overlayHTML(list, zone, max) {
     if (!list.length) return '';
     const chips = list.slice(0, max).map(({display, count}) => {
-      const label = display.length > 36 ? display.slice(0,34)+'…' : display;
-      const badge = count > 1 ? ` <em style="opacity:.65;font-size:.85em">(${count})</em>` : '';
-      // Store full text + count in data attrs for the modal
+      const label    = display.length > 36 ? display.slice(0,34)+'…' : display;
+      const badge    = count > 1 ? ` <em style="opacity:.65;font-size:.85em">(${count})</em>` : '';
       const safeText = display.replace(/"/g,'&quot;');
       return `<div class="zone-chip ${zone}" data-full="${safeText}" data-count="${count}" data-zone="${zone}" onclick="openChipModal(this)">${label}${badge}</div>`;
     }).join('');
-    const extra = list.length > max
-      ? `<div class="zone-chip ${zone} more">+${list.length - max} more</div>` : '';
-    return chips + extra;
+    if (list.length > max) {
+      // Encode the full list so the more chip can open a list view
+      const allJson = encodeURIComponent(JSON.stringify(list.map(({display,count})=>({display,count}))));
+      const extra = `<div class="zone-chip ${zone} more" data-zone="${zone}" data-all="${allJson}" onclick="openMoreModal(this)">+${list.length - max} more…</div>`;
+      return chips + extra;
+    }
+    return chips;
   }
 
   // Zone overlay positions as % of the 600×420 viewBox wrapper
@@ -527,6 +546,35 @@ function closeChipModal() {
   document.getElementById('chip-overlay').classList.remove('open');
 }
 
+// Opens chip modal in "full list" mode when +N more is tapped
+function openMoreModal(el) {
+  const zone  = el.dataset.zone;
+  const list  = JSON.parse(decodeURIComponent(el.dataset.all));
+  const modal   = document.getElementById('chip-modal');
+  const overlay = document.getElementById('chip-overlay');
+
+  modal.className = `chip-modal ${zone}`;
+  document.getElementById('cm-zone-label').textContent = ZONE_LABELS[zone] || zone;
+  document.getElementById('cm-statement').innerHTML =
+    list.map(({display, count}) =>
+      `<div style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,.07);cursor:pointer"
+        onclick="openChipModalDirect('${display.replace(/'/g,"\\'")}',${count},'${zone}')"
+       >${display}${count > 1 ? ` <em style="opacity:.6;font-size:.85em">(${count})</em>` : ''}</div>`
+    ).join('');
+
+  document.getElementById('cm-verdict').innerHTML = '';
+  document.getElementById('cm-civs').innerHTML = '';
+  document.getElementById('cm-count').textContent = `Tap any statement to see details`;
+  document.getElementById('cm-count').style.display = 'block';
+  overlay.classList.add('open');
+}
+
+// Called when tapping a statement inside the "more" list
+function openChipModalDirect(full, count, zone) {
+  const fakeEl = { dataset:{ full, count, zone } };
+  openChipModal(fakeEl);
+}
+
 document.getElementById('chip-overlay').addEventListener('click', e => {
   if (e.target === document.getElementById('chip-overlay')) closeChipModal();
 });
@@ -534,22 +582,6 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeChipModal();
 });
 </script>
-
-<!-- CHIP DETAIL MODAL -->
-<div class="chip-overlay" id="chip-overlay">
-  <div class="chip-modal" id="chip-modal">
-    <button class="cm-close" onclick="closeChipModal()">✕ Close</button>
-    <div class="cm-body">
-      <div class="cm-zone-label" id="cm-zone-label"></div>
-      <div class="cm-statement"  id="cm-statement"></div>
-      <hr class="cm-divider">
-      <div class="cm-verdict" id="cm-verdict"></div>
-      <div class="cm-overlap-label">This applies to:</div>
-      <div class="cm-civs" id="cm-civs"></div>
-      <div class="cm-count" id="cm-count"></div>
-    </div>
-  </div>
-</div>
 
 </body>
 </html>
