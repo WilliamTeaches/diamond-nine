@@ -36,22 +36,22 @@
   header {
     background: linear-gradient(180deg, #0d0604 0%, rgba(13,6,4,.8) 100%);
     border-bottom: 2px solid var(--gold);
-    padding: 12px 24px;
-    display: flex; align-items: center; justify-content: space-between; gap: 16px;
-    z-index: 10; flex-wrap: wrap;
+    padding: 10px 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    z-index: 10; flex-wrap: wrap; flex-shrink: 0;
   }
   .hdr-left .eyebrow {
-    font-family: 'Cinzel', serif; font-size: .62rem;
-    letter-spacing: .22em; color: var(--gold); text-transform: uppercase; margin-bottom: 3px;
+    font-family: 'Cinzel', serif; font-size: .55rem;
+    letter-spacing: .18em; color: var(--gold); text-transform: uppercase; margin-bottom: 2px;
   }
   .hdr-left h1 {
     font-family: 'Cinzel', serif;
-    font-size: clamp(1rem, 2.5vw, 1.55rem);
+    font-size: clamp(.9rem, 2.2vw, 1.4rem);
     font-weight: 700; color: var(--gold-lt); letter-spacing: .04em;
   }
-  .legend { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
-  .leg-item { display: flex; align-items: center; gap: 6px; font-size: .72rem; font-style: italic; color: var(--sand); white-space: nowrap; }
-  .leg-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+  .legend { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .leg-item { display: flex; align-items: center; gap: 5px; font-size: .65rem; font-style: italic; color: var(--sand); white-space: nowrap; }
+  .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   .leg-dot.general { background: var(--jade-lt); }
   .leg-dot.pakal   { background: var(--pakal); box-shadow: 0 0 7px var(--pakal); }
   .leg-dot.decline { background: var(--terra); }
@@ -185,8 +185,10 @@
     transform: translateY(24px) scale(.97);
     transition: transform .28s cubic-bezier(.34,1.4,.64,1);
     overflow: hidden;
+    max-height: 90vh; display: flex; flex-direction: column;
   }
   .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+  .modal-content { overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .modal.pakal-modal  { border-color: var(--pakal); box-shadow: 0 24px 70px rgba(0,0,0,.8), 0 0 40px rgba(233,196,106,.18); }
   .modal.decline-modal { border-color: var(--terra); }
   .modal.saxon-modal  { border-color: var(--saxon); box-shadow: 0 24px 70px rgba(0,0,0,.8), 0 0 30px rgba(122,174,214,.15); background: linear-gradient(145deg, #0e1e2e 0%, #08121c 100%); }
@@ -225,14 +227,15 @@
     color: rgba(232,213,176,.4);
   }
   .modal-close {
-    position: absolute; top: 12px; right: 14px;
-    background: rgba(0,0,0,.5); border: 1px solid rgba(201,168,76,.35);
-    color: var(--sand); border-radius: 5px; padding: 4px 12px;
+    position: absolute; top: 10px; right: 12px;
+    background: rgba(0,0,0,.6); border: 1px solid rgba(201,168,76,.35);
+    color: var(--sand); border-radius: 5px; padding: 8px 14px;
     cursor: pointer; font-family: 'Cinzel', serif; font-size: .6rem;
     letter-spacing: .1em; transition: all .2s; z-index: 10;
-    backdrop-filter: blur(4px);
+    touch-action: manipulation; min-height: 36px;
+    -webkit-tap-highlight-color: transparent;
   }
-  .modal-close:hover { border-color: var(--gold); color: var(--gold-lt); }
+  .modal-close:active { border-color: var(--gold); color: var(--gold-lt); }
 
   /* curiosity button inside main Maya modal */
   .modal-curiosity-btn {
@@ -250,26 +253,29 @@
   /* ── FOOTER ── */
   footer {
     background: rgba(0,0,0,.55); border-top: 1px solid rgba(201,168,76,.18);
-    padding: 8px 20px; display: flex; align-items: center;
-    justify-content: space-between; gap: 12px; z-index: 10; flex-wrap: wrap;
+    padding: 6px 12px; display: flex; align-items: center;
+    justify-content: space-between; gap: 6px; z-index: 10;
+    flex-shrink: 0;
   }
-  .hint { font-size: .7rem; font-style: italic; color: rgba(232,213,176,.38); }
-  .minimap-row { display: flex; align-items: center; gap: 8px; }
+  .hint { display: none; } /* hidden on small screens — not needed on touch */
+  .minimap-row { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; }
   .minimap-track {
-    width: 180px; height: 4px; background: rgba(201,168,76,.14);
-    border-radius: 2px; position: relative; cursor: pointer;
+    flex: 1; max-width: 180px; height: 5px; background: rgba(201,168,76,.14);
+    border-radius: 3px; position: relative; cursor: pointer; touch-action: none;
   }
-  .minimap-thumb { position: absolute; top: 0; height: 100%; background: var(--gold); border-radius: 2px; transition: left .08s, width .08s; }
-  .era-now { font-size: .65rem; font-style: italic; color: rgba(232,213,176,.38); white-space: nowrap; }
-  .nav-btns { display: flex; gap: 8px; }
+  .minimap-thumb { position: absolute; top: 0; height: 100%; background: var(--gold); border-radius: 3px; transition: left .08s, width .08s; }
+  .era-now { font-size: .6rem; font-style: italic; color: rgba(232,213,176,.4); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px; }
+  .nav-btns { display: flex; gap: 4px; }
   .nav-btn {
-    font-family: 'Cinzel', serif; font-size: .65rem; letter-spacing: .08em;
-    text-transform: uppercase; padding: 8px 20px;
-    background: transparent; border: 1px solid rgba(201,168,76,.32);
-    color: var(--sand); border-radius: 5px; cursor: pointer; transition: all .2s;
+    font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .05em;
+    text-transform: uppercase; padding: 10px 12px;
+    background: rgba(255,255,255,.05); border: 1px solid rgba(201,168,76,.3);
+    color: var(--sand); border-radius: 6px; cursor: pointer; transition: all .15s;
+    touch-action: manipulation; min-height: 42px; white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
   }
-  .nav-btn:hover { border-color: var(--gold); color: var(--gold-lt); }
-  .zoom-btn { min-width: 36px; padding: 8px 10px; font-size: 1.1rem; font-family: monospace; letter-spacing: 0; }
+  .nav-btn:active { background: rgba(201,168,76,.18); border-color: var(--gold); color: var(--gold-lt); }
+  .zoom-btn { min-width: 42px; padding: 10px; font-size: 1.15rem; font-family: monospace; letter-spacing: 0; }
 
   /* ── CENTURY NOTCHES ── */
   .notch {
@@ -294,73 +300,73 @@
     background: rgba(0,0,0,.55);
     border-top: 1px solid rgba(255,255,255,.08);
     overflow: hidden;
+    flex-shrink: 0;
   }
   .ribbon-row {
     position: relative;
-    height: 22px;
+    height: 32px; /* bigger tap target */
     overflow: hidden;
   }
   .ribbon-row + .ribbon-row {
     border-top: 1px solid rgba(255,255,255,.06);
   }
-  /* inner canvas that moves with timeline scroll */
   .ribbon-canvas {
     position: absolute; top: 0; left: 0;
     height: 100%;
-    pointer-events: none; /* chips handle their own events */
+    pointer-events: none;
   }
   .ribbon-track-label {
     position: sticky; left: 0; z-index: 3;
     display: inline-flex; align-items: center;
-    font-family: 'Cinzel', serif; font-size: .48rem; letter-spacing: .12em;
-    text-transform: uppercase; padding: 0 8px;
-    background: rgba(0,0,0,.7);
+    font-family: 'Cinzel', serif; font-size: .55rem; letter-spacing: .1em;
+    text-transform: uppercase; padding: 0 10px;
+    background: rgba(0,0,0,.8);
     height: 100%;
     white-space: nowrap; pointer-events: none;
-    border-right: 1px solid rgba(255,255,255,.07);
+    border-right: 1px solid rgba(255,255,255,.1);
+    min-width: 110px;
   }
-  .ribbon-row.saxon .ribbon-track-label { color: rgba(122,174,214,.65); }
-  .ribbon-row.islam .ribbon-track-label { color: rgba(176,126,212,.65); }
+  .ribbon-row.saxon .ribbon-track-label { color: rgba(122,174,214,.8); }
+  .ribbon-row.islam .ribbon-track-label { color: rgba(176,126,212,.8); }
 
-  /* individual chips — positioned absolutely on ribbon-canvas */
   .ribbon-chip {
     position: absolute; top: 50%; transform: translateY(-50%);
-    display: inline-flex; align-items: center; gap: 4px;
-    padding: 2px 7px;
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 9px;
     border-radius: 20px; border: 1px solid transparent;
     cursor: pointer; white-space: nowrap;
     transition: all .2s; pointer-events: auto;
     font-family: 'Cinzel', serif;
+    touch-action: manipulation;
+    min-height: 24px; /* ensure tapable */
   }
   .ribbon-row.saxon .ribbon-chip {
-    color: var(--saxon); border-color: rgba(122,174,214,.3);
-    background: rgba(122,174,214,.08);
+    color: var(--saxon); border-color: rgba(122,174,214,.35);
+    background: rgba(122,174,214,.1);
   }
   .ribbon-row.islam .ribbon-chip {
-    color: var(--islam); border-color: rgba(176,126,212,.3);
-    background: rgba(176,126,212,.08);
+    color: var(--islam); border-color: rgba(176,126,212,.35);
+    background: rgba(176,126,212,.1);
   }
-  .ribbon-row.saxon .ribbon-chip:hover { background: rgba(122,174,214,.22); border-color: var(--saxon); }
-  .ribbon-row.islam .ribbon-chip:hover { background: rgba(176,126,212,.22); border-color: var(--islam); }
+  .ribbon-row.saxon .ribbon-chip:hover { background: rgba(122,174,214,.25); border-color: var(--saxon); }
+  .ribbon-row.islam .ribbon-chip:hover { background: rgba(176,126,212,.25); border-color: var(--islam); }
   .ribbon-chip.expanded {
-    background: rgba(0,0,0,.7) !important;
+    background: rgba(0,0,0,.75) !important;
     z-index: 5; border-color: currentColor !important;
   }
 
-  .chip-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .chip-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
   .ribbon-row.saxon .chip-dot { background: var(--saxon); }
   .ribbon-row.islam .chip-dot { background: var(--islam); }
 
-  .chip-date { font-size: .5rem; letter-spacing: .06em; }
+  .chip-date { font-size: .55rem; letter-spacing: .05em; }
   .chip-title {
-    font-size: .5rem; letter-spacing: .04em;
+    font-size: .55rem; letter-spacing: .03em;
     max-width: 0; overflow: hidden;
     transition: max-width .3s ease, opacity .3s ease, margin .3s ease;
     opacity: 0; margin-left: 0;
   }
-  .ribbon-chip.expanded .chip-title {
-    max-width: 200px; opacity: 1; margin-left: 3px;
-  }
+  .ribbon-chip.expanded .chip-title { max-width: 200px; opacity: 1; margin-left: 3px; }
 
   /* ── CURIOSITY MODAL ── */
   .curiosity-overlay {
@@ -378,8 +384,20 @@
     box-shadow: 0 20px 60px rgba(0,0,0,.8), 0 0 30px rgba(176,126,212,.12);
     transform: translateY(20px) scale(.97);
     transition: transform .25s cubic-bezier(.34,1.4,.64,1);
-    overflow: hidden;
+    overflow: hidden; max-height: 88vh;
+    display: flex; flex-direction: column;
   }
+  .cm-body { padding: 16px 20px 20px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .cm-close {
+    position: absolute; top: 8px; right: 10px;
+    background: rgba(0,0,0,.6); border: 1px solid rgba(255,255,255,.2);
+    color: var(--sand); border-radius: 5px; padding: 8px 12px;
+    cursor: pointer; font-family: 'Cinzel', serif; font-size: .6rem;
+    letter-spacing: .1em; z-index: 10; transition: all .2s;
+    touch-action: manipulation; min-height: 36px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .cm-close:active { border-color: var(--gold); color: var(--gold-lt); }
   .curiosity-modal.saxon-cm {
     background: linear-gradient(145deg, #0e1e2e 0%, #08121c 100%);
     border-color: var(--saxon);
@@ -387,13 +405,12 @@
   }
   .curiosity-overlay.open .curiosity-modal { transform: translateY(0) scale(1); }
 
-  .cm-hero { width: 100%; height: 160px; object-fit: cover; display: block; }
+  .cm-hero { width: 100%; height: 140px; object-fit: cover; display: block; flex-shrink: 0; }
   .cm-hero-placeholder {
-    width: 100%; height: 160px;
+    width: 100%; height: 140px; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
     font-size: 3rem; background: rgba(0,0,0,.4);
   }
-  .cm-body { padding: 18px 22px 22px; }
   .cm-eyebrow {
     font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .16em;
     text-transform: uppercase; margin-bottom: 4px;
