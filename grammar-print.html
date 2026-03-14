@@ -84,34 +84,26 @@
   /* School header bar */
   .sheet-header {
     display:flex; align-items:flex-start; justify-content:space-between;
-    border-bottom:2.5px solid #1a1a2e;
-    padding-bottom:10px; margin-bottom:14px;
-    gap:10px;
+    border-bottom:2px solid #1a1a2e;
+    padding-bottom:10px; margin-bottom:14px; gap:10px;
   }
-  .sheet-school { font-size:7.5pt; color:#555; line-height:1.4; }
   .sheet-title { font-family:'Cinzel',Georgia,serif; font-size:13pt; font-weight:700; color:#1a1a2e; letter-spacing:.03em; }
   .sheet-subtitle { font-family:'Cinzel',Georgia,serif; font-size:8pt; color:#555; letter-spacing:.08em; text-transform:uppercase; margin-top:2px; }
   .sheet-name-box {
     border:1.5px solid #1a1a2e; border-radius:4px; padding:6px 14px;
     min-width:180px; text-align:center;
   }
-  .sheet-name-label { font-size:7pt; color:#777; text-transform:uppercase; letter-spacing:.1em; }
-  .sheet-name { font-family:'Cinzel',Georgia,serif; font-size:12pt; font-weight:700; color:#1a1a2e; margin-top:2px; }
+  .sheet-name-label { font-size:7pt; color:#777; text-transform:uppercase; letter-spacing:.1em; font-family:'Cinzel',Georgia,serif; }
+  .sheet-name { font-family:'TwinklCursive','Crimson Pro',Georgia,serif; font-size:13pt; color:#1a1a2e; margin-top:3px; }
 
   /* Section blocks */
-  .section {
-    margin-bottom:14px;
-    border:1px solid #ddd; border-radius:5px;
-    overflow:hidden;
-  }
+  .section { margin-bottom:14px; border:1px solid #ddd; border-radius:5px; overflow:hidden; }
   .section-header {
-    background:#1a1a2e; color:#fff;
-    padding:5px 12px;
-    display:flex; align-items:center; justify-content:space-between;
-    gap:8px;
+    padding:5px 12px; border-bottom:1px solid #ddd;
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
   }
-  .section-title { font-family:'Cinzel',Georgia,serif; font-size:8pt; letter-spacing:.1em; text-transform:uppercase; }
-  .section-score { font-family:'Cinzel',Georgia,serif; font-size:8pt; letter-spacing:.06em; opacity:.8; }
+  .section-title { font-family:'Cinzel',Georgia,serif; font-size:8pt; letter-spacing:.1em; text-transform:uppercase; color:#1a1a2e; }
+  .section-score { font-family:'Cinzel',Georgia,serif; font-size:8pt; color:#555; }
   .section-body { padding:10px 12px; }
 
   /* Quiz grid */
@@ -373,9 +365,8 @@ function buildSheet(name, quiz, sort, upgrade) {
   sheet.innerHTML = `
     <div class="sheet-header">
       <div>
-        <div class="sheet-school">Wallscourt Farm Academy · Year 4 · Maya Enquiry</div>
         <div class="sheet-title">Grammar Lesson 4 — Present Perfect Tense</div>
-        <div class="sheet-subtitle">Writing Skills · ${now}</div>
+        <div class="sheet-subtitle">${now}</div>
       </div>
       <div class="sheet-name-box">
         <div class="sheet-name-label">Learner</div>
@@ -404,11 +395,6 @@ function buildSheet(name, quiz, sort, upgrade) {
         <span class="section-title">⬆️ Upgrade It — Rewrite in Present Perfect</span>
       </div>
       <div class="section-body">${upgradeHTML}</div>
-    </div>
-
-    <div class="sheet-footer">
-      <span>williamteaches.github.io/diamond-nine</span>
-      <span>Lesson 4 · Grammar · Present Perfect Tense</span>
     </div>`;
 
   return sheet;

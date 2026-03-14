@@ -74,14 +74,23 @@
     font-family: 'Cinzel', serif; font-size: .7rem;
     letter-spacing: .15em; color: var(--gold); text-transform: uppercase; white-space: nowrap;
   }
-  .name-bar input {
-    background: rgba(0,0,0,.4);
+  .name-bar select {
+    background: rgba(0,0,0,.5);
     border: 1px solid rgba(201,168,76,.4); border-radius: 5px;
     color: var(--cream); font-family: 'Crimson Pro', serif; font-size: 1rem;
-    padding: 6px 12px; outline: none; width: min(260px, 100%); transition: border-color .2s;
+    padding: 7px 12px; outline: none; width: min(320px, 100%);
+    transition: border-color .2s; cursor: pointer;
+    -webkit-appearance: none; appearance: none;
   }
-  .name-bar input:focus { border-color: var(--gold); }
-  .name-bar input::placeholder { color: rgba(245,237,214,.3); font-style: italic; }
+  .name-bar select:focus { border-color: var(--gold); }
+  .name-bar select option { background: #1e0f07; color: var(--cream); }
+  .name-bar .reload-btn {
+    font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .1em; text-transform: uppercase;
+    padding: 7px 12px; background: transparent; border: 1px solid rgba(201,168,76,.3);
+    color: rgba(232,213,176,.5); border-radius: 5px; cursor: pointer;
+    touch-action: manipulation; transition: all .18s; white-space: nowrap;
+  }
+  .name-bar .reload-btn:active { border-color: var(--gold); color: var(--gold-lt); }
 
   .instructions {
     position: relative; z-index: 1;
@@ -286,7 +295,10 @@
 
 <div class="name-bar">
   <label for="pupil-name">Trio names:</label>
-  <input type="text" id="pupil-name" placeholder="e.g. Aisha, Marcus, Priya" autocomplete="off">
+  <select id="pupil-name">
+    <option value="">— Select your trio —</option>
+  </select>
+  <button class="reload-btn" onclick="loadTrioNames()" title="Reload names from Venn activity">↺ Load names</button>
 </div>
 
 <div class="instructions">
@@ -341,6 +353,46 @@
 // ── Replace this with your Google Apps Script Web App URL ──────────────
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyaD7QsCtpgvAnIlzAScmaSxIGTh_kH_Bx65heokDInP808n6Ygp8i1yTAiKjnA1xvF/exec';
 // ──────────────────────────────────────────────────────────────────────
+
+// Venn diagram CSV — used to populate trio name dropdown
+const VENN_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQNqr1dLDto9DsqIrTYAmK4aay6J6d9AHv0QHmJazO-I42Mx1uDhzKtb0YFvivALTnnfp74fE3hnJVc/pub?gid=0&single=true&output=csv';
+
+function splitCSV(line) {
+  const r=[]; let c='',q=false;
+  for(const ch of line){if(ch==='"'){q=!q;}else if(ch===','&&!q){r.push(c.trim());c='';}else{c+=ch;}}
+  r.push(c.trim()); return r;
+}
+
+async function loadTrioNames() {
+  const sel = document.getElementById('pupil-name');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">Loading…</option>';
+  try {
+    const res   = await fetch(VENN_CSV + '&t=' + Date.now());
+    const text  = await res.text();
+    const lines = text.trim().split('\n').filter(l=>l.trim());
+    // Collect unique names from column 1 (Names), newest first
+    const seen = new Set();
+    const names = [];
+    lines.slice(1).reverse().forEach(l => {
+      const name = splitCSV(l)[1]?.trim();
+      if (name && !seen.has(name)) { seen.add(name); names.push(name); }
+    });
+    sel.innerHTML = '<option value="">— Select your trio —</option>';
+    names.forEach(n => {
+      const opt = document.createElement('option');
+      opt.value = n; opt.textContent = n;
+      if (n === current) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    if (!names.length) sel.innerHTML = '<option value="">No trios found — complete Venn first</option>';
+  } catch {
+    sel.innerHTML = '<option value="">Could not load — tap ↺ to retry</option>';
+  }
+}
+
+// Load on startup
+loadTrioNames();
 
 const CARDS = [
   { id:'king',    name:'The King',          icon:'👑' },
@@ -521,8 +573,9 @@ function render() {
 
 // ── SUBMIT ────────────────────────────────────────────────────────────
 async function submitDiamond() {
-  const name = document.getElementById('pupil-name').value.trim();
-  if (!name)                         { showToast('Please enter at least one name first', true); return; }
+  const sel  = document.getElementById('pupil-name');
+  const name = sel.value.trim();
+  if (!name)                         { showToast('Please select your trio names first', true); return; }
   if (Object.keys(slots).length < 9) { showToast(`Place all 9 cards first (${9-Object.keys(slots).length} remaining)`, true); return; }
   const topReason = document.getElementById('top-reason').value.trim();
   if (!topReason)                    { showToast('Add your reason for the top card first', true); return; }
