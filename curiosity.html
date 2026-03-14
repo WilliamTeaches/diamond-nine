@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Curiosity Results · Timeline</title>
+<title>Learner Curiosity · Maya Enquiry</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -12,13 +12,11 @@
     --stone:   #3d2b1f; --stone-dk:#1e0f07;
     --cream:   #f5edd6; --sand:    #e8d5b0;
     --jade:    #2d6a4f; --jade-lt: #40916c;
-    --saxon:   #7aaed6; --islam:   #b07ed4;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Crimson Pro', Georgia, serif;
-    background: var(--stone-dk); color: var(--cream);
-    min-height: 100vh;
+    background: var(--stone-dk); color: var(--cream); min-height: 100vh;
   }
   body::before {
     content: ''; position: fixed; inset: 0; pointer-events: none;
@@ -34,11 +32,11 @@
     display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
   }
   .eyebrow { font-family: 'Cinzel', serif; font-size: .62rem; letter-spacing: .22em; color: var(--gold); text-transform: uppercase; margin-bottom: 3px; }
-  h1 { font-family: 'Cinzel', serif; font-size: clamp(1rem,2.5vw,1.6rem); font-weight: 700; color: var(--gold-lt); }
+  h1 { font-family: 'Cinzel', serif; font-size: clamp(1rem,2.5vw,1.55rem); font-weight: 700; color: var(--gold-lt); }
   .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--jade-lt); animation: pulse 2s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
 
-  main { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 28px 20px 60px; display: flex; flex-direction: column; gap: 28px; }
+  main { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 28px 20px 60px; display: flex; flex-direction: column; gap: 28px; }
 
   .stat-row { display: flex; gap: 14px; flex-wrap: wrap; }
   .stat-card { background: rgba(0,0,0,.3); border: 1px solid rgba(201,168,76,.3); border-radius: 10px; padding: 16px 24px; flex: 1 1 140px; text-align: center; }
@@ -47,15 +45,9 @@
 
   .section-title { font-family: 'Cinzel', serif; font-size: .72rem; letter-spacing: .18em; color: var(--gold); text-transform: uppercase; padding-bottom: 8px; border-bottom: 1px solid rgba(201,168,76,.3); margin-bottom: 18px; }
 
-  .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  @media(max-width:640px){ .charts-row { grid-template-columns: 1fr; } }
-  .chart-box { background: rgba(0,0,0,.3); border: 1px solid rgba(201,168,76,.2); border-radius: 10px; padding: 18px; }
-  .chart-box.saxon-box { border-color: rgba(122,174,214,.35); }
-  .chart-box.islam-box { border-color: rgba(176,126,212,.35); }
-  .chart-box h3 { font-family: 'Cinzel', serif; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 14px; text-align: center; }
-  .chart-box.saxon-box h3 { color: var(--saxon); }
-  .chart-box.islam-box h3 { color: var(--islam); }
-  canvas { max-height: 280px; }
+  .chart-box { background: rgba(0,0,0,.3); border: 1px solid rgba(201,168,76,.25); border-radius: 10px; padding: 20px; }
+  .chart-box h3 { font-family: 'Cinzel', serif; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold-lt); margin-bottom: 16px; text-align: center; }
+  .chart-container { position: relative; min-height: 300px; }
 
   .table-wrap { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; font-size: .88rem; }
@@ -66,21 +58,18 @@
 
   .actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
   button { font-family: 'Cinzel', serif; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; padding: 12px 28px; border: none; border-radius: 5px; cursor: pointer; transition: all .2s; }
-  .btn-primary { background: linear-gradient(135deg, var(--gold) 0%, #a8832a 100%); color: var(--stone); }
-  .btn-primary:hover { transform: translateY(-1px); }
   .btn-secondary { background: transparent; color: var(--sand); border: 1px solid rgba(201,168,76,.35); }
   .btn-secondary:hover { border-color: var(--gold); color: var(--gold-lt); }
 
-  .status { text-align: center; padding: 50px 20px; font-size: 1rem; font-style: italic; color: var(--sand); }
-  .progress-bar { height: 3px; background: rgba(201,168,76,.15); border-radius: 2px; overflow: hidden; max-width: 400px; margin: 10px auto 0; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--jade-lt), var(--gold)); border-radius: 2px; transition: width .4s; }
+  .status { text-align: center; padding: 60px 20px; font-size: 1rem; font-style: italic; color: var(--sand); }
 </style>
 </head>
 <body>
+
 <header>
   <div>
     <div class="eyebrow">Teacher View · Maya Enquiry · Year 4</div>
-    <h1>Learner Curiosity — What Do They Want to Explore?</h1>
+    <h1>Learner Curiosity — What Do You Want to Explore?</h1>
   </div>
   <div class="live-dot" title="Updates every 30 seconds"></div>
 </header>
@@ -90,11 +79,9 @@
 </main>
 
 <script>
-// ── Replace with your Google Apps Script curiosity sheet URL ──────────
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQf1XDI7qHdY7anNxChesR1fLE5Wod5PAZhyaZh1qvaUB65ZuBzxZVKiB8vIP7psFDQ4f2vGR0Ngsn8/pub?gid=0&single=true&output=csv';
-// ─────────────────────────────────────────────────────────────────────
 
-let saxonChart = null, islamChart = null;
+let mainChart = null;
 
 function splitCSV(line) {
   const r = []; let c = '', q = false;
@@ -106,11 +93,10 @@ function splitCSV(line) {
 
 async function load() {
   try {
-    const res  = await fetch(CSV_URL + '&t=' + Date.now());
-    const text = await res.text();
+    const res   = await fetch(CSV_URL + '&t=' + Date.now());
+    const text  = await res.text();
     const lines = text.trim().split('\n').filter(l => l.trim());
     if (lines.length < 2) { render([]); return; }
-    // Columns: Timestamp, Topic, Period, Date
     const rows = lines.slice(1).map(l => {
       const c = splitCSV(l);
       return { timestamp: c[0]||'', topic: c[1]||'', period: c[2]||'', date: c[3]||'' };
@@ -118,7 +104,8 @@ async function load() {
     render(rows);
     document.getElementById('status')?.remove();
   } catch(e) {
-    document.getElementById('status').textContent = 'Could not load — check the sheet is published as CSV.';
+    const s = document.getElementById('status');
+    if (s) s.textContent = 'Could not load — check the sheet is published as CSV.';
   }
 }
 
@@ -131,93 +118,97 @@ function countBy(rows, field) {
 function render(rows) {
   const main = document.getElementById('main');
   main.innerHTML = '';
+
   if (!rows.length) {
-    main.innerHTML = '<div class="status">No curiosity votes yet — share the timeline with your class!</div>';
+    main.innerHTML = '<div class="status">No curiosity votes yet — share the timeline with your class and ask them to tap "I want to learn more about this!" on any Maya event.</div>';
     return;
   }
 
-  const saxonRows = rows.filter(r => r.period.includes('Saxon') || r.period.includes('Viking'));
-  const islamRows = rows.filter(r => r.period.includes('Islam'));
-  const topSaxon  = countBy(saxonRows, 'topic');
-  const topIslam  = countBy(islamRows, 'topic');
-  const topOverall = countBy(rows, 'topic')[0];
+  const topicCounts = countBy(rows, 'topic');
+  const topTopic    = topicCounts[0];
 
-  // Stats
+  // ── STATS ──
   const stats = document.createElement('div');
   stats.className = 'stat-row';
   stats.innerHTML = `
-    <div class="stat-card"><div class="stat-n">${rows.length}</div><div class="stat-l">total votes</div></div>
-    <div class="stat-card"><div class="stat-n">${saxonRows.length}</div><div class="stat-l">Saxon &amp; Viking votes</div></div>
-    <div class="stat-card"><div class="stat-n">${islamRows.length}</div><div class="stat-l">Golden Age of Islam votes</div></div>
-    ${topOverall ? `<div class="stat-card" style="border-color:rgba(201,168,76,.5)"><div class="stat-n" style="font-size:1.1rem;padding-top:6px">${topOverall[0]}</div><div class="stat-l">most requested topic (${topOverall[1]} votes)</div></div>` : ''}
+    <div class="stat-card">
+      <div class="stat-n">${rows.length}</div>
+      <div class="stat-l">total votes</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n">${topicCounts.length}</div>
+      <div class="stat-l">different topics chosen</div>
+    </div>
+    <div class="stat-card" style="border-color:rgba(201,168,76,.5); flex:2 1 260px;">
+      <div class="stat-n" style="font-size:clamp(.9rem,2vw,1.2rem); padding-top:4px; line-height:1.3">${topTopic[0]}</div>
+      <div class="stat-l">most requested topic · ${topTopic[1]} vote${topTopic[1]!==1?'s':''}</div>
+    </div>
   `;
   main.appendChild(stats);
 
-  // Charts
-  const chartsSection = document.createElement('div');
-  chartsSection.innerHTML = '<p class="section-title">◆ Votes by Topic</p>';
-  const chartsRow = document.createElement('div');
-  chartsRow.className = 'charts-row';
+  // ── CHART ──
+  const chartSection = document.createElement('div');
+  chartSection.innerHTML = '<p class="section-title">◆ Topics Learners Want to Explore</p>';
+  const chartBox = document.createElement('div');
+  chartBox.className = 'chart-box';
+  chartBox.innerHTML = `<h3>◆ Votes by Maya Topic</h3><div class="chart-container"><canvas id="main-chart"></canvas></div>`;
+  chartSection.appendChild(chartBox);
+  main.appendChild(chartSection);
 
-  const saxonBox = document.createElement('div');
-  saxonBox.className = 'chart-box saxon-box';
-  saxonBox.innerHTML = '<h3>⚔ Anglo-Saxon &amp; Viking Britain</h3><canvas id="saxon-chart"></canvas>';
+  // Dynamically set chart height based on number of topics
+  const chartH = Math.max(300, topicCounts.length * 44);
+  chartBox.querySelector('.chart-container').style.height = chartH + 'px';
 
-  const islamBox = document.createElement('div');
-  islamBox.className = 'chart-box islam-box';
-  islamBox.innerHTML = '<h3>🌙 Golden Age of Islam</h3><canvas id="islam-chart"></canvas>';
-
-  chartsRow.appendChild(saxonBox);
-  chartsRow.appendChild(islamBox);
-  chartsSection.appendChild(chartsRow);
-  main.appendChild(chartsSection);
-
-  const opts = (color, color2) => ({
-    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
-    scales: {
-      x: { ticks:{ color:'#e8d5b0', stepSize:1 }, grid:{ color:'rgba(255,255,255,.07)' }, border:{ color:'rgba(255,255,255,.1)' } },
-      y: { ticks:{ color:'#e8d5b0', font:{ size:10 } }, grid:{ display:false }, border:{ display:false } },
-    },
-  });
-
-  if (saxonChart) saxonChart.destroy();
-  saxonChart = new Chart(document.getElementById('saxon-chart'), {
+  if (mainChart) mainChart.destroy();
+  mainChart = new Chart(document.getElementById('main-chart'), {
     type: 'bar',
     data: {
-      labels: topSaxon.map(([k])=>k),
-      datasets: [{ data: topSaxon.map(([,v])=>v), backgroundColor: topSaxon.map((_,i)=> i===0?'#7aaed6':'rgba(122,174,214,.3)'), borderRadius:4 }]
+      labels: topicCounts.map(([k]) => k),
+      datasets: [{
+        data: topicCounts.map(([,v]) => v),
+        backgroundColor: topicCounts.map((_,i) => i === 0 ? '#c9a84c' : 'rgba(201,168,76,.3)'),
+        borderRadius: 4,
+      }]
     },
-    options: opts(),
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: {
+          ticks: { color: '#e8d5b0', stepSize: 1, precision: 0 },
+          grid:  { color: 'rgba(255,255,255,.07)' },
+          border:{ color: 'rgba(255,255,255,.1)' },
+          title: { display: true, text: 'Number of votes', color: 'rgba(232,213,176,.5)', font: { size: 11 } },
+        },
+        y: {
+          ticks: { color: '#e8d5b0', font: { size: 11 } },
+          grid:  { display: false },
+          border:{ display: false },
+        },
+      },
+    },
   });
 
-  if (islamChart) islamChart.destroy();
-  islamChart = new Chart(document.getElementById('islam-chart'), {
-    type: 'bar',
-    data: {
-      labels: topIslam.map(([k])=>k),
-      datasets: [{ data: topIslam.map(([,v])=>v), backgroundColor: topIslam.map((_,i)=> i===0?'#b07ed4':'rgba(176,126,212,.3)'), borderRadius:4 }]
-    },
-    options: opts(),
-  });
-
-  // Table
+  // ── ALL VOTES TABLE ──
   const tableSection = document.createElement('div');
   tableSection.innerHTML = '<p class="section-title">◆ All Votes</p>';
   const tw = document.createElement('div');
   tw.className = 'table-wrap';
   tw.innerHTML = `<table>
-    <thead><tr><th>Time</th><th>Period</th><th>Topic</th></tr></thead>
-    <tbody>${rows.map(r => `<tr>
-      <td>${r.timestamp ? new Date(r.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : '—'}</td>
-      <td>${r.period}</td>
-      <td>${r.topic}</td>
-    </tr>`).join('')}</tbody>
+    <thead><tr><th>Time</th><th>Topic</th></tr></thead>
+    <tbody>${[...rows].reverse().map(r => `
+      <tr>
+        <td>${r.timestamp ? new Date(r.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : '—'}</td>
+        <td>${r.topic}</td>
+      </tr>`).join('')}
+    </tbody>
   </table>`;
   tableSection.appendChild(tw);
   main.appendChild(tableSection);
 
-  // Actions
+  // ── REFRESH ──
   const actions = document.createElement('div');
   actions.className = 'actions';
   actions.innerHTML = `<button class="btn-secondary" onclick="load()">↺ Refresh</button>`;
