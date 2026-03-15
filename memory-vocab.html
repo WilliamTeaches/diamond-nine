@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Memory Match · Historian Vocabulary</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        linear-gradient(160deg,#ffffff 0%,#f2f2f4 60%,#e8e8ec 100%);
+    --gold:      #b8921e;
+    --gold-bg:   rgba(184,146,30,0.1);
+    --jade:      #2d6a4f;
+    --terra:     #c1440e;
+    --text:      #111111;
+    --text2:     #444444;
+    --text3:     rgba(0,0,0,0.38);
+    --btn-bg:    #1c1c1e;
+    --radius:    14px;
+  }
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  html, body {
+    width:100%; height:100dvh; min-height:-webkit-fill-available;
+    font-family:'Crimson Pro',Georgia,serif;
+    background:var(--bg); color:var(--text);
+    overflow:hidden; overscroll-behavior:none;
+    user-select:none; -webkit-user-select:none;
+  }
+  .page { display:grid; grid-template-rows:auto 1fr auto; height:100dvh; }
+
+  /* ── HEADER ── */
+  header {
+    background:rgba(255,255,255,0.9);
+    backdrop-filter:blur(40px) saturate(180%);
+    -webkit-backdrop-filter:blur(40px) saturate(180%);
+    border-bottom:1px solid rgba(0,0,0,0.08);
+    box-shadow:0 2px 20px rgba(0,0,0,0.06);
+    padding:10px 18px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    flex-shrink:0;
+  }
+  .eyebrow { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.18em; color:var(--gold); text-transform:uppercase; margin-bottom:2px; }
+  h1 { font-family:'Cinzel',serif; font-size:clamp(.85rem,1.8vw,1.1rem); font-weight:700; color:var(--text); }
+  .hdr-right { display:flex; align-items:center; gap:8px; }
+  .stat-pill {
+    font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:.06em;
+    background:#ffffff; border:1.5px solid rgba(0,0,0,0.1);
+    border-radius:100px; padding:5px 13px; color:var(--text);
+    box-shadow:0 2px 8px rgba(0,0,0,0.06); white-space:nowrap;
+  }
+  .stat-pill span { color:var(--gold); font-weight:700; }
+
+  /* ── GRID AREA ── */
+  .grid-wrap {
+    overflow-y:auto; display:flex; align-items:center; justify-content:center;
+    padding:14px; min-height:0;
+  }
+  .card-grid {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    width:100%; max-width:820px;
+  }
+
+  /* ── CARD SHELL ── */
+  .card {
+    aspect-ratio:3/2;
+    perspective:800px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+  }
+  .card-inner {
+    width:100%; height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform .38s cubic-bezier(.4,0,.2,1);
+    border-radius:var(--radius);
+  }
+  .card.flipped .card-inner,
+  .card.matched  .card-inner { transform:rotateY(180deg); }
+
+  .face {
+    position:absolute; inset:0; border-radius:var(--radius);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:10px 8px; text-align:center;
+    backface-visibility:hidden; -webkit-backface-visibility:hidden;
+  }
+
+  /* Back face */
+  .back {
+    background:linear-gradient(145deg,#1c1c1e 0%,#2d2d30 100%);
+    border:2px solid rgba(255,255,255,0.07);
+    box-shadow:0 4px 16px rgba(0,0,0,0.18);
+  }
+  .back-icon { font-size:1.6rem; opacity:.5; }
+  .back-label {
+    font-family:'Cinzel',serif; font-size:.5rem; letter-spacing:.16em;
+    text-transform:uppercase; color:rgba(255,255,255,0.25); margin-top:5px;
+  }
+
+  /* Word face */
+  .front-word {
+    background:#ffffff;
+    border:2px solid rgba(184,146,30,0.35);
+    box-shadow:0 4px 20px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9);
+    transform:rotateY(180deg);
+  }
+  .word-text {
+    font-family:'Cinzel',serif;
+    font-size:clamp(.9rem,2.2vw,1.2rem);
+    font-weight:700; color:var(--gold); line-height:1.2;
+    letter-spacing:.02em;
+  }
+
+  /* Definition face */
+  .front-def {
+    background:#ffffff;
+    border:2px solid rgba(0,0,0,0.1);
+    box-shadow:0 4px 20px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9);
+    transform:rotateY(180deg);
+  }
+  .def-text {
+    font-size:clamp(.82rem,1.7vw,1rem);
+    color:var(--text); line-height:1.4;
+    font-style:italic;
+  }
+
+  /* Matched */
+  .card.matched .front-word,
+  .card.matched .front-def {
+    background:#f0f9f4;
+    border-color:var(--jade);
+    box-shadow:0 0 0 3px rgba(45,106,79,0.15), 0 4px 16px rgba(0,0,0,0.06);
+  }
+  .card.matched .word-text { color:var(--jade); }
+  .card.matched .def-text  { color:var(--jade); }
+
+  /* Wrong flash */
+  .card.wrong .card-inner { animation:shake .35s ease; }
+  .card.wrong .front-word,
+  .card.wrong .front-def {
+    border-color:var(--terra) !important;
+    background:#fdf0ef !important;
+  }
+  @keyframes shake {
+    0%,100%{transform:rotateY(180deg) translateX(0)}
+    25%{transform:rotateY(180deg) translateX(-6px)}
+    75%{transform:rotateY(180deg) translateX(6px)}
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background:rgba(255,255,255,0.9);
+    backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+    border-top:1.5px solid rgba(0,0,0,0.08);
+    padding:10px 18px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    flex-shrink:0;
+  }
+  .name-bar { display:flex; align-items:center; gap:8px; }
+  .name-bar label { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.12em; color:var(--gold); text-transform:uppercase; white-space:nowrap; }
+  .name-bar input {
+    background:#ffffff; border:1.5px solid rgba(0,0,0,0.15); border-radius:8px;
+    color:var(--text); font-family:'Crimson Pro',serif; font-size:16px;
+    padding:7px 12px; outline:none; width:min(190px,45vw); transition:border-color .2s;
+  }
+  .name-bar input:focus { border-color:var(--gold); }
+  .name-bar input::placeholder { color:rgba(0,0,0,0.28); font-style:italic; }
+  .foot-btns { display:flex; gap:8px; }
+  .btn {
+    font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.09em; text-transform:uppercase;
+    padding:10px 20px; border-radius:10px; cursor:pointer; transition:all .18s;
+    touch-action:manipulation; border:none; white-space:nowrap;
+  }
+  .btn-primary { background:#1c1c1e; color:#ffffff; font-weight:600; box-shadow:0 4px 14px rgba(0,0,0,0.2); }
+  .btn-primary:active { transform:scale(.97); }
+  .btn-secondary { background:#ffffff; color:var(--text); border:1.5px solid rgba(0,0,0,0.15); box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+  .btn-secondary:active { background:#f0f0f2; }
+  .btn:disabled { opacity:.4; cursor:default; }
+
+  /* ── COMPLETE OVERLAY ── */
+  .overlay {
+    position:fixed; inset:0; z-index:50;
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(40px); -webkit-backdrop-filter:blur(40px);
+    display:none; flex-direction:column; align-items:center; justify-content:center;
+    gap:16px; padding:28px 24px; text-align:center;
+  }
+  .overlay.show { display:flex; }
+  .overlay-icon { font-size:3.5rem; }
+  .overlay-title { font-family:'Cinzel',serif; font-size:1.5rem; font-weight:700; color:var(--text); }
+  .overlay-stat { font-family:'Cinzel',serif; font-size:2.8rem; font-weight:700; color:var(--gold); line-height:1; }
+  .overlay-sub { font-size:1rem; color:var(--text2); font-style:italic; max-width:340px; line-height:1.55; }
+  .name-wrap { display:flex; flex-direction:column; align-items:center; gap:8px; width:100%; max-width:300px; }
+  .name-wrap label { font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:.14em; color:var(--gold); text-transform:uppercase; }
+  .name-wrap input {
+    width:100%; background:#ffffff; border:1.5px solid rgba(0,0,0,0.15); border-radius:8px;
+    color:var(--text); font-family:'Crimson Pro',serif; font-size:18px;
+    padding:12px 16px; outline:none; text-align:center;
+    -webkit-user-select:text; user-select:text;
+  }
+  .name-wrap input:focus { border-color:var(--gold); }
+  .name-wrap input::placeholder { color:rgba(0,0,0,0.28); font-style:italic; }
+  .submit-btn {
+    font-family:'Cinzel',serif; font-size:.75rem; letter-spacing:.12em; text-transform:uppercase;
+    padding:16px 36px; border:none; border-radius:10px; cursor:pointer;
+    background:#1c1c1e; color:#ffffff; font-weight:600;
+    box-shadow:0 4px 16px rgba(0,0,0,0.2); width:100%; max-width:300px;
+    touch-action:manipulation; -webkit-user-select:none; transition:all .2s;
+  }
+  .submit-btn:active { transform:scale(.97); }
+  .submit-btn:disabled { opacity:.4; cursor:default; }
+  .submit-msg { font-size:.85rem; font-style:italic; color:var(--jade); min-height:1.2em; }
+
+  #toast {
+    position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(60px);
+    background:#1c1c1e; color:#ffffff; padding:10px 20px; border-radius:100px;
+    font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.08em;
+    box-shadow:0 8px 24px rgba(0,0,0,0.2); transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+    z-index:999; pointer-events:none;
+  }
+  #toast.show { transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div>
+      <div class="eyebrow">Historian Skills · Vocabulary</div>
+      <h1>Memory Match — Key Words</h1>
+    </div>
+    <div class="hdr-right">
+      <div class="stat-pill">Pairs: <span id="matched-count">0</span> / <span id="total-count">8</span></div>
+      <div class="stat-pill">Flips: <span id="flip-count">0</span></div>
+      <div class="stat-pill" id="timer-pill">⏱ <span id="timer">0:00</span></div>
+    </div>
+  </header>
+
+  <div class="grid-wrap">
+    <div class="card-grid" id="grid"></div>
+  </div>
+
+  <footer>
+    <div class="name-bar">
+      <label for="footer-name">Name:</label>
+      <input type="text" id="footer-name" placeholder="Your name…" autocomplete="off">
+    </div>
+    <div class="foot-btns">
+      <button class="btn btn-secondary" onclick="resetGame()">↺ Restart</button>
+      <button class="btn btn-primary" id="submit-footer-btn" onclick="openOverlay()" disabled>Share results ◆</button>
+    </div>
+  </footer>
+</div>
+
+<!-- COMPLETE OVERLAY -->
+<div class="overlay" id="overlay">
+  <div class="overlay-icon">🏺</div>
+  <div class="overlay-title">All matched!</div>
+  <div class="overlay-stat" id="overlay-stat"></div>
+  <div class="overlay-sub" id="overlay-sub"></div>
+  <div class="name-wrap">
+    <label for="overlay-name">Your name</label>
+    <input type="text" id="overlay-name" placeholder="e.g. Amara" autocomplete="off">
+  </div>
+  <button class="submit-btn" id="submit-btn" onclick="submitResults()">Share with teacher ◆</button>
+  <div class="submit-msg" id="submit-msg"></div>
+  <button class="btn btn-secondary" style="max-width:300px;width:100%;margin-top:4px" onclick="resetGame();closeOverlay()">Play again ↺</button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const SHEET_URL = 'YOUR_MEMORY_SHEET_URL';
+
+const PAIRS = [
+  { word:'Source',      def:'An object, document or account left behind from the past that historians use as evidence.' },
+  { word:'Evidence',   def:'Information used to support or prove a historical claim.' },
+  { word:'Primary source', def:'A first-hand account or object created at the time of the event being studied.' },
+  { word:'Secondary source', def:'An account written after the event, often using primary sources as evidence.' },
+  { word:'Chronology', def:'Events arranged in the order in which they happened.' },
+  { word:'Cause',      def:'The reason why something happened in history.' },
+  { word:'Consequence',def:'The result or effect of a historical event.' },
+  { word:'Significance',def:'How important a historical event or person was and why it matters.' },
+  { word:'Continuity', def:'Things that stayed the same across a period of time.' },
+  { word:'Change',     def:'Things that were different from one period of time to another.' },
+  { word:'Interpretation', def:'The way a historian makes sense of the past, which may differ from others.' },
+  { word:'Enquiry',    def:'A historical question that guides research and investigation.' },
+];
+
+// Pick 8 random pairs
+function pickPairs(n=8) {
+  const shuffled = [...PAIRS].sort(()=>Math.random()-.5);
+  return shuffled.slice(0,n);
+}
+
+let selected = [], matchedCount = 0, flips = 0, locked = false;
+let timerInterval = null, seconds = 0, gameStarted = false, gameComplete = false;
+let activePairs = [];
+
+function shuffle(arr) { return [...arr].sort(()=>Math.random()-.5); }
+
+function buildGrid() {
+  activePairs = pickPairs(8);
+  const cards = [];
+  activePairs.forEach((pair, i) => {
+    cards.push({ id:`w${i}`, pairId:i, type:'word', content:pair.word });
+    cards.push({ id:`d${i}`, pairId:i, type:'def',  content:pair.def  });
+  });
+  shuffle(cards).forEach((card, idx) => {
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.dataset.id = card.id;
+    el.dataset.pairId = card.pairId;
+    el.dataset.type = card.type;
+
+    const inner = document.createElement('div');
+    inner.className = 'card-inner';
+
+    const back = document.createElement('div');
+    back.className = 'face back';
+    back.innerHTML = `<div class="back-icon">📜</div><div class="back-label">Tap to reveal</div>`;
+
+    const front = document.createElement('div');
+    if (card.type === 'word') {
+      front.className = 'face front-word';
+      front.innerHTML = `<div class="word-text">${card.content}</div>`;
+    } else {
+      front.className = 'face front-def';
+      front.innerHTML = `<div class="def-text">${card.content}</div>`;
+    }
+
+    inner.appendChild(back);
+    inner.appendChild(front);
+    el.appendChild(inner);
+    el.addEventListener('click', () => flipCard(el));
+    document.getElementById('grid').appendChild(el);
+  });
+
+  document.getElementById('total-count').textContent = activePairs.length;
+}
+
+function flipCard(el) {
+  if (locked) return;
+  if (el.classList.contains('flipped') || el.classList.contains('matched')) return;
+
+  if (!gameStarted) startTimer();
+
+  el.classList.add('flipped');
+  flips++;
+  document.getElementById('flip-count').textContent = flips;
+  selected.push(el);
+
+  if (selected.length === 2) {
+    locked = true;
+    const [a, b] = selected;
+    const match = a.dataset.pairId === b.dataset.pairId && a.dataset.type !== b.dataset.type;
+
+    if (match) {
+      setTimeout(() => {
+        a.classList.add('matched'); b.classList.add('matched');
+        matchedCount++;
+        document.getElementById('matched-count').textContent = matchedCount;
+        selected = []; locked = false;
+        if (matchedCount === activePairs.length) finish();
+      }, 500);
+    } else {
+      a.classList.add('wrong'); b.classList.add('wrong');
+      setTimeout(() => {
+        a.classList.remove('flipped','wrong'); b.classList.remove('flipped','wrong');
+        selected = []; locked = false;
+      }, 900);
+    }
+  }
+}
+
+function startTimer() {
+  gameStarted = true;
+  timerInterval = setInterval(() => {
+    seconds++;
+    const m = Math.floor(seconds/60), s = seconds%60;
+    document.getElementById('timer').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  }, 1000);
+}
+
+function finish() {
+  clearInterval(timerInterval);
+  gameComplete = true;
+  document.getElementById('submit-footer-btn').disabled = false;
+
+  const m = Math.floor(seconds/60), s = seconds%60;
+  const timeStr = `${m}:${s.toString().padStart(2,'0')}`;
+  const msg = flips <= 20 ? 'Incredible memory — almost perfect!' :
+              flips <= 28 ? 'Really strong — well done!' :
+              flips <= 36 ? 'Good effort — keep practising!' :
+                            'You got there — great persistence!';
+
+  document.getElementById('overlay-stat').textContent = `${flips} flips · ${timeStr}`;
+  document.getElementById('overlay-sub').textContent = msg;
+
+  const footerName = document.getElementById('footer-name').value.trim();
+  if (footerName) document.getElementById('overlay-name').value = footerName;
+
+  setTimeout(() => {
+    document.getElementById('overlay').classList.add('show');
+    document.getElementById('overlay-name').focus();
+  }, 600);
+}
+
+function openOverlay() {
+  if (!gameComplete) return;
+  document.getElementById('overlay').classList.add('show');
+}
+function closeOverlay() {
+  document.getElementById('overlay').classList.remove('show');
+}
+
+async function submitResults() {
+  const name = document.getElementById('overlay-name').value.trim()
+             || document.getElementById('footer-name').value.trim();
+  if (!name) { document.getElementById('overlay-name').focus(); document.getElementById('submit-msg').textContent = 'Please enter your name first.'; return; }
+
+  const btn = document.getElementById('submit-btn');
+  const msg = document.getElementById('submit-msg');
+  btn.disabled = true; btn.textContent = 'Sharing…';
+
+  const m = Math.floor(seconds/60), s = seconds%60;
+  const payload = {
+    name,
+    flips,
+    time: `${m}:${s.toString().padStart(2,'0')}`,
+    timestamp: new Date().toISOString(),
+  };
+
+  try {
+    await fetch(SHEET_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    btn.textContent = '✓ Shared!';
+    msg.textContent = 'Sent to your teacher — brilliant work!';
+  } catch {
+    btn.disabled = false; btn.textContent = 'Share with teacher ◆';
+    msg.textContent = 'Could not share — check your connection.';
+  }
+}
+
+function resetGame() {
+  clearInterval(timerInterval);
+  seconds = 0; flips = 0; matchedCount = 0;
+  selected = []; locked = false; gameStarted = false; gameComplete = false;
+  document.getElementById('timer').textContent = '0:00';
+  document.getElementById('flip-count').textContent = '0';
+  document.getElementById('matched-count').textContent = '0';
+  document.getElementById('submit-footer-btn').disabled = true;
+  document.getElementById('submit-msg').textContent = '';
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('submit-btn').textContent = 'Share with teacher ◆';
+  document.getElementById('grid').innerHTML = '';
+  buildGrid();
+}
+
+buildGrid();
+</script>
+</body>
+</html>
