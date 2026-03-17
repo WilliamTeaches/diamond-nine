@@ -217,7 +217,84 @@ h1{font-family:'Cinzel',serif;font-size:clamp(.9rem,2vw,1.2rem);font-weight:700;
 .sarc-fb.correct{background:var(--jade-bg);border:1px solid rgba(45,106,79,0.3);color:#1a4d35;}
 .sarc-fb.wrong{background:var(--terra-bg);border:1px solid rgba(193,68,14,0.3);color:#7a2008;}
 
-/* ── TIMELINE STRIP ── */
+/* ── MATCHING GAME ── */
+.match-game{
+  background:#ffffff;border:2px solid var(--gold-bd);border-radius:var(--radius);
+  padding:18px 20px;margin:16px 0;box-shadow:var(--shadow);
+}
+.match-game-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.match-game-label::before{content:'↔';width:20px;height:20px;border-radius:50%;background:var(--gold-bg);
+  border:1px solid var(--gold-bd);display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0;}
+.match-instructions{font-size:.92rem;color:var(--text2);font-style:italic;margin-bottom:14px;line-height:1.45;}
+.match-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.match-col-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text3);text-align:center;margin-bottom:7px;}
+.match-col{display:flex;flex-direction:column;gap:7px;}
+.match-item{
+  padding:11px 13px;border-radius:9px;border:2px solid rgba(0,0,0,0.1);background:#fafafa;
+  font-size:clamp(.88rem,1.6vw,1rem);color:var(--text);line-height:1.4;cursor:pointer;
+  transition:all .18s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  text-align:center;min-height:52px;display:flex;align-items:center;justify-content:center;
+}
+.match-item.selected{border-color:var(--gold);background:var(--gold-bg);color:var(--pakal-deep);font-weight:600;}
+.match-item.matched-correct{border-color:var(--jade);background:var(--jade-bg);color:var(--jade);font-weight:600;cursor:default;}
+.match-item.matched-wrong{border-color:var(--terra);background:var(--terra-bg);color:var(--terra);animation:matchShake .3s ease;}
+.match-item:disabled,.match-item.matched-correct{pointer-events:none;}
+@keyframes matchShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.match-score-row{display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:10px;}
+.match-score-pill{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.08em;
+  color:var(--jade);background:var(--jade-bg);border:1px solid rgba(45,106,79,0.25);
+  padding:5px 14px;border-radius:100px;}
+.match-reset-btn{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;
+  padding:8px 16px;border-radius:8px;border:1.5px solid rgba(0,0,0,0.15);background:#fff;
+  color:var(--text);cursor:pointer;touch-action:manipulation;transition:all .18s;}
+.match-reset-btn:active{background:#f0f0f2;}
+.match-result{margin-top:10px;padding:10px 14px;border-radius:8px;font-size:.96rem;line-height:1.5;
+  display:none;}
+.match-result.show{display:block;}
+.match-result.all-correct{background:var(--jade-bg);border:1px solid rgba(45,106,79,0.3);color:#1a4d35;}
+
+/* ── FINAL SEQUENCE ACTIVITY ── */
+.seq-activity{
+  background:#ffffff;border:2px solid rgba(45,106,79,0.35);border-radius:var(--radius);
+  padding:20px 22px;margin:20px 0;box-shadow:var(--shadow);
+}
+.seq-label{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--jade);margin-bottom:5px;display:flex;align-items:center;gap:8px;}
+.seq-label::before{content:'≡';width:22px;height:22px;border-radius:50%;background:var(--jade-bg);
+  border:1px solid rgba(45,106,79,0.3);display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;}
+.seq-intro{font-size:clamp(.95rem,1.6vw,1.05rem);color:var(--text2);line-height:1.55;margin-bottom:14px;}
+.seq-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.seq-card{
+  padding:14px 16px;border-radius:10px;border:2px solid rgba(0,0,0,0.1);background:#fafafa;
+  font-size:clamp(.95rem,1.7vw,1.08rem);color:var(--text);line-height:1.45;
+  cursor:grab;display:flex;align-items:center;gap:12px;
+  transition:all .2s;touch-action:none;-webkit-tap-highlight-color:transparent;
+}
+.seq-card:active{cursor:grabbing;}
+.seq-card.dragging{opacity:.3;}
+.seq-card.drag-over-seq{border-color:var(--gold);background:var(--gold-bg);}
+.seq-card.seq-correct{border-color:var(--jade);background:var(--jade-bg);color:#1a4d35;font-weight:600;}
+.seq-card.seq-wrong{border-color:var(--terra);background:var(--terra-bg);color:#7a2008;}
+.seq-handle{font-size:1rem;opacity:.35;flex-shrink:0;}
+.seq-pos-num{font-family:'Cinzel',serif;font-size:.68rem;min-width:26px;height:26px;border-radius:50%;
+  background:rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;
+  font-weight:700;flex-shrink:0;}
+.seq-card.seq-correct .seq-pos-num{background:var(--jade);color:#fff;}
+.seq-card.seq-wrong   .seq-pos-num{background:var(--terra);color:#fff;}
+.seq-check-btn{
+  font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:15px 30px;border:none;border-radius:var(--radius);background:#1c1c1e;color:#fff;
+  font-weight:600;box-shadow:0 4px 14px rgba(0,0,0,0.2);cursor:pointer;
+  touch-action:manipulation;transition:all .18s;width:100%;
+}
+.seq-check-btn:active{transform:scale(.98);}
+.seq-result{margin-top:12px;padding:12px 16px;border-radius:10px;font-size:.98rem;line-height:1.55;
+  display:none;}
+.seq-result.show{display:block;}
+.seq-result.perfect{background:linear-gradient(135deg,#3d1a08,#5a2810);color:#f5edd6;border:none;}
+.seq-result.partial{background:var(--gold-bg);border:1px solid var(--gold-bd);color:#5a3a00;}
 .timeline-strip{
   background:#ffffff;border:1px solid rgba(0,0,0,0.08);border-radius:var(--radius);
   padding:20px 22px;margin:16px 0;box-shadow:0 2px 12px rgba(0,0,0,0.05);
@@ -240,6 +317,13 @@ h1{font-family:'Cinzel',serif;font-size:clamp(.9rem,2vw,1.2rem);font-weight:700;
 }
 .img-card-pic{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:3.5rem;}
 .img-card-cap{padding:10px 14px;font-size:.85rem;color:var(--text2);line-height:1.4;font-style:italic;}
+
+/* ── NEXT CHAPTER PULSE ── */
+@keyframes btnPulse {
+  0%   { transform:scale(1); box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+  40%  { transform:scale(1.03); box-shadow: 0 6px 28px rgba(45,106,79,0.5); background:#2d6a4f; }
+  100% { transform:scale(1); box-shadow: 0 4px 16px rgba(0,0,0,0.2); background:#1c1c1e; }
+}
 
 /* ── NEXT CHAPTER ── */
 .next-chapter-btn{
@@ -356,15 +440,15 @@ h1{font-family:'Cinzel',serif;font-size:clamp(.9rem,2vw,1.2rem);font-weight:700;
     <div class="quiz-label">Quick Question</div>
     <div class="quiz-q">What does Pakal Votan's full name K'inich Janaab' Pakal mean in English?</div>
     <div class="quiz-opts" id="q1-opts">
-      <button class="quiz-opt" onclick="answerQuiz('q1',0,1)" data-q="q1" data-i="0"><span class="quiz-opt-ltr">A</span>Warrior of the Jungle</button>
-      <button class="quiz-opt" onclick="answerQuiz('q1',1,1)" data-q="q1" data-i="1"><span class="quiz-opt-ltr">B</span>Sun Shield</button>
-      <button class="quiz-opt" onclick="answerQuiz('q1',2,1)" data-q="q1" data-i="2"><span class="quiz-opt-ltr">C</span>Lord of the Underworld</button>
-      <button class="quiz-opt" onclick="answerQuiz('q1',3,1)" data-q="q1" data-i="3"><span class="quiz-opt-ltr">D</span>King of the Stars</button>
+      <button type="button" class="quiz-opt" onclick="answerQuiz('q1',0,1)" data-q="q1" data-i="0"><span class="quiz-opt-ltr">A</span>Warrior of the Jungle</button>
+      <button type="button" class="quiz-opt" onclick="answerQuiz('q1',1,1)" data-q="q1" data-i="1"><span class="quiz-opt-ltr">B</span>Sun Shield</button>
+      <button type="button" class="quiz-opt" onclick="answerQuiz('q1',2,1)" data-q="q1" data-i="2"><span class="quiz-opt-ltr">C</span>Lord of the Underworld</button>
+      <button type="button" class="quiz-opt" onclick="answerQuiz('q1',3,1)" data-q="q1" data-i="3"><span class="quiz-opt-ltr">D</span>King of the Stars</button>
     </div>
     <div class="quiz-feedback" id="q1-fb"></div>
   </div>
 
-  <button class="next-chapter-btn" id="btn-ch2" onclick="unlockChapter('chapter-2','btn-ch2')" disabled>
+  <button type="button" class="next-chapter-btn" id="btn-ch2" onclick="unlockChapter('chapter-2','btn-ch2')" disabled>
     Continue to Chapter 2 — A Young King →
   </button>
 
@@ -426,8 +510,8 @@ h1{font-family:'Cinzel',serif;font-size:clamp(.9rem,2vw,1.2rem);font-weight:700;
     <div class="quiz-label">True or False?</div>
     <div class="quiz-q">Pakal was crowned king at the age of 12.</div>
     <div class="tf-wrap">
-      <button class="tf-btn true-btn" onclick="answerTF('q2',true,true)">✓ True</button>
-      <button class="tf-btn false-btn" onclick="answerTF('q2',false,true)">✗ False</button>
+      <button type="button" class="tf-btn true-btn" onclick="answerTF('q2',true,true)">✓ True</button>
+      <button type="button" class="tf-btn false-btn" onclick="answerTF('q2',false,true)">✗ False</button>
     </div>
     <div class="quiz-feedback" id="q2-fb"></div>
   </div>
@@ -442,15 +526,15 @@ h1{font-family:'Cinzel',serif;font-size:clamp(.9rem,2vw,1.2rem);font-weight:700;
     <div class="quiz-label">Quick Question</div>
     <div class="quiz-q">Why was Palenque in trouble when Pakal became king?</div>
     <div class="quiz-opts" id="q3-opts">
-      <button class="quiz-opt" onclick="answerQuiz('q3',0,2)" data-q="q3" data-i="0"><span class="quiz-opt-ltr">A</span>A volcano had destroyed the city</button>
-      <button class="quiz-opt" onclick="answerQuiz('q3',1,2)" data-q="q3" data-i="1"><span class="quiz-opt-ltr">B</span>Rival cities had attacked and defeated it</button>
-      <button class="quiz-opt" onclick="answerQuiz('q3',2,2)" data-q="q3" data-i="2"><span class="quiz-opt-ltr">C</span>The river had flooded and ruined the crops</button>
-      <button class="quiz-opt" onclick="answerQuiz('q3',3,2)" data-q="q3" data-i="3"><span class="quiz-opt-ltr">D</span>The city had run out of water</button>
+      <button type="button" class="quiz-opt" onclick="answerQuiz('q3',0,2)" data-q="q3" data-i="0"><span class="quiz-opt-ltr">A</span>A volcano had destroyed the city</button>
+      <button type="button" class="quiz-opt" onclick="answerQuiz('q3',1,2)" data-q="q3" data-i="1"><span class="quiz-opt-ltr">B</span>Rival cities had attacked and defeated it</button>
+      <button type="button" class="quiz-opt" onclick="answerQuiz('q3',2,2)" data-q="q3" data-i="2"><span class="quiz-opt-ltr">C</span>The river had flooded and ruined the crops</button>
+      <button type="button" class="quiz-opt" onclick="answerQuiz('q3',3,2)" data-q="q3" data-i="3"><span class="quiz-opt-ltr">D</span>The city had run out of water</button>
     </div>
     <div class="quiz-feedback" id="q3-fb"></div>
   </div>
 
-  <button class="next-chapter-btn" id="btn-ch3" onclick="unlockChapter('chapter-3','btn-ch3')" disabled>
+  <button type="button" class="next-chapter-btn" id="btn-ch3" onclick="unlockChapter('chapter-3','btn-ch3')" disabled>
     Continue to Chapter 3 — The Great Builder →
   </button>
 
@@ -516,11 +600,11 @@ h1{font-family:'Cinzel',serif;font-size:clamp(.9rem,2vw,1.2rem);font-weight:700;
     <div class="order-game-label">Put it in Order</div>
     <div class="order-instructions">Drag these events from Pakal's reign into the correct chronological order — earliest at the top, latest at the bottom.</div>
     <div class="order-list" id="order-list-1"></div>
-    <button class="order-check-btn" onclick="checkOrder('order-list-1','order-result-1',[3,1,0,2])">Check my order ✓</button>
+    <button type="button" class="order-check-btn" onclick="checkOrder('order-list-1','order-result-1')">Check my order ✓</button>
     <div class="order-result" id="order-result-1"></div>
   </div>
 
-  <button class="next-chapter-btn" id="btn-ch4" onclick="unlockChapter('chapter-4','btn-ch4')" disabled>
+  <button type="button" class="next-chapter-btn" id="btn-ch4" onclick="unlockChapter('chapter-4','btn-ch4')" disabled>
     Continue to Chapter 4 — The Tomb and the Legend →
   </button>
 
@@ -540,6 +624,22 @@ h1{font-family:'Cinzel',serif;font-size:clamp(.9rem,2vw,1.2rem);font-weight:700;
     <p>Pakal Votan died in <strong>683 CE</strong> at the remarkable age of around <strong>80 years old</strong> — extraordinary for the ancient world, where most people lived much shorter lives. He had reigned for 68 years.</p>
     <p>He was buried deep inside the <strong>Temple of Inscriptions</strong> — the great pyramid he had begun building decades earlier. His body was placed in a magnificent stone coffin called a <strong>sarcophagus</strong>, lowered down a secret staircase hidden inside the pyramid, and sealed away for over <em>1,000 years</em>.</p>
     <p>The sarcophagus was discovered in 1952 by Mexican archaeologist <strong>Alberto Ruz Lhuillier</strong>, who spent four years carefully excavating the staircase. When he finally opened the tomb, it was one of the most <strong>extraordinary archaeological discoveries</strong> of the 20th century.</p>
+  </div>
+
+  <div class="fact-box">
+    <div class="fact-box-title">◆ Inside the Tomb</div>
+    <div class="fact-item"><span class="fact-icon">💎</span>Pakal's body was covered in <strong>jade jewellery</strong> — a jade mask, jade necklaces, jade bracelets and jade rings. The Maya believed jade represented life, renewal and the maize god.</div>
+    <div class="fact-item"><span class="fact-icon">🔴</span>The entire burial chamber was painted <strong>blood red</strong> using a pigment called cinnabar. Red represented the rising sun — a symbol that Pakal would be reborn.</div>
+    <div class="fact-item"><span class="fact-icon">🚶</span>Five young people were sacrificed and buried at the entrance to the tomb — believed to be servants who would accompany Pakal on his journey to the underworld.</div>
+    <div class="fact-item"><span class="fact-icon">🌽</span>Food and drink were left in the tomb for Pakal's journey — including cacao (chocolate) and maize, the sacred crops of the Maya.</div>
+    <div class="fact-item"><span class="fact-icon">📡</span>A small stone tube ran from the burial chamber all the way up the staircase to the top of the temple — the Maya believed this allowed Pakal's soul to travel between the worlds.</div>
+  </div>
+
+  <div class="reading-block">
+    <p>When archaeologist Alberto Ruz Lhuillier finally entered the burial chamber after four years of excavation, he described it as one of the most breathtaking sights he had ever seen. The room was <strong>full of jade</strong> and the skeleton of Pakal himself, still wearing his jade mask after more than 1,000 years underground.</p>
+    <p>The jade death mask is considered one of the masterpieces of Maya art. It was made from <strong>over 200 pieces of jade</strong>, carefully cut and fitted together to form a portrait of Pakal's face. His eyes were made from shell and obsidian — a volcanic glass that the Maya believed held magical properties.</p>
+    <div class="pull-quote">"To stand in that chamber was to stand at the intersection of life and death, past and present — exactly as the Maya intended."</div>
+    <p>But the most famous object in the tomb was not the jade mask — it was the <strong>carved stone lid of the sarcophagus</strong> itself. At nearly 4 metres long and weighing over 5 tonnes, it took a team of experts weeks just to lift it. What they found underneath changed historians' understanding of Maya religion forever.</p>
   </div>
 
   <div class="hero-panel">
@@ -684,10 +784,10 @@ h1{font-family:'Cinzel',serif;font-size:clamp(.9rem,2vw,1.2rem);font-weight:700;
       </svg>
 
       <!-- HTML overlay hotspots — positioned as % of container -->
-      <button class="sarc-hotspot" style="left:50%;top:13%" id="hs-1" onclick="activateHotspot(1)">1</button>
-      <button class="sarc-hotspot" style="left:50%;top:56%" id="hs-2" onclick="activateHotspot(2)">2</button>
-      <button class="sarc-hotspot" style="left:18%;top:40%" id="hs-3" onclick="activateHotspot(3)">3</button>
-      <button class="sarc-hotspot" style="left:50%;top:80%" id="hs-4" onclick="activateHotspot(4)">4</button>
+      <button type="button" class="sarc-hotspot" style="left:50%;top:13%" id="hs-1" onclick="activateHotspot(1)">1</button>
+      <button type="button" class="sarc-hotspot" style="left:50%;top:56%" id="hs-2" onclick="activateHotspot(2)">2</button>
+      <button type="button" class="sarc-hotspot" style="left:18%;top:40%" id="hs-3" onclick="activateHotspot(3)">3</button>
+      <button type="button" class="sarc-hotspot" style="left:50%;top:80%" id="hs-4" onclick="activateHotspot(4)">4</button>
     </div>
 
     <div class="sarc-prompt" id="sarc-prompt">Tap a number on the sarcophagus lid to begin</div>
@@ -700,15 +800,15 @@ h1{font-family:'Cinzel',serif;font-size:clamp(.9rem,2vw,1.2rem);font-weight:700;
     <div class="quiz-label">Quick Question</div>
     <div class="quiz-q">In what year was Pakal's tomb discovered by archaeologists?</div>
     <div class="quiz-opts" id="q4-opts">
-      <button class="quiz-opt" onclick="answerQuiz('q4',0,4)" data-q="q4" data-i="0"><span class="quiz-opt-ltr">A</span>1492 CE</button>
-      <button class="quiz-opt" onclick="answerQuiz('q4',1,4)" data-q="q4" data-i="1"><span class="quiz-opt-ltr">B</span>1852 CE</button>
-      <button class="quiz-opt" onclick="answerQuiz('q4',2,4)" data-q="q4" data-i="2"><span class="quiz-opt-ltr">C</span>1952 CE</button>
-      <button class="quiz-opt" onclick="answerQuiz('q4',3,4)" data-q="q4" data-i="3"><span class="quiz-opt-ltr">D</span>2002 CE</button>
+      <button type="button" class="quiz-opt" onclick="answerQuiz('q4',0,4)" data-q="q4" data-i="0"><span class="quiz-opt-ltr">A</span>1492 CE</button>
+      <button type="button" class="quiz-opt" onclick="answerQuiz('q4',1,4)" data-q="q4" data-i="1"><span class="quiz-opt-ltr">B</span>1852 CE</button>
+      <button type="button" class="quiz-opt" onclick="answerQuiz('q4',2,4)" data-q="q4" data-i="2"><span class="quiz-opt-ltr">C</span>1952 CE</button>
+      <button type="button" class="quiz-opt" onclick="answerQuiz('q4',3,4)" data-q="q4" data-i="3"><span class="quiz-opt-ltr">D</span>2002 CE</button>
     </div>
     <div class="quiz-feedback" id="q4-fb"></div>
   </div>
 
-  <button class="next-chapter-btn" id="btn-ch5" onclick="unlockChapter('chapter-5','btn-ch5')" disabled>
+  <button type="button" class="next-chapter-btn" id="btn-ch5" onclick="unlockChapter('chapter-5','btn-ch5')" disabled>
     Continue to Chapter 5 — Legacy →
   </button>
 
@@ -751,17 +851,45 @@ h1{font-family:'Cinzel',serif;font-size:clamp(.9rem,2vw,1.2rem);font-weight:700;
     <div class="fact-item"><span class="fact-icon">🔭</span>Some historians think his tomb was designed so that on the winter solstice, sunlight falls directly down the staircase onto his burial chamber.</div>
   </div>
 
+  <!-- MATCHING GAME -->
+  <div class="match-game" id="match-game">
+    <div class="match-game-label">Matching Game</div>
+    <div class="match-instructions">Match each word on the left to its correct description on the right. Tap a word, then tap its match.</div>
+    <div style="margin-bottom:8px;display:flex;gap:6px;justify-content:center;">
+      <div class="match-col-label" style="flex:1">◆ Word</div>
+      <div class="match-col-label" style="flex:1">◆ What it means</div>
+    </div>
+    <div class="match-cols">
+      <div class="match-col" id="match-left"></div>
+      <div class="match-col" id="match-right"></div>
+    </div>
+    <div class="match-score-row">
+      <div class="match-score-pill" id="match-score-pill">0 / 6 matched</div>
+      <button type="button" class="match-reset-btn" onclick="resetMatch()">↺ Reset</button>
+    </div>
+    <div class="match-result" id="match-result"></div>
+  </div>
+
   <!-- FINAL QUIZ -->
   <div class="quiz-block">
     <div class="quiz-label">Final Question</div>
     <div class="quiz-q">How long did Pakal Votan reign as King of Palenque?</div>
     <div class="quiz-opts" id="q5-opts">
-      <button class="quiz-opt" onclick="answerQuiz('q5',0,5)" data-q="q5" data-i="0"><span class="quiz-opt-ltr">A</span>12 years</button>
-      <button class="quiz-opt" onclick="answerQuiz('q5',1,5)" data-q="q5" data-i="1"><span class="quiz-opt-ltr">B</span>40 years</button>
-      <button class="quiz-opt" onclick="answerQuiz('q5',2,5)" data-q="q5" data-i="2"><span class="quiz-opt-ltr">C</span>68 years</button>
-      <button class="quiz-opt" onclick="answerQuiz('q5',3,5)" data-q="q5" data-i="3"><span class="quiz-opt-ltr">D</span>100 years</button>
+      <button type="button" class="quiz-opt" onclick="answerQuiz('q5',0,5)" data-q="q5" data-i="0"><span class="quiz-opt-ltr">A</span>12 years</button>
+      <button type="button" class="quiz-opt" onclick="answerQuiz('q5',1,5)" data-q="q5" data-i="1"><span class="quiz-opt-ltr">B</span>40 years</button>
+      <button type="button" class="quiz-opt" onclick="answerQuiz('q5',2,5)" data-q="q5" data-i="2"><span class="quiz-opt-ltr">C</span>68 years</button>
+      <button type="button" class="quiz-opt" onclick="answerQuiz('q5',3,5)" data-q="q5" data-i="3"><span class="quiz-opt-ltr">D</span>100 years</button>
     </div>
     <div class="quiz-feedback" id="q5-fb"></div>
+  </div>
+
+  <!-- FINAL SEQUENCING ACTIVITY -->
+  <div class="seq-activity" id="seq-activity" style="display:none">
+    <div class="seq-label">Final Challenge — Sequence Pakal's Life</div>
+    <div class="seq-intro">You've reached the end of Pakal's story. Now put <strong>all 8 key events</strong> from his life in the correct order — earliest at the top, latest at the bottom. Drag to rearrange them.</div>
+    <div class="seq-list" id="seq-list"></div>
+    <button type="button" class="seq-check-btn" onclick="checkSeq()">Check my sequence ✓</button>
+    <div class="seq-result" id="seq-result"></div>
   </div>
 
   <div class="completion" id="completion" style="display:none">
@@ -778,7 +906,7 @@ h1{font-family:'Cinzel',serif;font-size:clamp(.9rem,2vw,1.2rem);font-weight:700;
 <script>
 // ── SCORE ──────────────────────────────────────────────────────────────
 let totalScore = 0, totalQs = 0;
-const TOTAL_POSSIBLE = 8; // 5 quiz + order game + sarc game
+const TOTAL_POSSIBLE = 10; // 5 quiz + order + 4 sarc hotspots + match + seq
 document.getElementById('total-qs').textContent = TOTAL_POSSIBLE;
 
 function addScore(n) {
@@ -797,8 +925,8 @@ function unlockChapter(chId, btnId) {
 // ── QUIZ: MULTIPLE CHOICE ───────────────────────────────────────────────
 const QUIZ_DATA = {
   q1: { correct:1, chapter:'chapter-2', btn:'btn-ch2',
-    fbCorrect:'✓ Correct! K'inich Janaab' Pakal means "Sun Shield" — a powerful name for a powerful king.',
-    fbWrong:  '✗ Not quite. His name K'inich Janaab' Pakal means "Sun Shield" — K'inich means sun, Pakal means shield.' },
+    fbCorrect:"✓ Correct! K\'inich Janaab\' Pakal means Sun Shield — a powerful name for a powerful king.",
+    fbWrong:  "✗ Not quite. His name means Sun Shield — K\'inich means sun, Pakal means shield." },
   q3: { correct:1, chapter:'chapter-3', btn:'btn-ch3',
     fbCorrect:'✓ Exactly right! Rival cities had attacked Palenque and left it weakened before Pakal became king.',
     fbWrong:  '✗ Not quite. Rival city-states had attacked and defeated Palenque, leaving it weak when young Pakal was crowned.' },
@@ -825,9 +953,17 @@ function answerQuiz(qid, chosen, scoreVal) {
   fb.textContent = isCorrect ? data.fbCorrect : data.fbWrong;
   if (isCorrect) addScore(1);
   if (data.btn) {
-    setTimeout(() => { document.getElementById(data.btn).disabled = false; }, 600);
+    setTimeout(() => {
+      const btn = document.getElementById(data.btn);
+      btn.disabled = false;
+      btn.style.animation = 'none';
+      btn.offsetHeight; // trigger reflow
+      btn.style.animation = 'btnPulse 0.6s ease';
+      btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 700);
   } else {
-    setTimeout(showCompletion, 800);
+    // Final quiz — reveal the sequencing activity
+    setTimeout(revealSeqActivity, 800);
   }
   totalQs++; document.getElementById('total-qs').textContent = TOTAL_POSSIBLE;
 }
@@ -853,7 +989,14 @@ function answerTF(qid, chosen, scoreVal) {
   fb.className = `quiz-feedback ${isCorrect?'correct':'wrong'} show`;
   fb.textContent = isCorrect ? data.fbCorrect : data.fbWrong;
   if (isCorrect) addScore(1);
-  if (data.btn) setTimeout(() => { document.getElementById(data.btn).disabled = false; }, 600);
+  if (data.btn) setTimeout(() => {
+      const btn = document.getElementById(data.btn);
+      btn.disabled = false;
+      btn.style.animation = 'none';
+      btn.offsetHeight; // trigger reflow
+      btn.style.animation = 'btnPulse 0.6s ease';
+      btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 700);
   totalQs++;
 }
 
@@ -946,13 +1089,13 @@ function updateOrderNums() {
   });
 }
 
-function checkOrder(listId, resultId, correctOrder) {
+function checkOrder(listId, resultId) {
   const list = document.getElementById(listId);
   const cards = [...list.children];
   let correct = 0;
   cards.forEach((card, i) => {
     const origIdx = parseInt(card.dataset.originalIndex);
-    const isCorrect = origIdx === CORRECT_ORDER[i];
+    const isCorrect = origIdx === CORRECT_ORDER[i]; // CORRECT_ORDER = [1,3,0,2] = born,crowned,building,death
     card.classList.remove('correct-pos','wrong-pos');
     card.classList.add(isCorrect ? 'correct-pos' : 'wrong-pos');
     if (isCorrect) correct++;
@@ -963,7 +1106,12 @@ function checkOrder(listId, resultId, correctOrder) {
     res.className='order-result show all-correct';
     res.textContent='✓ Perfect order! You\'ve correctly sequenced all four events in Pakal\'s life — from birth to death.';
     addScore(1);
-    setTimeout(() => { document.getElementById('btn-ch4').disabled = false; }, 600);
+    setTimeout(() => {
+      const b4 = document.getElementById('btn-ch4');
+      b4.disabled = false;
+      b4.style.animation = 'btnPulse 0.6s ease';
+      b4.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 700);
   } else {
     res.className='order-result show partial';
     res.textContent=`${correct} out of 4 correct. The correct order is: Born → Crowned → Building programme → Death. Have another look!`;
@@ -1046,7 +1194,10 @@ function answerSarc(n, chosen) {
   // Check if all 4 done
   if (answeredHotspots.size === 4) {
     setTimeout(() => {
-      document.getElementById('btn-ch5').disabled = false;
+      const b5 = document.getElementById('btn-ch5');
+        b5.disabled = false;
+        b5.style.animation = 'btnPulse 0.6s ease';
+        b5.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       document.getElementById('sarc-prompt').textContent='✓ You\'ve labelled all four parts of the sarcophagus lid!';
     }, 800);
   }
@@ -1072,6 +1223,214 @@ function buildTimeline() {
   });
 }
 
+// ── MATCHING GAME ───────────────────────────────────────────────────────
+const MATCH_PAIRS = [
+  { word:'Sarcophagus',   def:'A stone coffin used to bury an important person' },
+  { word:'Xibalba',       def:'The Maya underworld — the world of the dead' },
+  { word:'Jade',          def:'A precious green stone worn by Maya rulers' },
+  { word:'Quetzal',       def:'A sacred bird that symbolised the sky' },
+  { word:'Glyph',         def:'A symbol used in Maya writing carved into stone' },
+  { word:'World Tree',    def:'A sacred tree connecting the underworld, earth and heavens' },
+];
+
+let matchSelected = null;
+let matchCorrect  = 0;
+const matchDone   = new Set();
+
+function buildMatch() {
+  const lefts  = [...MATCH_PAIRS].sort(()=>Math.random()-.5);
+  const rights = [...MATCH_PAIRS].sort(()=>Math.random()-.5);
+  const leftCol  = document.getElementById('match-left');
+  const rightCol = document.getElementById('match-right');
+  leftCol.innerHTML=''; rightCol.innerHTML='';
+
+  lefts.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className='match-item';
+    btn.textContent = p.word;
+    btn.dataset.key  = p.word;
+    btn.dataset.side = 'left';
+    btn.onclick = () => selectMatch(btn);
+    leftCol.appendChild(btn);
+  });
+  rights.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className='match-item';
+    btn.textContent = p.def;
+    btn.dataset.key  = p.word;
+    btn.dataset.side = 'right';
+    btn.onclick = () => selectMatch(btn);
+    rightCol.appendChild(btn);
+  });
+}
+
+function selectMatch(btn) {
+  if (btn.classList.contains('matched-correct')) return;
+
+  if (!matchSelected) {
+    // First tap
+    document.querySelectorAll('.match-item.selected').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    matchSelected = btn;
+    return;
+  }
+
+  if (matchSelected === btn) {
+    btn.classList.remove('selected');
+    matchSelected = null;
+    return;
+  }
+
+  // Two selected — check if one is left and one is right
+  if (matchSelected.dataset.side === btn.dataset.side) {
+    // Same side — switch selection
+    document.querySelectorAll('.match-item.selected').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    matchSelected = btn;
+    return;
+  }
+
+  // Different sides — check match
+  const isMatch = matchSelected.dataset.key === btn.dataset.key;
+  if (isMatch) {
+    matchSelected.classList.remove('selected');
+    matchSelected.classList.add('matched-correct');
+    btn.classList.add('matched-correct');
+    matchCorrect++;
+    document.getElementById('match-score-pill').textContent = `${matchCorrect} / ${MATCH_PAIRS.length} matched`;
+    if (matchCorrect === MATCH_PAIRS.length) {
+      const res = document.getElementById('match-result');
+      res.className='match-result show all-correct';
+      res.textContent='✓ Perfect! You matched all six — you clearly know your Pakal Votan vocabulary!';
+      addScore(1);
+    }
+  } else {
+    // Wrong — flash red then reset
+    matchSelected.classList.remove('selected');
+    btn.classList.add('matched-wrong');
+    matchSelected.classList.add('matched-wrong');
+    const a = matchSelected, b2 = btn;
+    setTimeout(()=>{ a.classList.remove('matched-wrong'); b2.classList.remove('matched-wrong'); }, 700);
+  }
+  matchSelected = null;
+}
+
+function resetMatch() {
+  matchSelected=null; matchCorrect=0; matchDone.clear();
+  document.getElementById('match-score-pill').textContent=`0 / ${MATCH_PAIRS.length} matched`;
+  const res=document.getElementById('match-result');
+  res.className='match-result'; res.style.display='none';
+  buildMatch();
+}
+
+// ── FINAL SEQUENCE ACTIVITY ─────────────────────────────────────────────
+const SEQ_EVENTS = [
+  { text:'Pakal Votan is born in Palenque',                                    correct:0 },
+  { text:'Pakal is crowned King of Palenque at the age of 12',                 correct:1 },
+  { text:'Pakal begins his great building programme — palaces and temples',    correct:2 },
+  { text:'The Temple of Inscriptions — Pakal\'s great pyramid — is begun',    correct:3 },
+  { text:'Pakal dies aged approximately 80 and is buried in his sarcophagus', correct:4 },
+  { text:'The Temple of Inscriptions is completed by Pakal\'s son',            correct:5 },
+  { text:'Archaeologist Alberto Ruz discovers Pakal\'s tomb',                  correct:6 },
+  { text:'Palenque becomes a UNESCO World Heritage Site',                       correct:7 },
+];
+
+function buildSeq() {
+  const list = document.getElementById('seq-list');
+  list.innerHTML='';
+  const shuffled = [...SEQ_EVENTS].sort(()=>Math.random()-.5);
+
+  shuffled.forEach((ev, i) => {
+    const card = document.createElement('div');
+    card.className='seq-card';
+    card.draggable=true;
+    card.dataset.correct = ev.correct;
+    card.innerHTML=`<span class="seq-handle">⠿</span><span class="seq-pos-num">${i+1}</span><span class="seq-text">${ev.text}</span>`;
+
+    // Mouse drag
+    card.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('text/plain', ev.correct.toString());
+      setTimeout(()=>card.classList.add('dragging'),0);
+    });
+    card.addEventListener('dragend', ()=>card.classList.remove('dragging'));
+    card.addEventListener('dragover', e=>{ e.preventDefault(); card.classList.add('drag-over-seq'); });
+    card.addEventListener('dragleave', ()=>card.classList.remove('drag-over-seq'));
+    card.addEventListener('drop', e=>{
+      e.preventDefault(); card.classList.remove('drag-over-seq');
+      const fromKey = e.dataTransfer.getData('text/plain');
+      const fromCard = list.querySelector(`[data-correct="${fromKey}"]`);
+      if (fromCard && fromCard!==card) {
+        const all=[...list.children];
+        if (all.indexOf(fromCard)<all.indexOf(card)) list.insertBefore(fromCard, card.nextSibling);
+        else list.insertBefore(fromCard, card);
+      }
+      updateSeqNums();
+    });
+
+    // Touch drag
+    let tc;
+    card.addEventListener('touchstart', e=>{
+      const t=e.touches[0];
+      tc=card.cloneNode(true);
+      tc.style.cssText=`position:fixed;opacity:.7;pointer-events:none;z-index:999;width:${card.offsetWidth}px;top:${card.getBoundingClientRect().top}px;left:${card.getBoundingClientRect().left}px;`;
+      document.body.appendChild(tc); card.style.opacity='.3';
+    },{passive:true});
+    card.addEventListener('touchmove', e=>{
+      e.preventDefault();
+      const t=e.touches[0];
+      tc.style.top=(t.clientY-30)+'px'; tc.style.left=(t.clientX-120)+'px';
+      document.querySelectorAll('.seq-card').forEach(c=>c.classList.remove('drag-over-seq'));
+      document.elementFromPoint(t.clientX,t.clientY)?.closest('.seq-card')?.classList.add('drag-over-seq');
+    },{passive:false});
+    card.addEventListener('touchend', e=>{
+      const t=e.changedTouches[0];
+      tc?.remove(); card.style.opacity='';
+      document.querySelectorAll('.seq-card').forEach(c=>c.classList.remove('drag-over-seq'));
+      const target=document.elementFromPoint(t.clientX,t.clientY)?.closest('.seq-card');
+      if (target && target!==card) {
+        const all=[...list.children];
+        if (all.indexOf(card)<all.indexOf(target)) list.insertBefore(card, target.nextSibling);
+        else list.insertBefore(card, target);
+      }
+      updateSeqNums();
+    });
+
+    list.appendChild(card);
+  });
+}
+
+function updateSeqNums() {
+  document.querySelectorAll('#seq-list .seq-pos-num').forEach((el,i)=>el.textContent=i+1);
+}
+
+function checkSeq() {
+  const cards = [...document.getElementById('seq-list').children];
+  let correct=0;
+  cards.forEach((card,i)=>{
+    card.classList.remove('seq-correct','seq-wrong');
+    if (parseInt(card.dataset.correct)===i) { card.classList.add('seq-correct'); correct++; }
+    else card.classList.add('seq-wrong');
+  });
+  const res=document.getElementById('seq-result');
+  res.classList.add('show');
+  if (correct===SEQ_EVENTS.length) {
+    res.className='seq-result show perfect';
+    res.innerHTML='<strong>🏺 Perfect sequence!</strong> You\'ve placed all 8 events in the correct order — from Pakal\'s birth to Palenque becoming a World Heritage Site. You now know this story inside out!';
+    addScore(1);
+    setTimeout(showCompletion, 1000);
+  } else {
+    res.className='seq-result show partial';
+    res.textContent=`${correct} out of ${SEQ_EVENTS.length} in the right place. The ones marked in red are out of order — try shuffling them!`;
+  }
+}
+
+function revealSeqActivity() {
+  const seq = document.getElementById('seq-activity');
+  seq.style.display='block';
+  seq.scrollIntoView({behavior:'smooth', block:'start'});
+  buildSeq();
+}
+
 // ── COMPLETION ─────────────────────────────────────────────────────────
 function showCompletion() {
   const comp = document.getElementById('completion');
@@ -1089,6 +1448,7 @@ function showCompletion() {
 // ── INIT ───────────────────────────────────────────────────────────────
 buildOrderGame();
 buildTimeline();
+buildMatch();
 </script>
 </body>
 </html>
