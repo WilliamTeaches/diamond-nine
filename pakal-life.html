@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>The Life of Pakal Votan</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:#b8921e; --gold-lt:#d4a830; --gold-bg:rgba(184,146,30,0.1); --gold-bd:rgba(184,146,30,0.35);
+  --jade:#2d6a4f; --jade-lt:#40916c; --jade-bg:rgba(45,106,79,0.08);
+  --terra:#c1440e; --terra-bg:rgba(193,68,14,0.08);
+  --text:#111111; --text2:#444444; --text3:rgba(0,0,0,0.38);
+  --bg:linear-gradient(160deg,#faf9f6 0%,#f4f2ee 50%,#ede9e2 100%);
+  --surface:rgba(255,255,255,0.88); --blur:blur(24px) saturate(160%);
+  --radius:14px; --shadow:0 4px 24px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9);
+  --pakal-deep:#3d1a08; --pakal-gold:#c9984a; --pakal-stone:#8a7a6a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--text);
+  min-height:100%;overscroll-behavior:auto;}
+body{padding-bottom:60px;}
+
+/* ── HEADER ── */
+header{
+  background:rgba(255,255,255,0.92);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border-bottom:1px solid rgba(0,0,0,0.08);box-shadow:0 2px 20px rgba(0,0,0,0.06);
+  padding:12px 24px;position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.eyebrow{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:2px;}
+h1{font-family:'Cinzel',serif;font-size:clamp(.9rem,2vw,1.2rem);font-weight:700;color:var(--text);}
+.score-badge{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.08em;
+  background:var(--gold-bg);border:1.5px solid var(--gold-bd);color:var(--gold);
+  padding:7px 16px;border-radius:100px;white-space:nowrap;}
+.score-badge span{font-weight:700;font-size:.9rem;}
+
+/* ── MAIN CONTENT ── */
+.content{max-width:780px;margin:0 auto;padding:0 20px;}
+
+/* ── CHAPTER HEADER ── */
+.chapter-header{
+  display:flex;align-items:center;gap:14px;
+  padding:28px 0 12px;border-bottom:1px solid rgba(0,0,0,0.08);margin-bottom:20px;
+}
+.chapter-num{
+  font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);background:var(--gold-bg);border:1px solid var(--gold-bd);
+  padding:4px 12px;border-radius:100px;white-space:nowrap;flex-shrink:0;
+}
+.chapter-title{font-family:'Cinzel',serif;font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:700;color:var(--text);}
+
+/* ── ILLUSTRATED HERO ── */
+.hero-panel{
+  background:#ffffff;border:1px solid rgba(0,0,0,0.08);border-radius:var(--radius);
+  overflow:hidden;box-shadow:var(--shadow);margin-bottom:20px;
+  display:grid;grid-template-columns:1fr 1fr;
+}
+.hero-illustration{background:linear-gradient(145deg,#3d1a08 0%,#5a2810 60%,#7a3a18 100%);
+  display:flex;align-items:center;justify-content:center;padding:24px;min-height:200px;}
+.hero-text{padding:22px 22px;display:flex;flex-direction:column;justify-content:center;gap:10px;}
+.hero-date{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);}
+.hero-heading{font-family:'Cinzel',serif;font-size:clamp(.95rem,2vw,1.2rem);font-weight:700;color:var(--text);line-height:1.3;}
+.hero-body{font-size:clamp(.9rem,1.7vw,1.05rem);line-height:1.7;color:var(--text2);}
+
+/* ── READING SECTION ── */
+.reading-block{
+  background:#ffffff;border:1px solid rgba(0,0,0,0.07);border-radius:var(--radius);
+  padding:20px 22px;margin-bottom:14px;box-shadow:0 2px 12px rgba(0,0,0,0.05);
+}
+.reading-block p{font-size:clamp(.95rem,1.7vw,1.1rem);line-height:1.78;color:var(--text);margin-bottom:12px;}
+.reading-block p:last-child{margin-bottom:0;}
+.reading-block strong{color:var(--pakal-deep);font-weight:700;}
+.reading-block em{color:var(--gold);font-style:normal;font-weight:600;}
+.pull-quote{
+  border-left:4px solid var(--gold);padding:10px 18px;margin:14px 0;
+  background:var(--gold-bg);border-radius:0 var(--radius-sm,8px) var(--radius-sm,8px) 0;
+  font-size:clamp(1rem,1.8vw,1.15rem);font-style:italic;color:var(--pakal-deep);line-height:1.55;
+}
+
+/* ── QUIZ BLOCK ── */
+.quiz-block{
+  background:linear-gradient(135deg,rgba(45,106,79,0.06) 0%,rgba(255,255,255,0.95) 100%);
+  border:2px solid rgba(45,106,79,0.2);border-radius:var(--radius);
+  padding:18px 20px;margin:16px 0;box-shadow:0 2px 12px rgba(0,0,0,0.05);
+}
+.quiz-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--jade);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.quiz-label::before{content:'?';width:20px;height:20px;border-radius:50%;background:var(--jade);
+  color:#fff;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;flex-shrink:0;}
+.quiz-q{font-size:clamp(1rem,1.8vw,1.15rem);font-weight:500;color:var(--text);margin-bottom:12px;line-height:1.45;}
+.quiz-opts{display:flex;flex-direction:column;gap:7px;}
+.quiz-opt{
+  padding:11px 14px;border-radius:10px;cursor:pointer;
+  border:2px solid rgba(0,0,0,0.1);background:#ffffff;
+  font-size:1rem;color:var(--text);line-height:1.4;
+  transition:all .18s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  display:flex;align-items:center;gap:10px;
+}
+.quiz-opt:active{transform:scale(.98);}
+.quiz-opt.correct{border-color:var(--jade);background:var(--jade-bg);color:var(--jade);font-weight:600;}
+.quiz-opt.wrong{border-color:var(--terra);background:var(--terra-bg);color:var(--terra);}
+.quiz-opt.reveal{border-color:var(--jade);background:var(--jade-bg);color:var(--jade);font-weight:600;}
+.quiz-opt:disabled{cursor:default;}
+.quiz-opt-ltr{font-family:'Cinzel',serif;font-size:.65rem;min-width:22px;height:22px;border-radius:50%;
+  background:rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;
+  font-weight:700;flex-shrink:0;}
+.quiz-opt.correct .quiz-opt-ltr,.quiz-opt.reveal .quiz-opt-ltr{background:var(--jade);color:#fff;}
+.quiz-opt.wrong   .quiz-opt-ltr{background:var(--terra);color:#fff;}
+.quiz-feedback{margin-top:10px;padding:10px 14px;border-radius:8px;font-size:.96rem;line-height:1.5;
+  opacity:0;transform:translateY(6px);transition:all .3s;}
+.quiz-feedback.show{opacity:1;transform:translateY(0);}
+.quiz-feedback.correct{background:var(--jade-bg);border:1px solid rgba(45,106,79,0.3);color:#1a4d35;}
+.quiz-feedback.wrong{background:var(--terra-bg);border:1px solid rgba(193,68,14,0.3);color:#7a2008;}
+
+/* ── TRUE/FALSE ── */
+.tf-wrap{display:flex;gap:10px;margin-top:10px;}
+.tf-btn{flex:1;padding:14px;border-radius:10px;border:2px solid rgba(0,0,0,0.1);background:#fff;
+  font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.08em;font-weight:700;cursor:pointer;
+  text-transform:uppercase;transition:all .18s;touch-action:manipulation;}
+.tf-btn.true-btn{color:var(--jade);}
+.tf-btn.false-btn{color:var(--terra);}
+.tf-btn.correct{background:var(--jade-bg);border-color:var(--jade);color:var(--jade);}
+.tf-btn.wrong{background:var(--terra-bg);border-color:var(--terra);color:var(--terra);}
+.tf-btn:disabled{cursor:default;}
+
+/* ── FACT BOX ── */
+.fact-box{
+  background:linear-gradient(135deg,#3d1a08 0%,#5a2810 100%);
+  border-radius:var(--radius);padding:18px 22px;margin:14px 0;
+  color:#f5edd6;box-shadow:var(--shadow);
+}
+.fact-box-title{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--pakal-gold);margin-bottom:10px;}
+.fact-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;font-size:clamp(.88rem,1.6vw,1rem);line-height:1.5;}
+.fact-item:last-child{margin-bottom:0;}
+.fact-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px;}
+
+/* ── ORDER GAME ── */
+.order-game{
+  background:#ffffff;border:2px solid var(--gold-bd);border-radius:var(--radius);
+  padding:18px 20px;margin:16px 0;box-shadow:var(--shadow);
+}
+.order-game-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.order-game-label::before{content:'⟳';width:20px;height:20px;border-radius:50%;background:var(--gold-bg);
+  border:1px solid var(--gold-bd);display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0;}
+.order-instructions{font-size:.92rem;color:var(--text2);font-style:italic;margin-bottom:12px;line-height:1.45;}
+.order-list{display:flex;flex-direction:column;gap:7px;}
+.order-card{
+  padding:12px 14px;border-radius:9px;border:2px solid rgba(0,0,0,0.1);background:#fafafa;
+  font-size:clamp(.9rem,1.7vw,1.02rem);color:var(--text);line-height:1.4;
+  cursor:grab;display:flex;align-items:center;gap:10px;
+  transition:all .18s;touch-action:none;-webkit-tap-highlight-color:transparent;
+}
+.order-card:active{cursor:grabbing;background:#f0f0f2;transform:scale(.99);}
+.order-card.dragging{opacity:.35;}
+.order-card.correct-pos{border-color:var(--jade);background:var(--jade-bg);color:var(--jade);}
+.order-card.wrong-pos{border-color:var(--terra);background:var(--terra-bg);color:var(--terra);}
+.order-card.drag-over{border-color:var(--gold);background:var(--gold-bg);}
+.order-handle{font-size:.9rem;opacity:.4;flex-shrink:0;}
+.order-num{font-family:'Cinzel',serif;font-size:.65rem;min-width:22px;height:22px;border-radius:50%;
+  background:rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;
+  font-weight:700;flex-shrink:0;}
+.order-card.correct-pos .order-num{background:var(--jade);color:#fff;}
+.order-check-btn{
+  margin-top:12px;font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:13px 28px;border:none;border-radius:var(--radius);background:#1c1c1e;color:#fff;
+  font-weight:600;box-shadow:0 3px 12px rgba(0,0,0,0.2);cursor:pointer;
+  touch-action:manipulation;transition:all .18s;
+}
+.order-check-btn:active{transform:scale(.97);}
+.order-result{margin-top:10px;padding:10px 14px;border-radius:8px;font-size:.96rem;line-height:1.5;
+  display:none;}
+.order-result.show{display:block;}
+.order-result.all-correct{background:var(--jade-bg);border:1px solid rgba(45,106,79,0.3);color:#1a4d35;}
+.order-result.partial{background:var(--gold-bg);border:1px solid var(--gold-bd);color:#5a3a00;}
+
+/* ── SARCOPHAGUS LABEL GAME ── */
+.sarc-game{
+  background:#ffffff;border:2px solid var(--gold-bd);border-radius:var(--radius);
+  padding:18px 20px;margin:16px 0;box-shadow:var(--shadow);
+}
+.sarc-game-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.sarc-game-label::before{content:'☆';width:20px;height:20px;border-radius:50%;background:var(--gold-bg);
+  border:1px solid var(--gold-bd);display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0;}
+.sarc-instructions{font-size:.92rem;color:var(--text2);font-style:italic;margin-bottom:14px;line-height:1.45;}
+.sarc-scene{position:relative;width:100%;max-width:500px;margin:0 auto 16px;}
+.sarc-svg{width:100%;height:auto;display:block;}
+.sarc-hotspot{
+  position:absolute;width:34px;height:34px;border-radius:50%;
+  background:rgba(184,146,30,0.85);border:3px solid #fff;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  font-family:'Cinzel',serif;font-size:.65rem;font-weight:700;color:#fff;
+  transform:translate(-50%,-50%);box-shadow:0 2px 10px rgba(0,0,0,0.3);
+  transition:all .2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+}
+.sarc-hotspot:active{transform:translate(-50%,-50%) scale(.92);}
+.sarc-hotspot.answered-correct{background:var(--jade);border-color:rgba(45,106,79,0.4);}
+.sarc-hotspot.answered-wrong{background:var(--terra);border-color:rgba(193,68,14,0.4);}
+.sarc-options{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:4px;}
+.sarc-opt{
+  padding:10px 12px;border-radius:9px;border:2px solid rgba(0,0,0,0.1);background:#fafafa;
+  font-size:.92rem;color:var(--text);cursor:pointer;
+  transition:all .18s;touch-action:manipulation;text-align:center;line-height:1.3;
+}
+.sarc-opt:active{transform:scale(.98);}
+.sarc-opt.correct{border-color:var(--jade);background:var(--jade-bg);color:var(--jade);font-weight:600;}
+.sarc-opt.wrong{border-color:var(--terra);background:var(--terra-bg);color:var(--terra);}
+.sarc-opt:disabled{cursor:default;}
+.sarc-prompt{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gold);text-align:center;margin-bottom:10px;}
+.sarc-fb{margin-top:8px;padding:9px 14px;border-radius:8px;font-size:.94rem;line-height:1.5;
+  opacity:0;transform:translateY(6px);transition:all .3s;}
+.sarc-fb.show{opacity:1;transform:translateY(0);}
+.sarc-fb.correct{background:var(--jade-bg);border:1px solid rgba(45,106,79,0.3);color:#1a4d35;}
+.sarc-fb.wrong{background:var(--terra-bg);border:1px solid rgba(193,68,14,0.3);color:#7a2008;}
+
+/* ── TIMELINE STRIP ── */
+.timeline-strip{
+  background:#ffffff;border:1px solid rgba(0,0,0,0.08);border-radius:var(--radius);
+  padding:20px 22px;margin:16px 0;box-shadow:0 2px 12px rgba(0,0,0,0.05);
+  overflow-x:auto;scrollbar-width:thin;
+}
+.timeline-strip-inner{display:flex;gap:0;min-width:600px;position:relative;padding-top:4px;}
+.tl-line{position:absolute;top:22px;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--gold) 0%,#c9a84c 100%);}
+.tl-event{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative;z-index:1;}
+.tl-dot{width:14px;height:14px;border-radius:50%;background:var(--gold);
+  border:3px solid #fff;box-shadow:0 0 0 2px var(--gold);flex-shrink:0;}
+.tl-year{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.08em;color:var(--gold);font-weight:700;}
+.tl-desc{font-size:.8rem;color:var(--text2);text-align:center;line-height:1.35;max-width:80px;}
+
+/* ── IMAGE PANELS ── */
+.img-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;}
+.img-card{
+  background:#ffffff;border:1px solid rgba(0,0,0,0.08);border-radius:var(--radius);
+  overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.06);
+}
+.img-card-pic{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:3.5rem;}
+.img-card-cap{padding:10px 14px;font-size:.85rem;color:var(--text2);line-height:1.4;font-style:italic;}
+
+/* ── NEXT CHAPTER ── */
+.next-chapter-btn{
+  display:block;width:100%;margin:20px 0;padding:16px;
+  font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;
+  background:#1c1c1e;color:#fff;border:none;border-radius:var(--radius);font-weight:600;
+  box-shadow:0 4px 16px rgba(0,0,0,0.2);cursor:pointer;transition:all .2s;
+  touch-action:manipulation;
+}
+.next-chapter-btn:active{transform:scale(.98);}
+.next-chapter-btn:disabled{opacity:.35;cursor:default;}
+
+/* ── COMPLETION ── */
+.completion{
+  background:linear-gradient(135deg,#3d1a08 0%,#5a2810 100%);
+  border-radius:var(--radius);padding:32px 24px;margin:24px 0;
+  text-align:center;box-shadow:var(--shadow);
+}
+.completion-icon{font-size:4rem;margin-bottom:14px;}
+.completion-title{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:700;color:#f5edd6;margin-bottom:6px;}
+.completion-score{font-family:'Cinzel',serif;font-size:3rem;font-weight:700;color:var(--pakal-gold);line-height:1;margin-bottom:8px;}
+.completion-msg{font-size:1rem;font-style:italic;color:rgba(245,237,214,.75);line-height:1.6;max-width:380px;margin:0 auto;}
+
+/* ── LOCKED SECTION ── */
+.locked{display:none;}
+.locked.unlocked{display:block;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:560px){
+  .hero-panel{grid-template-columns:1fr;}
+  .hero-illustration{min-height:140px;}
+  .img-pair{grid-template-columns:1fr;}
+  .sarc-options{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="eyebrow">Maya Enquiry · Reading Activity</div>
+    <h1>The Life of Pakal Votan — King of Palenque</h1>
+  </div>
+  <div class="score-badge">Score: <span id="total-score">0</span> / <span id="total-qs">0</span></div>
+</header>
+
+<div class="content">
+
+<!-- ══════════════════════════════════════════════════════════════
+     CHAPTER 1 — BIRTH
+══════════════════════════════════════════════════════════════ -->
+<div id="chapter-1">
+
+  <div class="chapter-header">
+    <span class="chapter-num">Chapter 1</span>
+    <h2 class="chapter-title">A King is Born</h2>
+  </div>
+
+  <div class="hero-panel">
+    <div class="hero-illustration">
+      <svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+        <!-- Stars -->
+        <circle cx="20" cy="20" r="1.5" fill="#f5edd6" opacity=".6"/>
+        <circle cx="50" cy="12" r="1" fill="#f5edd6" opacity=".5"/>
+        <circle cx="130" cy="18" r="2" fill="#f5edd6" opacity=".7"/>
+        <circle cx="145" cy="35" r="1.2" fill="#f5edd6" opacity=".5"/>
+        <circle cx="10" cy="50" r="1.5" fill="#f5edd6" opacity=".4"/>
+        <!-- Moon -->
+        <path d="M 100 15 A 20 20 0 1 1 100 55 A 12 12 0 1 0 100 15" fill="#f5edd6" opacity=".8"/>
+        <!-- Baby Pakal stylised shape -->
+        <ellipse cx="80" cy="95" rx="25" ry="30" fill="#c9984a"/>
+        <circle cx="80" cy="65" r="20" fill="#c9984a"/>
+        <!-- Headdress feathers -->
+        <line x1="65" y1="47" x2="55" y2="28" stroke="#2d7a3a" stroke-width="3" stroke-linecap="round"/>
+        <line x1="73" y1="44" x2="66" y2="22" stroke="#c9984a" stroke-width="3" stroke-linecap="round"/>
+        <line x1="80" y1="43" x2="80" y2="18" stroke="#b8300a" stroke-width="3" stroke-linecap="round"/>
+        <line x1="87" y1="44" x2="94" y2="22" stroke="#c9984a" stroke-width="3" stroke-linecap="round"/>
+        <line x1="95" y1="47" x2="105" y2="28" stroke="#2d7a3a" stroke-width="3" stroke-linecap="round"/>
+        <!-- Face -->
+        <ellipse cx="72" cy="63" rx="3" ry="4" fill="#3d1a08"/>
+        <ellipse cx="88" cy="63" rx="3" ry="4" fill="#3d1a08"/>
+        <path d="M 73 73 Q 80 79 87 73" stroke="#3d1a08" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- Maya jade necklace -->
+        <rect x="63" y="82" width="34" height="5" rx="2.5" fill="#2d7a3a"/>
+        <!-- Date inscription below -->
+        <text x="80" y="135" font-family="serif" font-size="11" fill="#f5edd6" text-anchor="middle" opacity=".8">603 CE</text>
+        <text x="80" y="150" font-family="serif" font-size="8.5" fill="rgba(245,237,214,.5)" text-anchor="middle" font-style="italic">Palenque, Mexico</text>
+      </svg>
+    </div>
+    <div class="hero-text">
+      <div class="hero-date">26th March, 603 CE</div>
+      <div class="hero-heading">K'inich Janaab' Pakal is born</div>
+      <div class="hero-body">In the city of Palenque, deep in the jungle rainforest, a royal baby was born who would one day become the greatest ruler the Maya world had ever seen.</div>
+    </div>
+  </div>
+
+  <div class="reading-block">
+    <p>Imagine being born into a world of <strong>towering pyramid temples</strong>, sacred jaguars, and a sky full of gods. That was the world of <em>K'inich Janaab' Pakal</em> — the child who would later be known to us as <strong>Pakal Votan</strong>.</p>
+    <p>Pakal was born on 26th March 603 CE in the great Maya city of <strong>Palenque</strong>, hidden deep in the rainforests of what is now southern Mexico. His name, K'inich Janaab' Pakal, means <strong>"Sun Shield"</strong> — a name fit for a king.</p>
+    <div class="pull-quote">"The Maya believed their kings were descended from the gods — a link between heaven and earth."</div>
+    <p>As a royal child, Pakal grew up learning everything about Maya life — how to read glyphs, how to perform religious ceremonies, and how to lead a people. He was being prepared for a destiny that would last <strong>68 years</strong> on the throne.</p>
+  </div>
+
+  <div class="fact-box">
+    <div class="fact-box-title">◆ Key Facts — Palenque</div>
+    <div class="fact-item"><span class="fact-icon">🌿</span>Palenque sat at the foot of forested hills in the dense Maya rainforest.</div>
+    <div class="fact-item"><span class="fact-icon">🏛️</span>When Pakal was born, the city already had magnificent temples and palaces.</div>
+    <div class="fact-item"><span class="fact-icon">👑</span>His mother, Lady Sak K'uk', would later help rule until Pakal was old enough.</div>
+    <div class="fact-item"><span class="fact-icon">⭐</span>Maya kings were believed to be part human, part god — directly linked to the sun.</div>
+  </div>
+
+  <!-- QUIZ 1 -->
+  <div class="quiz-block">
+    <div class="quiz-label">Quick Question</div>
+    <div class="quiz-q">What does Pakal Votan's full name K'inich Janaab' Pakal mean in English?</div>
+    <div class="quiz-opts" id="q1-opts">
+      <button class="quiz-opt" onclick="answerQuiz('q1',0,1)" data-q="q1" data-i="0"><span class="quiz-opt-ltr">A</span>Warrior of the Jungle</button>
+      <button class="quiz-opt" onclick="answerQuiz('q1',1,1)" data-q="q1" data-i="1"><span class="quiz-opt-ltr">B</span>Sun Shield</button>
+      <button class="quiz-opt" onclick="answerQuiz('q1',2,1)" data-q="q1" data-i="2"><span class="quiz-opt-ltr">C</span>Lord of the Underworld</button>
+      <button class="quiz-opt" onclick="answerQuiz('q1',3,1)" data-q="q1" data-i="3"><span class="quiz-opt-ltr">D</span>King of the Stars</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+  </div>
+
+  <button class="next-chapter-btn" id="btn-ch2" onclick="unlockChapter('chapter-2','btn-ch2')" disabled>
+    Continue to Chapter 2 — A Young King →
+  </button>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     CHAPTER 2 — CORONATION
+══════════════════════════════════════════════════════════════ -->
+<div id="chapter-2" class="locked">
+
+  <div class="chapter-header">
+    <span class="chapter-num">Chapter 2</span>
+    <h2 class="chapter-title">Crowned at Twelve</h2>
+  </div>
+
+  <div class="hero-panel">
+    <div class="hero-illustration">
+      <svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+        <!-- Temple backdrop -->
+        <rect x="0" y="0" width="160" height="160" fill="#3d1a08"/>
+        <polygon points="20,140 80,50 140,140" fill="#5a2810"/>
+        <polygon points="35,140 80,62 125,140" fill="#6a3520"/>
+        <polygon points="50,140 80,74 110,140" fill="#7a4030"/>
+        <!-- Steps on temple -->
+        <rect x="60" y="128" width="40" height="5" fill="#8a5040"/>
+        <rect x="63" y="118" width="34" height="5" fill="#8a5040"/>
+        <rect x="66" y="108" width="28" height="5" fill="#8a5040"/>
+        <!-- Pakal figure on top -->
+        <circle cx="80" cy="88" r="8" fill="#c9984a"/>
+        <rect x="75" y="96" width="10" height="14" rx="2" fill="#c9984a"/>
+        <!-- Crown -->
+        <rect x="72" y="76" width="16" height="6" rx="2" fill="#c9a84c"/>
+        <line x1="75" y1="76" x2="73" y2="68" stroke="#c9a84c" stroke-width="1.5"/>
+        <circle cx="73" cy="67" r="2" fill="#2d7a3a"/>
+        <line x1="80" y1="76" x2="80" y2="65" stroke="#c9a84c" stroke-width="1.5"/>
+        <circle cx="80" cy="64" r="2.5" fill="#b8300a"/>
+        <line x1="85" y1="76" x2="87" y2="68" stroke="#c9a84c" stroke-width="1.5"/>
+        <circle cx="87" cy="67" r="2" fill="#2d7a3a"/>
+        <!-- Text -->
+        <text x="80" y="152" font-family="serif" font-size="10" fill="#f5edd6" text-anchor="middle" opacity=".85">615 CE · Age 12</text>
+      </svg>
+    </div>
+    <div class="hero-text">
+      <div class="hero-date">615 CE — Pakal is aged just 12</div>
+      <div class="hero-heading">The youngest king in Palenque's history</div>
+      <div class="hero-body">When the crown was placed on Pakal's head, nobody could have guessed he would reign for 68 years — longer than almost any ruler in the ancient world.</div>
+    </div>
+  </div>
+
+  <div class="reading-block">
+    <p>In 615 CE, when Pakal was only <strong>12 years old</strong>, he was crowned King of Palenque. Can you imagine being crowned a king or queen at your age? Pakal was barely older than you when he took the throne!</p>
+    <p>The city of Palenque had been through <strong>very difficult times</strong>. Rival cities had attacked and defeated it. The people were weak and the city was struggling. Many people must have looked at the young boy on the throne and wondered if he was strong enough to save them.</p>
+    <div class="pull-quote">"He was crowned at 12. He would still be ruling at 80."</div>
+    <p>But Pakal proved everyone wrong. Over the decades that followed, he rebuilt Palenque from the ground up — creating new temples, palaces and monuments that made it one of the most <strong>beautiful cities in the ancient world</strong>.</p>
+  </div>
+
+  <!-- TRUE/FALSE QUIZ -->
+  <div class="quiz-block">
+    <div class="quiz-label">True or False?</div>
+    <div class="quiz-q">Pakal was crowned king at the age of 12.</div>
+    <div class="tf-wrap">
+      <button class="tf-btn true-btn" onclick="answerTF('q2',true,true)">✓ True</button>
+      <button class="tf-btn false-btn" onclick="answerTF('q2',false,true)">✗ False</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+  </div>
+
+  <div class="reading-block">
+    <p>At 12, Pakal couldn't rule alone. His mother <strong>Lady Sak K'uk'</strong> helped govern the city alongside him. The Maya had a rule that only men could be king — but Lady Sak K'uk' found a way around this by claiming she was a direct descendant of the gods, which gave her the authority to place the crown on her son's head.</p>
+    <p>This was Maya politics at its cleverest — using <strong>religion, stories and belief</strong> as tools of power.</p>
+  </div>
+
+  <!-- QUIZ 3 -->
+  <div class="quiz-block">
+    <div class="quiz-label">Quick Question</div>
+    <div class="quiz-q">Why was Palenque in trouble when Pakal became king?</div>
+    <div class="quiz-opts" id="q3-opts">
+      <button class="quiz-opt" onclick="answerQuiz('q3',0,2)" data-q="q3" data-i="0"><span class="quiz-opt-ltr">A</span>A volcano had destroyed the city</button>
+      <button class="quiz-opt" onclick="answerQuiz('q3',1,2)" data-q="q3" data-i="1"><span class="quiz-opt-ltr">B</span>Rival cities had attacked and defeated it</button>
+      <button class="quiz-opt" onclick="answerQuiz('q3',2,2)" data-q="q3" data-i="2"><span class="quiz-opt-ltr">C</span>The river had flooded and ruined the crops</button>
+      <button class="quiz-opt" onclick="answerQuiz('q3',3,2)" data-q="q3" data-i="3"><span class="quiz-opt-ltr">D</span>The city had run out of water</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+  </div>
+
+  <button class="next-chapter-btn" id="btn-ch3" onclick="unlockChapter('chapter-3','btn-ch3')" disabled>
+    Continue to Chapter 3 — The Great Builder →
+  </button>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     CHAPTER 3 — THE GREAT BUILDER
+══════════════════════════════════════════════════════════════ -->
+<div id="chapter-3" class="locked">
+
+  <div class="chapter-header">
+    <span class="chapter-num">Chapter 3</span>
+    <h2 class="chapter-title">The Great Builder</h2>
+  </div>
+
+  <div class="reading-block">
+    <p>Pakal Votan was not just a warrior or a ruler — he was one of the <strong>greatest builders</strong> in all of Maya history. During his 68-year reign, he transformed Palenque into a city of extraordinary beauty.</p>
+    <p>He ordered the construction of massive <strong>temples, palaces and plazas</strong>, all decorated with intricate stone carvings and painted in brilliant colours. These were not just buildings — they were <em>messages to the gods</em>, and to anyone who visited Palenque, that this was one of the greatest cities on Earth.</p>
+  </div>
+
+  <div class="img-pair">
+    <div class="img-card">
+      <div class="img-card-pic" style="background:linear-gradient(145deg,#2d4a28,#3a6030)">
+        <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="5,75 40,5 75,75" fill="#5a3010"/>
+          <polygon points="12,75 40,15 68,75" fill="#6a3818"/>
+          <polygon points="19,75 40,25 61,75" fill="#7a4220"/>
+          <polygon points="26,75 40,35 54,75" fill="#8a4c28"/>
+          <rect x="32" y="66" width="16" height="4" fill="#9a5630"/>
+          <rect x="34" y="58" width="12" height="4" fill="#9a5630"/>
+        </svg>
+      </div>
+      <div class="img-card-cap">The Temple of Inscriptions — Pakal's most famous building, containing his tomb</div>
+    </div>
+    <div class="img-card">
+      <div class="img-card-pic" style="background:linear-gradient(145deg,#3a2a18,#5a4030)">
+        <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <!-- Palace building -->
+          <rect x="10" y="45" width="60" height="25" fill="#8a5030"/>
+          <rect x="20" y="35" width="40" height="15" fill="#9a5838"/>
+          <rect x="28" y="28" width="24" height="12" fill="#aa6040"/>
+          <!-- Tower -->
+          <rect x="52" y="20" width="12" height="30" fill="#7a4828"/>
+          <rect x="54" y="15" width="8" height="8" fill="#8a5030"/>
+          <!-- Doorways -->
+          <rect x="16" y="54" width="8" height="10" fill="#3d1a08"/>
+          <rect x="36" y="54" width="8" height="10" fill="#3d1a08"/>
+          <rect x="56" y="54" width="8" height="10" fill="#3d1a08"/>
+        </svg>
+      </div>
+      <div class="img-card-cap">The Palace of Palenque — a complex of buildings Pakal expanded and beautified</div>
+    </div>
+  </div>
+
+  <div class="reading-block">
+    <p>One of Pakal's greatest achievements was the <strong>Palace of Palenque</strong> — a huge complex of rooms, corridors and courtyards, topped with a four-storey tower that was probably used to watch the stars. Pakal covered the walls with carved stone portraits showing himself as a <strong>god-king</strong>.</p>
+    <p>But his most remarkable building project was one that would only be completed after his death. He began constructing a <strong>great pyramid temple</strong> — the Temple of Inscriptions — that would eventually become his tomb. Imagine ordering your own tomb to be built, knowing it would take decades and would only be finished long after you were gone!</p>
+    <div class="pull-quote">"The walls of Palenque told the story of Pakal's divine right to rule — written in stone forever."</div>
+  </div>
+
+  <!-- ORDER GAME — put building activities in order -->
+  <div class="order-game" id="order-game-1">
+    <div class="order-game-label">Put it in Order</div>
+    <div class="order-instructions">Drag these events from Pakal's reign into the correct chronological order — earliest at the top, latest at the bottom.</div>
+    <div class="order-list" id="order-list-1"></div>
+    <button class="order-check-btn" onclick="checkOrder('order-list-1','order-result-1',[3,1,0,2])">Check my order ✓</button>
+    <div class="order-result" id="order-result-1"></div>
+  </div>
+
+  <button class="next-chapter-btn" id="btn-ch4" onclick="unlockChapter('chapter-4','btn-ch4')" disabled>
+    Continue to Chapter 4 — The Tomb and the Legend →
+  </button>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     CHAPTER 4 — THE SARCOPHAGUS
+══════════════════════════════════════════════════════════════ -->
+<div id="chapter-4" class="locked">
+
+  <div class="chapter-header">
+    <span class="chapter-num">Chapter 4</span>
+    <h2 class="chapter-title">The Tomb and the Legend</h2>
+  </div>
+
+  <div class="reading-block">
+    <p>Pakal Votan died in <strong>683 CE</strong> at the remarkable age of around <strong>80 years old</strong> — extraordinary for the ancient world, where most people lived much shorter lives. He had reigned for 68 years.</p>
+    <p>He was buried deep inside the <strong>Temple of Inscriptions</strong> — the great pyramid he had begun building decades earlier. His body was placed in a magnificent stone coffin called a <strong>sarcophagus</strong>, lowered down a secret staircase hidden inside the pyramid, and sealed away for over <em>1,000 years</em>.</p>
+    <p>The sarcophagus was discovered in 1952 by Mexican archaeologist <strong>Alberto Ruz Lhuillier</strong>, who spent four years carefully excavating the staircase. When he finally opened the tomb, it was one of the most <strong>extraordinary archaeological discoveries</strong> of the 20th century.</p>
+  </div>
+
+  <div class="hero-panel">
+    <div class="hero-illustration">
+      <svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+        <!-- Dark tomb background -->
+        <rect width="160" height="160" fill="#1a0a04"/>
+        <!-- Stone sarcophagus lid simplified -->
+        <rect x="20" y="30" width="120" height="90" rx="8" fill="#5a4a3a" stroke="#c9984a" stroke-width="2"/>
+        <rect x="28" y="38" width="104" height="74" rx="6" fill="#4a3a2a"/>
+        <!-- Central figure — Pakal descending -->
+        <ellipse cx="80" cy="72" rx="12" ry="14" fill="#c9984a"/>
+        <!-- Cross/Tree of Life above -->
+        <line x1="80" y1="38" x2="80" y2="60" stroke="#c9984a" stroke-width="2"/>
+        <line x1="64" y1="50" x2="96" y2="50" stroke="#c9984a" stroke-width="2"/>
+        <!-- Celestial serpent arching -->
+        <path d="M 35 55 Q 50 42 65 50 Q 80 58 95 50 Q 110 42 125 55" stroke="#2d7a3a" stroke-width="2.5" fill="none"/>
+        <!-- Maize god sprout -->
+        <line x1="80" y1="38" x2="75" y2="25" stroke="#2d7a3a" stroke-width="1.5"/>
+        <line x1="80" y1="38" x2="85" y2="25" stroke="#2d7a3a" stroke-width="1.5"/>
+        <ellipse cx="80" cy="20" rx="5" ry="7" fill="#2d7a3a"/>
+        <!-- Jade beads around border -->
+        <circle cx="30" cy="45" r="3" fill="#2d7a3a"/>
+        <circle cx="30" cy="75" r="3" fill="#2d7a3a"/>
+        <circle cx="30" cy="105" r="3" fill="#2d7a3a"/>
+        <circle cx="130" cy="45" r="3" fill="#2d7a3a"/>
+        <circle cx="130" cy="75" r="3" fill="#2d7a3a"/>
+        <circle cx="130" cy="105" r="3" fill="#2d7a3a"/>
+        <!-- Underworld jaws at bottom -->
+        <path d="M 45 105 L 55 115 L 65 105 L 75 115 L 85 105 L 95 115 L 105 105 L 115 115" stroke="#8a5a3a" stroke-width="2" fill="none"/>
+        <!-- Glow -->
+        <circle cx="80" cy="72" r="30" fill="none" stroke="rgba(201,168,76,0.3)" stroke-width="8"/>
+        <text x="80" y="150" font-family="serif" font-size="8.5" fill="rgba(245,237,214,.6)" text-anchor="middle" font-style="italic">The Sarcophagus Lid · 683 CE</text>
+      </svg>
+    </div>
+    <div class="hero-text">
+      <div class="hero-date">683 CE · Temple of Inscriptions</div>
+      <div class="hero-heading">The most famous Maya carving ever found</div>
+      <div class="hero-body">The carved lid of Pakal's sarcophagus is one of the most detailed and beautiful objects the Maya ever created — packed with meaning about life, death and rebirth.</div>
+    </div>
+  </div>
+
+  <div class="reading-block">
+    <p>The lid of Pakal's stone coffin is covered in an intricate carving that tells the story of <strong>his journey after death</strong>. At the centre is Pakal himself, shown <strong>falling down into Xibalba</strong> — the Maya underworld. But this is not just a sad story — the Maya believed that death was not the end.</p>
+    <p>Rising above Pakal in the carving is the <strong>World Tree</strong> — a great tree that connected the underworld, the earth and the heavens. A serpent with two heads stretches across the scene, and at the very top of the tree sits a <strong>sacred quetzal bird</strong>, symbol of the sky.</p>
+    <div class="pull-quote">"Just as the maize seed falls into the ground and rises again as a plant, so Pakal would be reborn."</div>
+    <p>Around the edge of the lid are the <strong>lords of the underworld</strong> — fearsome beings who Pakal would face on his journey. The entire carving was a message of hope: that Pakal, like the maize god, would <strong>rise again</strong>.</p>
+  </div>
+
+  <!-- SARCOPHAGUS LABEL GAME -->
+  <div class="sarc-game">
+    <div class="sarc-game-label">Label the Sarcophagus Lid</div>
+    <div class="sarc-instructions">Tap a numbered spot on the lid, then choose what it shows from the options below. How much can you remember?</div>
+
+    <div class="sarc-scene">
+      <svg class="sarc-svg" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+        <!-- Dark background -->
+        <rect width="400" height="500" fill="#2a1408" rx="10"/>
+        <!-- Outer jade border decoration -->
+        <rect x="8" y="8" width="384" height="484" rx="8" fill="none" stroke="#2d7a3a" stroke-width="3" stroke-dasharray="8,4"/>
+        <!-- Stone lid shape -->
+        <rect x="25" y="25" width="350" height="450" rx="10" fill="#4a3a2a" stroke="#c9984a" stroke-width="2"/>
+        <rect x="35" y="35" width="330" height="430" rx="8" fill="#3a2a18"/>
+
+        <!-- === MAIN SCENE === -->
+        <!-- WORLD TREE (vertical) -->
+        <line x1="200" y1="80" x2="200" y2="280" stroke="#2d7a3a" stroke-width="8" stroke-linecap="round"/>
+        <!-- Tree branches -->
+        <line x1="200" y1="120" x2="155" y2="100" stroke="#2d7a3a" stroke-width="4" stroke-linecap="round"/>
+        <line x1="200" y1="120" x2="245" y2="100" stroke="#2d7a3a" stroke-width="4" stroke-linecap="round"/>
+        <line x1="200" y1="150" x2="145" y2="135" stroke="#2d7a3a" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="200" y1="150" x2="255" y2="135" stroke="#2d7a3a" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="200" y1="180" x2="148" y2="170" stroke="#2d7a3a" stroke-width="3" stroke-linecap="round"/>
+        <line x1="200" y1="180" x2="252" y2="170" stroke="#2d7a3a" stroke-width="3" stroke-linecap="round"/>
+        <!-- Foliage blobs -->
+        <ellipse cx="200" cy="88" rx="18" ry="14" fill="#1a5a28"/>
+        <ellipse cx="148" cy="97" rx="12" ry="10" fill="#1a5a28"/>
+        <ellipse cx="252" cy="97" rx="12" ry="10" fill="#1a5a28"/>
+
+        <!-- QUETZAL BIRD at top -->
+        <ellipse cx="200" cy="68" rx="10" ry="8" fill="#2d7a3a"/>
+        <ellipse cx="200" cy="60" rx="7" ry="6" fill="#c9984a"/>
+        <circle cx="200" cy="58" r="3.5" fill="#2d7a3a"/>
+        <ellipse cx="198" cy="57" rx="1.5" ry="2" fill="#111"/>
+        <path d="M 192 62 Q 185 55 188 68 Z" fill="#b8300a"/>
+        <path d="M 208 62 Q 215 55 212 68 Z" fill="#b8300a"/>
+        <line x1="200" y1="75" x2="192" y2="90" stroke="#2d7a3a" stroke-width="2.5"/>
+        <line x1="200" y1="75" x2="208" y2="90" stroke="#2d7a3a" stroke-width="2.5"/>
+
+        <!-- PAKAL FIGURE — central, falling/reclining -->
+        <ellipse cx="200" cy="310" rx="22" ry="25" fill="#c9984a"/><!-- body -->
+        <circle cx="200" cy="280" r="17" fill="#c9984a"/><!-- head -->
+        <!-- Headdress on Pakal -->
+        <rect x="185" y="260" width="30" height="8" rx="2" fill="#c9a84c" stroke="#f5edd6" stroke-width="1"/>
+        <line x1="190" y1="260" x2="185" y2="248" stroke="#c9a84c" stroke-width="2"/>
+        <circle cx="185" cy="246" r="3.5" fill="#2d7a3a"/>
+        <line x1="200" y1="260" x2="200" y2="244" stroke="#c9a84c" stroke-width="2"/>
+        <circle cx="200" cy="242" r="4" fill="#b8300a"/>
+        <line x1="210" y1="260" x2="215" y2="248" stroke="#c9a84c" stroke-width="2"/>
+        <circle cx="215" cy="246" r="3.5" fill="#2d7a3a"/>
+        <!-- Face -->
+        <ellipse cx="193" cy="277" rx="3" ry="4" fill="#3d1a08"/>
+        <ellipse cx="207" cy="277" rx="3" ry="4" fill="#3d1a08"/>
+        <!-- Jade mask/necklace -->
+        <rect x="187" y="290" width="26" height="6" rx="3" fill="#2d7a3a"/>
+        <!-- Arms spread -->
+        <line x1="178" y1="305" x2="155" y2="295" stroke="#c9984a" stroke-width="5" stroke-linecap="round"/>
+        <line x1="222" y1="305" x2="245" y2="295" stroke="#c9984a" stroke-width="5" stroke-linecap="round"/>
+        <!-- Legs -->
+        <line x1="192" y1="332" x2="178" y2="355" stroke="#c9984a" stroke-width="5" stroke-linecap="round"/>
+        <line x1="208" y1="332" x2="222" y2="355" stroke="#c9984a" stroke-width="5" stroke-linecap="round"/>
+
+        <!-- CELESTIAL SERPENT -->
+        <path d="M 60 200 Q 90 170 130 185 Q 165 200 200 195 Q 235 190 270 185 Q 305 175 340 200"
+          fill="none" stroke="#c9a84c" stroke-width="4" stroke-linecap="round"/>
+        <!-- Serpent heads -->
+        <ellipse cx="60" cy="200" rx="10" ry="7" fill="#8a5a28"/>
+        <ellipse cx="340" cy="200" rx="10" ry="7" fill="#8a5a28"/>
+        <!-- Serpent fangs -->
+        <line x1="54" y1="204" x2="52" y2="210" stroke="#f5edd6" stroke-width="1.5"/>
+        <line x1="66" y1="204" x2="68" y2="210" stroke="#f5edd6" stroke-width="1.5"/>
+        <line x1="334" y1="204" x2="332" y2="210" stroke="#f5edd6" stroke-width="1.5"/>
+        <line x1="346" y1="204" x2="348" y2="210" stroke="#f5edd6" stroke-width="1.5"/>
+
+        <!-- UNDERWORLD JAWS at bottom -->
+        <path d="M 80 400 L 100 420 L 120 400 L 140 420 L 160 400 L 180 420 L 200 400 L 220 420 L 240 400 L 260 420 L 280 400 L 300 420 L 320 400"
+          stroke="#8a5a38" stroke-width="3" fill="rgba(90,30,8,0.4)"/>
+        <text x="200" y="445" font-family="Cinzel,serif" font-size="9" fill="rgba(201,152,74,0.6)" text-anchor="middle">Xibalba — The Underworld</text>
+
+        <!-- JADE BORDER ELEMENTS -->
+        <circle cx="50" cy="90" r="5" fill="#2d7a3a" opacity=".7"/>
+        <circle cx="50" cy="200" r="5" fill="#2d7a3a" opacity=".7"/>
+        <circle cx="50" cy="310" r="5" fill="#2d7a3a" opacity=".7"/>
+        <circle cx="50" cy="370" r="5" fill="#2d7a3a" opacity=".7"/>
+        <circle cx="350" cy="90" r="5" fill="#2d7a3a" opacity=".7"/>
+        <circle cx="350" cy="200" r="5" fill="#2d7a3a" opacity=".7"/>
+        <circle cx="350" cy="310" r="5" fill="#2d7a3a" opacity=".7"/>
+        <circle cx="350" cy="370" r="5" fill="#2d7a3a" opacity=".7"/>
+
+        <!-- HOTSPOT NUMBERS (visual circles, actual buttons positioned in HTML overlay) -->
+        <!-- These are reference markers only, the buttons are positioned via CSS -->
+      </svg>
+
+      <!-- HTML overlay hotspots — positioned as % of container -->
+      <button class="sarc-hotspot" style="left:50%;top:13%" id="hs-1" onclick="activateHotspot(1)">1</button>
+      <button class="sarc-hotspot" style="left:50%;top:56%" id="hs-2" onclick="activateHotspot(2)">2</button>
+      <button class="sarc-hotspot" style="left:18%;top:40%" id="hs-3" onclick="activateHotspot(3)">3</button>
+      <button class="sarc-hotspot" style="left:50%;top:80%" id="hs-4" onclick="activateHotspot(4)">4</button>
+    </div>
+
+    <div class="sarc-prompt" id="sarc-prompt">Tap a number on the sarcophagus lid to begin</div>
+    <div class="sarc-options" id="sarc-options" style="display:none"></div>
+    <div class="sarc-fb" id="sarc-fb"></div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-block">
+    <div class="quiz-label">Quick Question</div>
+    <div class="quiz-q">In what year was Pakal's tomb discovered by archaeologists?</div>
+    <div class="quiz-opts" id="q4-opts">
+      <button class="quiz-opt" onclick="answerQuiz('q4',0,4)" data-q="q4" data-i="0"><span class="quiz-opt-ltr">A</span>1492 CE</button>
+      <button class="quiz-opt" onclick="answerQuiz('q4',1,4)" data-q="q4" data-i="1"><span class="quiz-opt-ltr">B</span>1852 CE</button>
+      <button class="quiz-opt" onclick="answerQuiz('q4',2,4)" data-q="q4" data-i="2"><span class="quiz-opt-ltr">C</span>1952 CE</button>
+      <button class="quiz-opt" onclick="answerQuiz('q4',3,4)" data-q="q4" data-i="3"><span class="quiz-opt-ltr">D</span>2002 CE</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+  </div>
+
+  <button class="next-chapter-btn" id="btn-ch5" onclick="unlockChapter('chapter-5','btn-ch5')" disabled>
+    Continue to Chapter 5 — Legacy →
+  </button>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     CHAPTER 5 — LEGACY
+══════════════════════════════════════════════════════════════ -->
+<div id="chapter-5" class="locked">
+
+  <div class="chapter-header">
+    <span class="chapter-num">Chapter 5</span>
+    <h2 class="chapter-title">Pakal's Legacy</h2>
+  </div>
+
+  <div class="reading-block">
+    <p>Pakal Votan died in 683 CE at approximately <strong>80 years old</strong> — but his story didn't end there. The city of Palenque continued to flourish after his death. His son, <strong>K'inich Kan B'alam II</strong>, completed the Temple of Inscriptions and added more magnificent buildings in his father's honour.</p>
+    <p>Over <strong>1,300 years later</strong>, Pakal's name is still known around the world. The Temple of Inscriptions is now one of the most visited archaeological sites in Mexico, and people travel thousands of miles to stand before the same pyramid that Pakal built as his eternal resting place.</p>
+  </div>
+
+  <!-- TIMELINE STRIP -->
+  <div class="timeline-strip">
+    <div class="timeline-strip-inner" id="tl-strip">
+      <div class="tl-line"></div>
+    </div>
+  </div>
+
+  <div class="reading-block">
+    <p>The carved sarcophagus lid is now considered one of the most important objects ever created by the ancient Maya. It has been studied, photographed, and reproduced millions of times. The original still lies in the tomb beneath the Temple of Inscriptions — exactly where it was placed in 683 CE.</p>
+    <p>Pakal's legacy is everywhere in Maya history. He showed that a city could rise from near-defeat to become the most beautiful in the world. He showed that writing, art and architecture could be used to tell stories that last <strong>thousands of years</strong>. And he showed that even a <strong>12-year-old</strong> can change the world.</p>
+    <div class="pull-quote">"The Maya didn't think time moved in a straight line — they believed the past, present and future were all connected. Pakal understood this. His buildings were messages to the future — messages we are still reading today."</div>
+  </div>
+
+  <div class="fact-box">
+    <div class="fact-box-title">◆ Pakal's Record-Breaking Reign</div>
+    <div class="fact-item"><span class="fact-icon">👑</span>Pakal ruled for 68 years — one of the longest reigns in the ancient Americas.</div>
+    <div class="fact-item"><span class="fact-icon">🏛️</span>He built more temples, palaces and monuments than almost any other Maya king.</div>
+    <div class="fact-item"><span class="fact-icon">📜</span>His sarcophagus lid contains one of the most detailed stories told in Maya art.</div>
+    <div class="fact-item"><span class="fact-icon">🌍</span>Palenque, the city he transformed, is now a UNESCO World Heritage Site.</div>
+    <div class="fact-item"><span class="fact-icon">🔭</span>Some historians think his tomb was designed so that on the winter solstice, sunlight falls directly down the staircase onto his burial chamber.</div>
+  </div>
+
+  <!-- FINAL QUIZ -->
+  <div class="quiz-block">
+    <div class="quiz-label">Final Question</div>
+    <div class="quiz-q">How long did Pakal Votan reign as King of Palenque?</div>
+    <div class="quiz-opts" id="q5-opts">
+      <button class="quiz-opt" onclick="answerQuiz('q5',0,5)" data-q="q5" data-i="0"><span class="quiz-opt-ltr">A</span>12 years</button>
+      <button class="quiz-opt" onclick="answerQuiz('q5',1,5)" data-q="q5" data-i="1"><span class="quiz-opt-ltr">B</span>40 years</button>
+      <button class="quiz-opt" onclick="answerQuiz('q5',2,5)" data-q="q5" data-i="2"><span class="quiz-opt-ltr">C</span>68 years</button>
+      <button class="quiz-opt" onclick="answerQuiz('q5',3,5)" data-q="q5" data-i="3"><span class="quiz-opt-ltr">D</span>100 years</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+  </div>
+
+  <div class="completion" id="completion" style="display:none">
+    <div class="completion-icon">🏺</div>
+    <div class="completion-title">You've studied the life of Pakal Votan!</div>
+    <div class="completion-score" id="comp-score"></div>
+    <div class="completion-msg" id="comp-msg"></div>
+  </div>
+
+</div>
+
+</div><!-- /content -->
+
+<script>
+// ── SCORE ──────────────────────────────────────────────────────────────
+let totalScore = 0, totalQs = 0;
+const TOTAL_POSSIBLE = 8; // 5 quiz + order game + sarc game
+document.getElementById('total-qs').textContent = TOTAL_POSSIBLE;
+
+function addScore(n) {
+  totalScore += n;
+  document.getElementById('total-score').textContent = totalScore;
+}
+
+// ── CHAPTER UNLOCK ─────────────────────────────────────────────────────
+function unlockChapter(chId, btnId) {
+  const ch = document.getElementById(chId);
+  ch.classList.remove('locked'); ch.classList.add('unlocked');
+  document.getElementById(btnId).style.display='none';
+  ch.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ── QUIZ: MULTIPLE CHOICE ───────────────────────────────────────────────
+const QUIZ_DATA = {
+  q1: { correct:1, chapter:'chapter-2', btn:'btn-ch2',
+    fbCorrect:'✓ Correct! K'inich Janaab' Pakal means "Sun Shield" — a powerful name for a powerful king.',
+    fbWrong:  '✗ Not quite. His name K'inich Janaab' Pakal means "Sun Shield" — K'inich means sun, Pakal means shield.' },
+  q3: { correct:1, chapter:'chapter-3', btn:'btn-ch3',
+    fbCorrect:'✓ Exactly right! Rival cities had attacked Palenque and left it weakened before Pakal became king.',
+    fbWrong:  '✗ Not quite. Rival city-states had attacked and defeated Palenque, leaving it weak when young Pakal was crowned.' },
+  q4: { correct:2, chapter:'chapter-5', btn:'btn-ch5',
+    fbCorrect:'✓ Correct! Archaeologist Alberto Ruz Lhuillier discovered Pakal\'s tomb in 1952 after four years of excavating the hidden staircase.',
+    fbWrong:  '✗ Not quite. The tomb was discovered in 1952 by Mexican archaeologist Alberto Ruz Lhuillier.' },
+  q5: { correct:2, chapter:null, btn:null,
+    fbCorrect:'✓ Brilliant! Pakal ruled for 68 years — from age 12 to age 80. One of the longest reigns in ancient history.',
+    fbWrong:  '✗ Not quite. Pakal reigned for 68 years — he was crowned at 12 and died aged approximately 80.' },
+};
+
+function answerQuiz(qid, chosen, scoreVal) {
+  const data = QUIZ_DATA[qid];
+  if (!data) return;
+  const opts = document.querySelectorAll(`#${qid}-opts .quiz-opt`);
+  opts.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === data.correct) btn.classList.add('reveal');
+    else if (i === chosen && chosen !== data.correct) btn.classList.add('wrong');
+  });
+  const fb = document.getElementById(`${qid}-fb`);
+  const isCorrect = chosen === data.correct;
+  fb.className = `quiz-feedback ${isCorrect?'correct':'wrong'} show`;
+  fb.textContent = isCorrect ? data.fbCorrect : data.fbWrong;
+  if (isCorrect) addScore(1);
+  if (data.btn) {
+    setTimeout(() => { document.getElementById(data.btn).disabled = false; }, 600);
+  } else {
+    setTimeout(showCompletion, 800);
+  }
+  totalQs++; document.getElementById('total-qs').textContent = TOTAL_POSSIBLE;
+}
+
+// ── TRUE/FALSE ──────────────────────────────────────────────────────────
+const TF_DATA = {
+  q2: { correct:true, chapter:'chapter-3', btn:'btn-ch3',
+    fbCorrect:'✓ True! Pakal was crowned at age 12 in 615 CE, making him one of the youngest rulers in Maya history.',
+    fbWrong:  '✗ Actually, this is TRUE. Pakal really was crowned at just 12 years old in 615 CE.' },
+};
+
+function answerTF(qid, chosen, scoreVal) {
+  const data = TF_DATA[qid];
+  if (!data) return;
+  document.querySelectorAll('.tf-btn').forEach(btn => {
+    btn.disabled = true;
+    const btnVal = btn.classList.contains('true-btn');
+    if (btnVal === data.correct) btn.classList.add('correct');
+    else if (btnVal === chosen && chosen !== data.correct) btn.classList.add('wrong');
+  });
+  const fb = document.getElementById(`${qid}-fb`);
+  const isCorrect = chosen === data.correct;
+  fb.className = `quiz-feedback ${isCorrect?'correct':'wrong'} show`;
+  fb.textContent = isCorrect ? data.fbCorrect : data.fbWrong;
+  if (isCorrect) addScore(1);
+  if (data.btn) setTimeout(() => { document.getElementById(data.btn).disabled = false; }, 600);
+  totalQs++;
+}
+
+// ── ORDER GAME ──────────────────────────────────────────────────────────
+const ORDER_ITEMS = [
+  'Pakal begins his enormous building programme at Palenque',
+  'Pakal is born in Palenque',
+  'Pakal dies at approximately 80 years old and is buried beneath the Temple of Inscriptions',
+  'Pakal is crowned king at the age of 12',
+];
+// Correct order indices: Born (1), Crowned (3), Building programme (0), Death (2)
+const CORRECT_ORDER = [1, 3, 0, 2];
+
+function buildOrderGame() {
+  const list = document.getElementById('order-list-1');
+  const shuffled = [...ORDER_ITEMS].sort(() => Math.random() - .5);
+  shuffled.forEach((text, i) => {
+    const card = document.createElement('div');
+    card.className = 'order-card';
+    card.draggable = true;
+    card.dataset.originalIndex = ORDER_ITEMS.indexOf(text);
+    card.innerHTML = `<span class="order-handle">⠿</span><span class="order-num">${i+1}</span>${text}`;
+
+    // Drag events
+    card.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('text/plain', card.dataset.originalIndex);
+      setTimeout(() => card.classList.add('dragging'), 0);
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+    card.addEventListener('dragover', e => { e.preventDefault(); card.classList.add('drag-over'); });
+    card.addEventListener('dragleave', () => card.classList.remove('drag-over'));
+    card.addEventListener('drop', e => {
+      e.preventDefault();
+      card.classList.remove('drag-over');
+      const fromIdx = parseInt(e.dataTransfer.getData('text/plain'));
+      const fromCard = list.querySelector(`[data-original-index="${fromIdx}"]`);
+      if (fromCard && fromCard !== card) {
+        const allCards = [...list.children];
+        const fromPos = allCards.indexOf(fromCard);
+        const toPos   = allCards.indexOf(card);
+        if (fromPos < toPos) list.insertBefore(fromCard, card.nextSibling);
+        else list.insertBefore(fromCard, card);
+      }
+      updateOrderNums();
+    });
+
+    // Touch drag
+    let touchClone;
+    card.addEventListener('touchstart', e => {
+      const t = e.touches[0];
+      touchClone = card.cloneNode(true);
+      touchClone.style.cssText=`position:fixed;opacity:.7;pointer-events:none;z-index:999;
+        width:${card.offsetWidth}px;top:${card.getBoundingClientRect().top}px;left:${card.getBoundingClientRect().left}px;
+        transform:scale(1.03);`;
+      document.body.appendChild(touchClone);
+      card.style.opacity='.3';
+    }, {passive:true});
+    card.addEventListener('touchmove', e => {
+      e.preventDefault();
+      const t = e.touches[0];
+      touchClone.style.top=(t.clientY-30)+'px';
+      touchClone.style.left=(t.clientX-100)+'px';
+      document.querySelectorAll('.order-card').forEach(c=>c.classList.remove('drag-over'));
+      const el = document.elementFromPoint(t.clientX, t.clientY);
+      el?.closest('.order-card')?.classList.add('drag-over');
+    }, {passive:false});
+    card.addEventListener('touchend', e => {
+      const t = e.changedTouches[0];
+      touchClone?.remove(); card.style.opacity='';
+      const el = document.elementFromPoint(t.clientX, t.clientY);
+      const target = el?.closest('.order-card');
+      document.querySelectorAll('.order-card').forEach(c=>c.classList.remove('drag-over'));
+      if (target && target !== card) {
+        const allCards = [...list.children];
+        const fromPos = allCards.indexOf(card);
+        const toPos   = allCards.indexOf(target);
+        if (fromPos < toPos) list.insertBefore(card, target.nextSibling);
+        else list.insertBefore(card, target);
+      }
+      updateOrderNums();
+    });
+
+    list.appendChild(card);
+  });
+}
+
+function updateOrderNums() {
+  document.querySelectorAll('#order-list-1 .order-card').forEach((card, i) => {
+    card.querySelector('.order-num').textContent = i+1;
+  });
+}
+
+function checkOrder(listId, resultId, correctOrder) {
+  const list = document.getElementById(listId);
+  const cards = [...list.children];
+  let correct = 0;
+  cards.forEach((card, i) => {
+    const origIdx = parseInt(card.dataset.originalIndex);
+    const isCorrect = origIdx === CORRECT_ORDER[i];
+    card.classList.remove('correct-pos','wrong-pos');
+    card.classList.add(isCorrect ? 'correct-pos' : 'wrong-pos');
+    if (isCorrect) correct++;
+  });
+  const res = document.getElementById(resultId);
+  res.classList.add('show');
+  if (correct === 4) {
+    res.className='order-result show all-correct';
+    res.textContent='✓ Perfect order! You\'ve correctly sequenced all four events in Pakal\'s life — from birth to death.';
+    addScore(1);
+    setTimeout(() => { document.getElementById('btn-ch4').disabled = false; }, 600);
+  } else {
+    res.className='order-result show partial';
+    res.textContent=`${correct} out of 4 correct. The correct order is: Born → Crowned → Building programme → Death. Have another look!`;
+  }
+}
+
+// ── SARCOPHAGUS LABEL GAME ───────────────────────────────────────────────
+const HOTSPOTS = {
+  1: {
+    label:'What is shown at the very top of the sarcophagus lid?',
+    opts:['A jaguar sun god','A quetzal bird — symbol of the sky','A cenote sinkhole','A Maya king\'s headdress'],
+    correct:1,
+    fb:'✓ Correct! The quetzal bird sits at the very top of the World Tree. The quetzal was one of the most sacred birds to the Maya — its bright green feathers symbolised the sky and were worn by rulers and gods.',
+    fbWrong:'✗ Not quite. It\'s the quetzal bird — one of the most sacred birds in Maya culture. It symbolised the sky and sat at the top of the World Tree.'
+  },
+  2: {
+    label:'The central figure on the lid is Pakal himself. Where is he shown going?',
+    opts:['Rising up to the sun','Falling into the underworld (Xibalba)','Swimming in the sea','Sitting on his throne'],
+    correct:1,
+    fb:'✓ Exactly right! Pakal is shown descending into Xibalba, the Maya underworld. But this isn\'t the end of the story — the Maya believed he would be reborn, just like the maize god.',
+    fbWrong:'✗ Not quite. Pakal is shown falling into Xibalba — the Maya underworld. The Maya believed this was part of the journey to rebirth, not just death.'
+  },
+  3: {
+    label:'The long curved shape stretching across the lid from side to side is…',
+    opts:['The Usumacinta River','A rainbow over the city','A two-headed celestial serpent','A border made of jade beads'],
+    correct:2,
+    fb:'✓ Brilliant! The two-headed celestial serpent was a powerful symbol of the sky and the journey between worlds. It appears in many pieces of Maya art.',
+    fbWrong:'✗ Not quite. It\'s a two-headed celestial serpent — a sacred creature representing the sky. It was one of the most important symbols in Maya religious art.'
+  },
+  4: {
+    label:'The jagged shapes along the very bottom of the lid represent what?',
+    opts:['The mountains of Guatemala','The teeth and jaws of the underworld','The waves of the Caribbean Sea','The roots of the World Tree'],
+    correct:1,
+    fb:'✓ Correct! The jagged teeth-like shapes represent the jaws of the underworld — Xibalba. Pakal is shown descending into those jaws, but the Maya believed he would be reborn from the underworld just like maize grows from the ground.',
+    fbWrong:'✗ Not quite. Those jagged shapes represent the jaws and teeth of Xibalba, the underworld. Pakal descends into them on his journey after death.'
+  },
+};
+
+let activeHotspot = null;
+let answeredHotspots = new Set();
+
+function activateHotspot(n) {
+  if (answeredHotspots.has(n)) return;
+  activeHotspot = n;
+  const data = HOTSPOTS[n];
+  document.getElementById('sarc-prompt').textContent = data.label;
+  const opts = document.getElementById('sarc-options');
+  opts.style.display='grid';
+  opts.innerHTML='';
+  data.opts.forEach((text, i) => {
+    const btn = document.createElement('button');
+    btn.className='sarc-opt';
+    btn.textContent = text;
+    btn.onclick = () => answerSarc(n, i);
+    opts.appendChild(btn);
+  });
+  const fb = document.getElementById('sarc-fb');
+  fb.className='sarc-fb'; fb.textContent='';
+}
+
+function answerSarc(n, chosen) {
+  const data = HOTSPOTS[n];
+  const opts = document.querySelectorAll('#sarc-options .sarc-opt');
+  opts.forEach((btn,i) => {
+    btn.disabled=true;
+    if (i===data.correct) btn.classList.add('correct');
+    else if (i===chosen && chosen!==data.correct) btn.classList.add('wrong');
+  });
+  const isCorrect = chosen === data.correct;
+  const fb = document.getElementById('sarc-fb');
+  fb.className=`sarc-fb ${isCorrect?'correct':'wrong'} show`;
+  fb.textContent = isCorrect ? data.fb : data.fbWrong;
+
+  const hs = document.getElementById(`hs-${n}`);
+  hs.classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
+  hs.textContent = isCorrect ? '✓' : '✗';
+  answeredHotspots.add(n);
+  if (isCorrect) addScore(1);
+
+  // Check if all 4 done
+  if (answeredHotspots.size === 4) {
+    setTimeout(() => {
+      document.getElementById('btn-ch5').disabled = false;
+      document.getElementById('sarc-prompt').textContent='✓ You\'ve labelled all four parts of the sarcophagus lid!';
+    }, 800);
+  }
+}
+
+// ── TIMELINE ───────────────────────────────────────────────────────────
+const TL_EVENTS = [
+  {year:'603 CE', label:'Pakal is born'},
+  {year:'615 CE', label:'Crowned at 12'},
+  {year:'626 CE', label:'Rebuilds Palenque'},
+  {year:'683 CE', label:'Pakal dies, age ~80'},
+  {year:'692 CE', label:'Temple of Inscriptions completed'},
+  {year:'1952 CE',label:'Tomb discovered'},
+];
+
+function buildTimeline() {
+  const strip = document.getElementById('tl-strip');
+  TL_EVENTS.forEach(ev => {
+    const div = document.createElement('div');
+    div.className='tl-event';
+    div.innerHTML=`<div class="tl-dot"></div><div class="tl-year">${ev.year}</div><div class="tl-desc">${ev.label}</div>`;
+    strip.appendChild(div);
+  });
+}
+
+// ── COMPLETION ─────────────────────────────────────────────────────────
+function showCompletion() {
+  const comp = document.getElementById('completion');
+  comp.style.display='block';
+  comp.scrollIntoView({behavior:'smooth', block:'center'});
+  document.getElementById('comp-score').textContent=`${totalScore} / ${TOTAL_POSSIBLE}`;
+  const pct = totalScore / TOTAL_POSSIBLE;
+  document.getElementById('comp-msg').textContent =
+    pct===1   ? 'Perfect score! You know the life of Pakal Votan inside out. He would be proud!' :
+    pct>=.75  ? 'Brilliant work — you clearly paid close attention. Pakal\'s story is one worth remembering.' :
+    pct>=.5   ? 'Good effort! Read back through the chapters and you\'ll nail it next time.' :
+                'A solid start — Pakal\'s life is full of detail. Go back through the chapters for another look.';
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────
+buildOrderGame();
+buildTimeline();
+</script>
+</body>
+</html>
