@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maya Geography · Class Recap</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       linear-gradient(160deg,#ffffff 0%,#f2f2f4 60%,#e8e8ec 100%);
+    --gold:     #b8921e;
+    --gold-bg:  rgba(184,146,30,0.1);
+    --gold-bd:  rgba(184,146,30,0.35);
+    --jade:     #2d6a4f;
+    --terra:    #c1440e;
+    --text:     #111111;
+    --text2:    #444444;
+    --text3:    rgba(0,0,0,0.38);
+    --btn-bg:   #1c1c1e;
+    --radius:   14px;
+    --shadow:   0 4px 24px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9);
+  }
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  html, body {
+    width:100%; height:100svh; min-height:-webkit-fill-available;
+    font-family:'Crimson Pro',Georgia,serif;
+    background:var(--bg); color:var(--text);
+    overflow:hidden; overscroll-behavior:none;
+    user-select:none; -webkit-user-select:none;
+  }
+  .page { display:grid; grid-template-rows:auto 1fr; height:100svh; }
+
+  /* ── HEADER ── */
+  header {
+    background:rgba(255,255,255,0.9);
+    backdrop-filter:blur(40px) saturate(180%);
+    -webkit-backdrop-filter:blur(40px) saturate(180%);
+    border-bottom:1px solid rgba(0,0,0,0.08);
+    box-shadow:0 2px 20px rgba(0,0,0,0.06);
+    padding:9px 18px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    flex-shrink:0;
+  }
+  .eyebrow { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.18em; color:var(--gold); text-transform:uppercase; margin-bottom:1px; }
+  h1 { font-family:'Cinzel',serif; font-size:clamp(.85rem,1.7vw,1.1rem); font-weight:700; color:var(--text); }
+  .progress-pills { display:flex; align-items:center; gap:6px; }
+  .q-pill { width:26px; height:7px; border-radius:4px; background:rgba(0,0,0,0.1); transition:background .3s; }
+  .q-pill.done    { background:var(--jade); }
+  .q-pill.current { background:var(--gold); }
+  .btn {
+    font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.08em; text-transform:uppercase;
+    padding:8px 16px; border-radius:var(--radius); cursor:pointer; transition:all .18s;
+    touch-action:manipulation; border:none; white-space:nowrap;
+  }
+  .btn-secondary { background:#ffffff; color:var(--text); border:1.5px solid rgba(0,0,0,0.15); box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+  .btn-secondary:active { background:#f0f0f2; }
+  .btn:disabled { opacity:.38; cursor:default; }
+
+  /* ── BODY ── */
+  .body-wrap { display:grid; grid-template-columns:1fr 400px; min-height:0; overflow:hidden; }
+
+  /* ── MAP PANE ── */
+  .map-pane {
+    position:relative; overflow:hidden;
+    border-right:1px solid rgba(0,0,0,0.07);
+    background:#c8dff0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .map-container {
+    position:relative;
+    width:100%; height:100%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .map-img {
+    width:100%; height:100%;
+    object-fit:contain;
+    display:block;
+  }
+  /* SVG overlay — exactly on top of the image */
+  .map-overlay {
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    pointer-events:none;
+    overflow:visible;
+  }
+
+  /* Highlight regions */
+  .hl-region {
+    opacity:0;
+    transition:opacity .45s ease;
+  }
+  .hl-region.show { opacity:1; }
+  .hl-region.dim  { opacity:0; }
+
+  /* Dim overlay — darkens the whole map when a feature is revealed */
+  .map-dim {
+    fill:rgba(0,0,0,0); transition:fill .45s;
+  }
+  .map-dim.active { fill:rgba(0,0,0,0.25); }
+
+  /* City pins */
+  .city-pin { opacity:0; transition:opacity .45s .1s; }
+  .city-pin.show { opacity:1; }
+  .pin-circle { fill:#c1440e; stroke:#ffffff; stroke-width:2; }
+  .pin-label {
+    font-family:'Cinzel',serif; font-size:11px; font-weight:700;
+    fill:#c1440e; paint-order:stroke; stroke:#ffffff; stroke-width:3px;
+  }
+
+  /* Feature labels on map */
+  .map-feat-label {
+    font-family:'Cinzel',serif; font-size:9px; letter-spacing:.04em; font-weight:700;
+    paint-order:stroke; stroke:#ffffff; stroke-width:3.5px;
+    opacity:0; transition:opacity .45s .15s;
+  }
+  .map-feat-label.show { opacity:1; }
+
+  /* ── QUESTION PANEL ── */
+  .q-panel {
+    display:flex; flex-direction:column; overflow:hidden;
+    background:rgba(255,255,255,0.85);
+    backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+  }
+  .q-header { padding:14px 18px 10px; border-bottom:1px solid rgba(0,0,0,0.07); flex-shrink:0; }
+  .q-number { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); margin-bottom:5px; }
+  .q-text { font-size:clamp(1rem,1.7vw,1.2rem); line-height:1.5; font-weight:500; color:var(--text); }
+
+  .options { padding:11px 18px; display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
+  .opt {
+    padding:12px 15px; border-radius:10px; cursor:pointer;
+    border:2px solid rgba(0,0,0,0.1); background:#ffffff;
+    font-size:1rem; line-height:1.4; color:var(--text);
+    transition:all .18s; touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+    display:flex; align-items:center; gap:10px;
+  }
+  .opt:active { transform:scale(.98); }
+  .opt.selected { border-color:var(--gold); background:var(--gold-bg); }
+  .opt.correct  { border-color:var(--jade); background:#f0f9f4; color:var(--jade); font-weight:600; }
+  .opt.wrong    { border-color:var(--terra); background:#fdf0ef; color:var(--terra); }
+  .opt.revealed { border-color:var(--jade); background:#f0f9f4; color:var(--jade); font-weight:600; }
+  .opt-letter {
+    font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.06em;
+    min-width:22px; height:22px; border-radius:50%;
+    background:rgba(0,0,0,0.07); display:flex; align-items:center; justify-content:center;
+    font-weight:700; flex-shrink:0;
+  }
+  .opt.correct  .opt-letter,
+  .opt.revealed .opt-letter { background:var(--jade); color:#fff; }
+  .opt.wrong    .opt-letter { background:var(--terra); color:#fff; }
+
+  .explanation {
+    margin:0 18px 8px; padding:11px 14px; border-radius:10px;
+    background:#f0f9f4; border:1.5px solid var(--jade);
+    font-size:.97rem; line-height:1.55; color:#1a3d2a;
+    opacity:0; transform:translateY(8px); transition:all .35s .1s; flex-shrink:0;
+  }
+  .explanation.show { opacity:1; transform:translateY(0); }
+  .explanation-label { font-family:'Cinzel',serif; font-size:.56rem; letter-spacing:.14em; text-transform:uppercase; color:var(--jade); margin-bottom:4px; }
+
+  .nav-row {
+    padding:11px 18px; display:flex; gap:8px; flex-shrink:0;
+    border-top:1px solid rgba(0,0,0,0.07); margin-top:auto;
+  }
+  .nav-row .btn { flex:1; padding:13px; font-size:.65rem; }
+  .btn-primary  { background:#1c1c1e; color:#ffffff; font-weight:600; box-shadow:0 3px 12px rgba(0,0,0,0.2); border:none; }
+  .btn-primary:active  { transform:scale(.97); }
+  #reveal-btn   { background:var(--gold); color:#fff; font-weight:700; box-shadow:0 3px 12px rgba(184,146,30,0.3); border:none; }
+  #reveal-btn:active { transform:scale(.97); }
+
+  /* ── SCORE SCREEN ── */
+  .score-overlay {
+    position:fixed; inset:0; z-index:50;
+    background:rgba(255,255,255,0.96);
+    backdrop-filter:blur(40px); -webkit-backdrop-filter:blur(40px);
+    display:none; flex-direction:column; align-items:center; justify-content:center;
+    gap:12px; padding:28px; text-align:center;
+  }
+  .score-overlay.show { display:flex; }
+  .score-icon  { font-size:4rem; }
+  .score-title { font-family:'Cinzel',serif; font-size:1.5rem; font-weight:700; color:var(--text); }
+  .score-num   { font-family:'Cinzel',serif; font-size:3.5rem; font-weight:700; color:var(--gold); line-height:1; }
+  .score-sub   { font-size:1rem; color:var(--text2); font-style:italic; max-width:360px; line-height:1.55; }
+  .score-features { display:flex; flex-wrap:wrap; gap:7px; justify-content:center; max-width:520px; }
+  .feature-tag {
+    font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.06em;
+    padding:5px 13px; border-radius:100px;
+    background:var(--gold-bg); border:1px solid var(--gold-bd); color:var(--gold);
+  }
+
+  @media(max-width:700px) {
+    .body-wrap { grid-template-columns:1fr; grid-template-rows:1fr 1fr; }
+    .map-pane { border-right:none; border-bottom:1px solid rgba(0,0,0,0.07); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div>
+      <div class="eyebrow">Whole Class Recap · Year 4 · Geography</div>
+      <h1>Where Did the Maya Live? — Physical Features</h1>
+    </div>
+    <div class="progress-pills" id="progress-pills"></div>
+    <button class="btn btn-secondary" onclick="restart()">↺ Restart</button>
+  </header>
+
+  <div class="body-wrap">
+
+    <!-- MAP -->
+    <div class="map-pane">
+      <div class="map-container">
+        <img class="map-img" src="maya-map.png" alt="Map of the Maya region" id="map-img">
+
+        <!-- SVG overlay — viewBox matches image 2000×1285 -->
+        <svg class="map-overlay" id="map-svg"
+             viewBox="0 0 2000 1285"
+             preserveAspectRatio="xMidYMid meet"
+             xmlns="http://www.w3.org/2000/svg">
+
+          <!-- Dim overlay (whole map darkens on reveal) -->
+          <rect class="map-dim" id="map-dim" x="0" y="0" width="2000" height="1285"/>
+
+          <!-- ── HIGHLIGHT REGIONS ── -->
+
+          <!-- Yucatán Peninsula -->
+          <polygon id="hl-yucatan" class="hl-region"
+            points="895,378 950,368 1005,375 1040,415 1055,468 1050,528 1025,578 975,592 910,590 865,572 848,522 852,462 862,415"
+            fill="rgba(184,146,30,0.45)" stroke="#b8921e" stroke-width="3"/>
+
+          <!-- Gulf of Mexico (water highlight) -->
+          <ellipse id="hl-gulf" class="hl-region" cx="600" cy="310" rx="220" ry="130"
+            fill="rgba(74,127,210,0.35)" stroke="#4a7fd2" stroke-width="3"/>
+
+          <!-- Rainforest / Southern Lowlands -->
+          <polygon id="hl-rainforest" class="hl-region"
+            points="760,545 838,510 870,525 908,588 966,598 1005,618 1002,665 978,706 938,735 878,748 820,732 778,703 752,658 748,608"
+            fill="rgba(45,130,58,0.45)" stroke="#2d7a3a" stroke-width="3"/>
+
+          <!-- Guatemalan Highlands & Volcanoes -->
+          <polygon id="hl-highlands" class="hl-region"
+            points="742,612 798,605 838,638 848,698 822,745 782,758 748,742 726,710 720,668"
+            fill="rgba(110,85,55,0.5)" stroke="#6e5537" stroke-width="3"/>
+
+          <!-- Pacific Coastal Plain -->
+          <polygon id="hl-pacific" class="hl-region"
+            points="706,695 748,678 792,720 776,782 738,802 704,794 686,752"
+            fill="rgba(210,190,80,0.5)" stroke="#c8b440" stroke-width="3"/>
+
+          <!-- Usumacinta River -->
+          <path id="hl-river" class="hl-region"
+            d="M 752,648 Q 790,620 822,585 Q 840,562 852,535"
+            fill="none" stroke="#3a72c0" stroke-width="8" stroke-linecap="round" opacity="0"/>
+
+          <!-- Lake Petén Itzá -->
+          <ellipse id="hl-lake" class="hl-region" cx="895" cy="648" rx="30" ry="16"
+            fill="rgba(74,127,210,0.7)" stroke="#3a6aaa" stroke-width="2.5"/>
+
+          <!-- Cenotes (dots scattered in northern Yucatan) -->
+          <g id="hl-cenotes" class="hl-region" opacity="0">
+            <circle cx="892" cy="430" r="10" fill="rgba(74,127,210,0.8)" stroke="#3a6aaa" stroke-width="2"/>
+            <circle cx="935" cy="445" r="9"  fill="rgba(74,127,210,0.8)" stroke="#3a6aaa" stroke-width="2"/>
+            <circle cx="958" cy="472" r="10" fill="rgba(74,127,210,0.8)" stroke="#3a6aaa" stroke-width="2"/>
+            <circle cx="908" cy="468" r="8"  fill="rgba(74,127,210,0.8)" stroke="#3a6aaa" stroke-width="2"/>
+            <circle cx="945" cy="500" r="9"  fill="rgba(74,127,210,0.8)" stroke="#3a6aaa" stroke-width="2"/>
+            <circle cx="975" cy="445" r="8"  fill="rgba(74,127,210,0.8)" stroke="#3a6aaa" stroke-width="2"/>
+          </g>
+
+          <!-- Caribbean Sea highlight -->
+          <ellipse id="hl-caribbean" class="hl-region" cx="1280" cy="460" rx="180" ry="140"
+            fill="rgba(74,127,210,0.3)" stroke="#4a7fd2" stroke-width="3"/>
+
+          <!-- ── CITY PINS ── -->
+
+          <!-- Chichén Itzá -->
+          <g id="pin-chichen" class="city-pin">
+            <circle class="pin-circle" cx="962" cy="465" r="10"/>
+            <text class="pin-label" x="980" y="455" font-size="12">Chichén Itzá</text>
+          </g>
+
+          <!-- Tulum -->
+          <g id="pin-tulum" class="city-pin">
+            <circle class="pin-circle" cx="1052" cy="548" r="10"/>
+            <text class="pin-label" x="1065" y="538" font-size="12">Tulúm</text>
+          </g>
+
+          <!-- ── FEATURE LABELS (appear on reveal) ── -->
+          <text id="lbl-yucatan"    class="map-feat-label" x="948" y="478" text-anchor="middle" fill="#7a5a00" font-size="13">Yucatán Peninsula</text>
+          <text id="lbl-rainforest" class="map-feat-label" x="878" y="648" text-anchor="middle" fill="#1a5a28" font-size="13">Southern Lowlands</text>
+          <text id="lbl-highlands"  class="map-feat-label" x="784" y="692" text-anchor="middle" fill="#4a3010" font-size="13">Guatemalan Highlands</text>
+          <text id="lbl-pacific"    class="map-feat-label" x="738" y="748" text-anchor="middle" fill="#8a7a20" font-size="11">Pacific Coastal Plain</text>
+          <text id="lbl-river"      class="map-feat-label" x="790" y="605" text-anchor="middle" fill="#1a3a8a" font-size="11">Usumacinta River</text>
+          <text id="lbl-lake"       class="map-feat-label" x="895" y="672" text-anchor="middle" fill="#1a3a8a" font-size="10">Lake Petén Itzá</text>
+          <text id="lbl-cenotes"    class="map-feat-label" x="935" y="415" text-anchor="middle" fill="#1a3a8a" font-size="12">Cenotes</text>
+          <text id="lbl-gulf"       class="map-feat-label" x="600" y="295" text-anchor="middle" fill="#1a3a8a" font-size="14">Gulf of Mexico</text>
+          <text id="lbl-caribbean"  class="map-feat-label" x="1260" y="445" text-anchor="middle" fill="#1a3a8a" font-size="13">Caribbean Sea</text>
+
+        </svg>
+      </div>
+    </div>
+
+    <!-- QUESTION PANEL -->
+    <div class="q-panel">
+      <div class="q-header">
+        <div class="q-number" id="q-number">Question 1 of 9</div>
+        <div class="q-text"  id="q-text"></div>
+      </div>
+      <div class="options" id="options"></div>
+      <div class="explanation" id="explanation">
+        <div class="explanation-label">◆ Explanation</div>
+        <div id="explanation-text"></div>
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-secondary" id="prev-btn" onclick="prev()" disabled>← Back</button>
+        <button class="btn" id="reveal-btn" onclick="reveal()">Reveal answer</button>
+        <button class="btn btn-primary"   id="next-btn" onclick="next()" disabled>Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCORE SCREEN -->
+<div class="score-overlay" id="score-overlay">
+  <div class="score-icon">🌎</div>
+  <div class="score-title">Recap complete!</div>
+  <div class="score-num" id="score-num"></div>
+  <div class="score-sub" id="score-sub"></div>
+  <p style="font-family:'Cinzel',serif;font-size:.63rem;letter-spacing:.1em;color:rgba(0,0,0,0.4);text-transform:uppercase;margin-top:4px">Physical features covered today:</p>
+  <div class="score-features" id="score-features"></div>
+  <button class="btn btn-primary" style="margin-top:10px;padding:14px 32px" onclick="restart()">↺ Play again</button>
+</div>
+
+<script>
+// ── QUESTIONS ─────────────────────────────────────────────────────────
+// highlight: ids of SVG elements to show. labels: text labels to show. pins: city pins.
+const QUESTIONS = [
+  {
+    q:'What is the large peninsula that juts northward into the Gulf of Mexico, forming the northern part of the Maya region?',
+    options:['The Sierra Madre Peninsula','The Yucatán Peninsula','The Caribbean Peninsula','The Petén Peninsula'],
+    correct:1,
+    explanation:'The Yucatán Peninsula stretches north into the Gulf of Mexico and Caribbean Sea. It is almost entirely flat limestone — so flat there are barely any rivers on the surface.',
+    highlight:['hl-yucatan'], labels:['lbl-yucatan'], pins:[],
+  },
+  {
+    q:'What body of water lies to the north and west of the Yucatán Peninsula?',
+    options:['The Pacific Ocean','The Indian Ocean','The Atlantic Ocean','The Gulf of Mexico'],
+    correct:3,
+    explanation:'The Gulf of Mexico bounds the Maya region to the north and west. Maya traders used its coastline to move goods between cities by canoe.',
+    highlight:['hl-gulf'], labels:['lbl-gulf'], pins:[],
+  },
+  {
+    q:'The Maya used natural water-filled sinkholes as their main source of fresh water in the north. What are these called?',
+    options:['Bajos','Chultunes','Cenotes','Sacbes'],
+    correct:2,
+    explanation:'Cenotes form when the limestone rock collapses and exposes the underground water table. The Maya considered them sacred portals to the underworld and used them for drinking water and religious ceremonies.',
+    highlight:['hl-cenotes','hl-yucatan'], labels:['lbl-cenotes'], pins:[],
+  },
+  {
+    q:'Where were the great Maya cities like Tikal and Palenque built?',
+    options:['In the desert of northern Mexico','On the Pacific coast','In the dense tropical rainforest of the southern lowlands','On top of volcanoes'],
+    correct:2,
+    explanation:'The southern lowlands were covered by thick tropical rainforest reaching over 45 metres tall. The great Maya cities were carved out of the jungle — their pyramids rose above the treetops.',
+    highlight:['hl-rainforest'], labels:['lbl-rainforest'], pins:[],
+  },
+  {
+    q:'In the south of the Maya region there are tall mountains and volcanoes. What is this region called?',
+    options:['The Yucatán Highlands','The Guatemalan Highlands','The Petén Mountains','The Belize Range'],
+    correct:1,
+    explanation:'The Guatemalan Highlands form part of the Sierra Madre mountain range. Volcanic soil made them fertile for farming, and the mountains provided jade and obsidian used for trade.',
+    highlight:['hl-highlands'], labels:['lbl-highlands'], pins:[],
+  },
+  {
+    q:'Which mighty river flowed through the southern lowlands, used by the Maya to transport people and trade goods?',
+    options:['The Amazon','The Nile','The Mississippi','The Usumacinta River'],
+    correct:3,
+    explanation:'The Usumacinta River was the most important waterway in the Maya world. Maya traders used it like a motorway — moving jade, cacao and obsidian by canoe along its length.',
+    highlight:['hl-river','hl-rainforest'], labels:['lbl-river'], pins:[],
+  },
+  {
+    q:'A narrow coastal plain along the southern edge of the Maya region bordered which ocean?',
+    options:['The Atlantic Ocean','The Arctic Ocean','The Pacific Ocean','The Indian Ocean'],
+    correct:2,
+    explanation:'The Pacific Coastal Plain is a narrow strip of fertile volcanic soil between the highlands and the Pacific Ocean. It provided fish, salt and shells, and was one of the earliest settled areas of the Maya world.',
+    highlight:['hl-pacific'], labels:['lbl-pacific'], pins:[],
+  },
+  {
+    q:'Chichén Itzá was one of the most powerful Maya city-states. Where on the map would you find it?',
+    options:['Deep in the southern rainforest','On the Pacific coast','In the northern Yucatán Peninsula','In the Guatemalan Highlands'],
+    correct:2,
+    explanation:'Chichén Itzá sits in the northern Yucatán Peninsula. Its great pyramid, El Castillo, is engineered so that at the spring equinox a shadow serpent appears to slide down the staircase.',
+    highlight:['hl-yucatan'], labels:['lbl-yucatan'], pins:['pin-chichen'],
+  },
+  {
+    q:'Tulúm was a Maya city built on a cliff above the Caribbean Sea. On which coast of the Yucatán Peninsula would you find it?',
+    options:['The north coast','The west coast facing the Gulf of Mexico','The east coast facing the Caribbean Sea','The southern tip'],
+    correct:2,
+    explanation:'Tulúm sits on the eastern Caribbean coast of the Yucatán Peninsula. It was one of the last Maya cities to be built and one of the few built directly on the coast — its walls and cliff made it easy to defend.',
+    highlight:['hl-yucatan','hl-caribbean'], labels:['lbl-caribbean'], pins:['pin-tulum'],
+  },
+];
+
+const FEATURE_NAMES = [
+  'Yucatán Peninsula','Gulf of Mexico','Cenotes','Tropical Rainforest',
+  'Guatemalan Highlands','Usumacinta River','Pacific Coast',
+  'Chichén Itzá','Tulúm'
+];
+
+const ALL_HIGHLIGHTS = ['hl-yucatan','hl-gulf','hl-rainforest','hl-highlands','hl-pacific',
+  'hl-river','hl-lake','hl-cenotes','hl-caribbean'];
+const ALL_LABELS     = ['lbl-yucatan','lbl-rainforest','lbl-highlands','lbl-pacific','lbl-river',
+  'lbl-lake','lbl-cenotes','lbl-gulf','lbl-caribbean'];
+const ALL_PINS       = ['pin-chichen','pin-tulum'];
+
+let current=0, revealed=false, score=0, chosen=null;
+
+function render() {
+  const q = QUESTIONS[current];
+  revealed=false; chosen=null;
+
+  document.getElementById('q-number').textContent = `Question ${current+1} of ${QUESTIONS.length}`;
+  document.getElementById('q-text').textContent   = q.q;
+
+  const opts = document.getElementById('options');
+  opts.innerHTML='';
+  ['A','B','C','D'].forEach((ltr,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = `<span class="opt-letter">${ltr}</span>${q.options[i]}`;
+    btn.onclick = () => select(i);
+    opts.appendChild(btn);
+  });
+
+  const exp = document.getElementById('explanation');
+  exp.classList.remove('show');
+  document.getElementById('explanation-text').textContent='';
+
+  document.getElementById('prev-btn').disabled   = current===0;
+  document.getElementById('next-btn').disabled   = true;
+  document.getElementById('reveal-btn').disabled = false;
+  document.getElementById('reveal-btn').textContent = 'Reveal answer';
+  if (current===QUESTIONS.length-1) {
+    document.getElementById('next-btn').textContent='Finish ✓';
+  } else {
+    document.getElementById('next-btn').textContent='Next →';
+  }
+
+  resetMap();
+  buildPills();
+}
+
+function select(idx) {
+  if (revealed) return;
+  chosen=idx;
+  document.querySelectorAll('.opt').forEach((btn,i) => {
+    btn.classList.toggle('selected', i===idx);
+  });
+}
+
+function reveal() {
+  if (revealed) return;
+  revealed=true;
+  const q = QUESTIONS[current];
+
+  document.querySelectorAll('.opt').forEach((btn,i) => {
+    btn.classList.remove('selected');
+    if (i===q.correct)             btn.classList.add('revealed');
+    else if (i===chosen)           btn.classList.add('wrong');
+  });
+
+  if (chosen===q.correct) score++;
+
+  document.getElementById('explanation-text').textContent = q.explanation;
+  document.getElementById('explanation').classList.add('show');
+  document.getElementById('reveal-btn').disabled  = true;
+  document.getElementById('reveal-btn').textContent = '✓ Revealed';
+  document.getElementById('next-btn').disabled    = false;
+
+  highlightMap(q);
+  buildPills();
+}
+
+function highlightMap(q) {
+  // Dim all first
+  document.getElementById('map-dim').classList.add('active');
+  ALL_HIGHLIGHTS.forEach(id => {
+    const el=document.getElementById(id);
+    if (el) { el.classList.remove('show'); el.style.opacity='0'; }
+  });
+  ALL_LABELS.forEach(id => {
+    const el=document.getElementById(id);
+    if (el) el.classList.remove('show');
+  });
+  ALL_PINS.forEach(id => {
+    const el=document.getElementById(id);
+    if (el) el.classList.remove('show');
+  });
+
+  // Show selected features
+  q.highlight.forEach(id => {
+    const el=document.getElementById(id);
+    if (el) { el.classList.add('show'); el.style.opacity=''; }
+  });
+  q.labels.forEach(id => {
+    const el=document.getElementById(id);
+    if (el) el.classList.add('show');
+  });
+  q.pins.forEach(id => {
+    const el=document.getElementById(id);
+    if (el) el.classList.add('show');
+  });
+}
+
+function resetMap() {
+  document.getElementById('map-dim').classList.remove('active');
+  ALL_HIGHLIGHTS.forEach(id => {
+    const el=document.getElementById(id);
+    if (el) { el.classList.remove('show'); el.style.opacity=''; }
+  });
+  ALL_LABELS.forEach(id => {
+    const el=document.getElementById(id);
+    if (el) el.classList.remove('show');
+  });
+  ALL_PINS.forEach(id => {
+    const el=document.getElementById(id);
+    if (el) el.classList.remove('show');
+  });
+}
+
+function next() {
+  if (current===QUESTIONS.length-1) { finish(); return; }
+  current++;
+  render();
+}
+function prev() {
+  if (current>0) { current--; render(); }
+}
+
+function buildPills() {
+  const wrap=document.getElementById('progress-pills');
+  wrap.innerHTML='';
+  QUESTIONS.forEach((_,i) => {
+    const p=document.createElement('div');
+    p.className='q-pill';
+    if (i<current||(i===current&&revealed)) p.classList.add('done');
+    else if (i===current) p.classList.add('current');
+    wrap.appendChild(p);
+  });
+}
+
+function finish() {
+  const pct=Math.round(score/QUESTIONS.length*100);
+  const msg = pct===100 ? 'Perfect! The class knows every physical feature!' :
+              pct>=78   ? 'Brilliant — great geographical knowledge!' :
+              pct>=56   ? 'Good effort — keep revisiting these features.' :
+                          'Good discussion — use the map to help you remember.';
+  document.getElementById('score-num').textContent=`${score} / ${QUESTIONS.length}`;
+  document.getElementById('score-sub').textContent=msg;
+  document.getElementById('score-features').innerHTML=FEATURE_NAMES.map(f=>`<span class="feature-tag">${f}</span>`).join('');
+  document.getElementById('score-overlay').classList.add('show');
+}
+
+function restart() {
+  current=0; score=0; chosen=null; revealed=false;
+  document.getElementById('score-overlay').classList.remove('show');
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
